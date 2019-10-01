@@ -1,0 +1,5 @@
+$25 : Camera module
+$10 : Raspberry Pi Zero W
+$2  : 1200 mA USB step-up
+$14 : 18650 Li-ion battery
+$1  : Li-ion charger

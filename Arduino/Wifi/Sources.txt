@@ -1,0 +1,2 @@
+https://github.com/imjeffparedes/iot-esp8266-arduino-interface/blob/master/esp8266Sample.ino
+https://www.arduino.cc/en/Reference/softwareSerial

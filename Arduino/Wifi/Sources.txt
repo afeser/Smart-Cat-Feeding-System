@@ -1,2 +1,13 @@
+Similar Projects :
+https://forum.arduino.cc/index.php?topic=239484.0
+https://openhomeautomation.net/wireless-camera
+
+
+
+Sanki Sunucu Gibi: 
+
 https://github.com/imjeffparedes/iot-esp8266-arduino-interface/blob/master/esp8266Sample.ino
 https://www.arduino.cc/en/Reference/softwareSerial
+https://create.arduino.cc/projecthub/jeffpar0721/add-wifi-to-arduino-uno-663b9e
+
+

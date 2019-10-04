@@ -1,0 +1,1 @@
+Mekanik tasarımlar için oluşturuldu.

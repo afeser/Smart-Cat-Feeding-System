@@ -22,6 +22,10 @@
 import threading
 import socket
 import time
+import CameraDriver
+
+# from io import BytesIO
+
 # import logging
 
 constants = {
@@ -88,6 +92,9 @@ class VideoServer(Server):
         data = clientsocket.recv(_packageSize)
 
 
+        return data
+
+
 class CommandServer(Server):
     _serverName = 'CommandServer'
 
@@ -141,6 +148,7 @@ class VideoClient(Client):
         self._packageSize       = constants['videoPackageSize']
         self._fps               = constants['fps']
         self._frameSenderThread = None
+        self._cameraDriver      = CameraDriver.CameraDriver()
 
         super()._init__()
 
@@ -151,12 +159,21 @@ class VideoClient(Client):
         self._frameSenderThread.start()
 
     def _startFrameSender(self):
+        """
+        First send the buffer size, then send the data
+        """
+        cd     = self._cameraDriver
+        socket = self._socket
         while True:
             # or wait for the transfer...
             time.sleep(1. / self._fps)
 
-            # TODO - capture and send..
-            .
+            # Capture
+            cd.capture()
+
+            # Send the file
+            socket.send(cd.getImageData())
+
 
 class CommandClient(Client):
 

@@ -22,9 +22,13 @@
 import threading
 import socket
 import time
-import CameraDriver
 
-# from io import BytesIO
+
+from io import BytesIO
+
+import sys
+
+
 
 # import logging
 
@@ -38,14 +42,16 @@ constants = {
 
     # _videoPackageSize : package size that stream read is done per receive request
     # To be optimized for performance. Used in stream server.
-    'videoPackageSize' : 1024,
+    'videoPackageSize' : 4096,
     # _commandPackageSize : package size that stream read is done per receive request
     # Not need to be optimized, already small data stream.
     'commandPackageSize' : 1024,
 
     # Frame per second, how many frames will the client send in sendFrame mode
     # Moreover, it can be dynamic in the future depending on the vision algorithm
-    'fps' : 10
+    # Notice increasing fps results in overflow in socket buffer...
+    # Either a new technique will be used, or greater fps values will be avoided
+    'fps' : 1
 
 }
 
@@ -65,6 +71,9 @@ class Server:
 
         (clientsocket, address) = self._serversocket.accept()
 
+        self._clientsocket  = clientsocket
+        self._clientaddress = address
+
 
     def getAddress():
         return self._listenAddress
@@ -82,17 +91,41 @@ class VideoServer(Server):
         self._packageSize   = constants['videoPackageSize']
 
 
-        Person.__init__(self)
+        Server.__init__(self)
 
 
-    def receiveFrame(self, name):
-        # Read a single image from the stream
-        # TODO - images may stack! time may shift!
+    def receiveFrame(self):
+        # Image library...
+        from PIL import Image
 
-        data = clientsocket.recv(_packageSize)
+        """
+        Read a single image from the stream
+        Return the Image object from PIL
+        """
 
+        # read length
+        print('Read length of the image...')
+        uzunluk = int(self._clientsocket.recv(self._packageSize).decode())
 
-        return data
+        data = BytesIO()
+
+        print('Reading total length ', uzunluk, ' bytes data...')
+        for i in range(uzunluk // 4096 + 1):
+            if i == 1 :
+                b = a
+            a = self._clientsocket.recv(self._packageSize)
+            data.write(a)
+
+        print('Len = ' + str(data.getbuffer().nbytes))
+
+        data.truncate(uzunluk)
+
+        im = Image.open(data)
+
+        print(data.getvalue()[100:200])
+
+        print('Done!')
+        return im
 
 
 class CommandServer(Server):
@@ -105,22 +138,6 @@ class CommandServer(Server):
 
         super().__init__()
 
-
-
-
-    def _createServer(self, name):
-        # Receive commands
-        # Do different actions
-        # Actions will be stored in a dictionary that belongs to the class
-
-        # Accept connection - connection is already encrypted over SSH layer, so no check is required
-        # it jumped to a new socket...
-        (clientsocket, address) = self._serversocket.accept()
-
-        self._clientsocket  = clientsocket
-        self._clientaddress = address
-
-        # Done! Main program will determine which command will be sent etc.
 
     def sendCommand(self, cmd):
         # Determine the command, do the required actions!
@@ -144,19 +161,19 @@ class Client:
 class VideoClient(Client):
 
     def __init__(self):
+        import CameraDriver
         self._desPort           = constants['videoPort']
         self._packageSize       = constants['videoPackageSize']
         self._fps               = constants['fps']
         self._frameSenderThread = None
         self._cameraDriver      = CameraDriver.CameraDriver()
 
-        super()._init__()
+        super().__init__()
 
     def startFrameSender(self):
         # Start frame sender thread
         # save the thread to kill later on request
-        self._frameSenderThread = threading.Thread(target=self._startFrameSender, args=self, name='frameSender')
-        self._frameSenderThread.start()
+        self._startFrameSender()
 
     def _startFrameSender(self):
         """
@@ -166,13 +183,20 @@ class VideoClient(Client):
         socket = self._socket
         while True:
             # or wait for the transfer...
-            time.sleep(1. / self._fps)
+            waitDuration = 1. / self._fps / 2
 
             # Capture
-            cd.capture()
+            cd.capture(waitDuration)
+
+            # Send total size
+            size = cd.getImageDataSize()
+            socket.send((size + ' ' * (self._packageSize - len(size))).encode())
 
             # Send the file
-            socket.send(cd.getImageData())
+            # Veriyi küçük boyutun tam katı yap
+            imDat = cd.getImageData()
+            imDat.write(b'0' * (self._packageSize - int(cd.getImageDataSize()) % self._packageSize))
+            socket.send(imDat.getvalue())
 
 
 class CommandClient(Client):

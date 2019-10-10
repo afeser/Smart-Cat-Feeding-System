@@ -14,36 +14,33 @@ class CameraDriver():
 
     def __init__(self):
         self._image     = None
-        self._imageData = None
+        self._imageData = BytesIO()
         self._camera    = PiCamera()
 
-    def capture(self):
+
+    def capture(self, waitDuration):
         """
         Capture an image and return as stream object.
         """
-        self._imageData = BytesIO()
+
 
         self._camera.start_preview()
-        sleep(2)
 
-        self._camera.capture(self._imageData, 'jpg')
+        sleep(waitDuration)
+        self._camera.capture(self._imageData, 'jpeg')
 
+        self._camera.stop_preview()
+        sleep(waitDuration)
+        
 
-
-    def getSize(self):
+    def getImageDataSize(self):
         """
-        Get the size of the buffer
+        Get the size of the buffer object that holds the image data in string type
         """
         # TODO - int->str->byte->str->int probably not efficient
-        # im = self._image
-        #
-        # width  = im.size[0]
-        # height = im.size[1]
-        #
-        # size = width * height
-        #
-        # return str(size).encode()
-        pass
+        size = self._imageData.getbuffer().nbytes
+
+        return str(size)
 
 
 

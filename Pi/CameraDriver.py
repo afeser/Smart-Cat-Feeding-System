@@ -27,11 +27,16 @@ class CameraDriver():
         self._camera.start_preview()
 
         sleep(waitDuration)
+
+        # Reset imageData
+        self._imageData.truncate(0)
+        self._imageData.seek(0)
+
         self._camera.capture(self._imageData, 'jpeg')
 
         self._camera.stop_preview()
         sleep(waitDuration)
-        
+
 
     def getImageDataSize(self):
         """

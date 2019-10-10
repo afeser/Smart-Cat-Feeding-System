@@ -111,18 +111,14 @@ class VideoServer(Server):
 
         print('Reading total length ', uzunluk, ' bytes data...')
         for i in range(uzunluk // 4096 + 1):
-            if i == 1 :
-                b = a
             a = self._clientsocket.recv(self._packageSize)
             data.write(a)
 
-        print('Len = ' + str(data.getbuffer().nbytes))
 
         data.truncate(uzunluk)
 
         im = Image.open(data)
 
-        print(data.getvalue()[100:200])
 
         print('Done!')
         return im

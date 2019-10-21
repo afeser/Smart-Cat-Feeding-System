@@ -1,3 +1,17 @@
 \section{Computer Vision}
 \label{sec:vision}
-...TODO
+
+This week, only some initial research was done on various ways of achieving cat and dog detection and cat recognition. Even though initial decision was to take advantage of neural networks, it is now on the table to develop and use feature based detection algorithms. It is discussed and made clear that even though feature based detection is prone to a higher error, it requires much less computational power, let alone training time and data. The decision between a convolutional neural network and a feature based detection algorithm is still in consideration. A casual comparison of the two methods can be found in Table \ref{table:dl-vs-fd}.
+
+\begin{table}[h]
+	\begin{tabular}{r|c|c|}
+		\cline{2-3}
+		\multicolumn{1}{l|}{}                                                                   & Advantages                                                                  & Disadvantages                                                                                                     \\ \hline
+		\multicolumn{1}{|r|}{Deep Learning}                                                     & \begin{tabular}[c]{@{}c@{}}Newer technology\\ Better community\end{tabular} & \begin{tabular}[c]{@{}c@{}}Too much computational power\\ Requires server\\ Ever changing technology\end{tabular} \\ \hline
+		\multicolumn{1}{|r|}{\begin{tabular}[c]{@{}r@{}}Feature-based\\ Detection\end{tabular}} & \begin{tabular}[c]{@{}c@{}}Faster\\ Can run on embedded system\end{tabular} & \begin{tabular}[c]{@{}c@{}}More prone to error\\ Old technology\end{tabular}                                      \\ \hline
+	\end{tabular}
+	\caption{Advantages and disadvantages of two methods}
+	\label{table:dl-vs-fd}
+\end{table}
+
+We examined some open source implementation examples. A remarkable amount of those were trained on the ``Dogs vs Cats'' data on Kaggle \cite{dogsandcats}. If we need to train a data-set instead of using pretrained weights, we will most likely use this data-set.

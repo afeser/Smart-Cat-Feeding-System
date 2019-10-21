@@ -1,0 +1,36 @@
+\section{INTRODUCTION}
+Cat feeding project report \weekNum is presented in this report. This week we have done a lot of works in various aspects of the project. Therefore, it is best to present the results in sections mechanic design, electronic component selection, base software development, computer vision which are given as sections \ref{sec:mechanic}, \ref{sec:electronic}, \ref{sec:software} and \ref{sec:vision} respectively. The tasks for the next week is given in section \ref{sec:tasks}.
+
+
+We shared the work according to our abilities and professions. We end up with the following work structure:
+
+
+\begin{tikzpicture}[
+roundnode/.style={circle, draw=green!60, fill=green!5, very thick, minimum size=7mm},
+squarednode/.style={rectangle, draw=black!60, fill=red!5, very thick, minimum size=5mm},
+]
+% Nodes here..
+\node[squarednode] (vis) {Computer Vision};
+\node[squarednode] (mec) [right=of vis] {Mechanic Design};
+\node[squarednode] (soft) [right=of mec] {Base Software};
+\node[squarednode] (ele) [right=of soft] {Electronic Component};
+\node[squarednode] (furkan) [below=of vis] {Furkan};
+\node[squarednode] (asude) [right=of furkan] {Asude};
+\node[squarednode] (doga) [right=of asude] {Doğa};
+\node[squarednode] (utku) [right=of doga] {Utku};
+\node[squarednode] (fatih) [right=of utku] {Fatih};
+
+% Draw lines..
+\draw[->] (mec.south) -- (fatih.north);
+\draw[->] (mec.south) -- (utku.north);
+\draw[->] (mec.south) -- (doga.north);
+
+\draw[->] (vis.south) -- (furkan.north);
+\draw[->] (vis.south) -- (asude.north);
+
+\draw[->] (ele.south) -- (fatih.north);
+\draw[->] (ele.south) -- (utku.north);
+
+\draw[->] (soft.south) -- (fatih.north);
+
+\end{tikzpicture}

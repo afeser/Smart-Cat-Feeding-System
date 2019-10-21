@@ -1,0 +1,8 @@
+\babel@toc {english}{}
+\contentsline {section}{\numberline {1}INTRODUCTION}{2}
+\contentsline {section}{\numberline {2}Mechanic Design}{3}
+\contentsline {section}{\numberline {3}Electronic Component Selection}{4}
+\contentsline {section}{\numberline {4}Base Software Development}{5}
+\contentsline {section}{\numberline {5}Computer Vision}{7}
+\contentsline {section}{\numberline {6}Next Week Tasks}{8}
+\contentsline {section}{\numberline {7}Conclusion}{9}

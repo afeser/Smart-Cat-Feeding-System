@@ -8,6 +8,7 @@
 
 ```bash
 ├── src 
+│   ├── common source files
 │   ├── Week1
 │   │   ├── Week 1 source files
 │   ├── ...
@@ -15,6 +16,7 @@
 │   ├── ...
 │   ├── Week{n}
 │   │   ├── Week n source files
+
 ├── Reports
 │   ├── Week1.pdf
 │   ├── ...

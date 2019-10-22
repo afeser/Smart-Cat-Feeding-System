@@ -1,1 +1,6 @@
-Mekanik/
+*.aux
+*.bbl
+*.blg
+*.log
+*.gz
+*.toc

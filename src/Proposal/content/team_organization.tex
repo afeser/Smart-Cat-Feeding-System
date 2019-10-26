@@ -1,0 +1,99 @@
+% TODO - grafik genisletilecek
+
+\section{Team Organization} \label{sec:team_org}
+
+\begin{figure}[htp]
+  \centering
+  
+  
+\begin{tikzpicture}[
+  level 1/.style={sibling distance=40mm},
+  edge from parent/.style={->,draw},
+  >=latex,
+]
+
+% root...
+\node[root] (rootNode) {Fatih Eser CTO}
+% Teams...
+%   \node[squarenode] (cvTeam) [left=of eeTeam] {Computer Vision Team};
+%   \node[squarenode] (eeTeam) [below=of rootNode] {Electronics Team};
+%   \node[squarenode] (mechTeam) [ {Mechanics Team};
+%   \node[squarenode] (softTeam) {Software Team};
+
+% Teams...
+child {node [level 2] (cvTeam) {CV}}
+child {node [level 2] (mechTeam) {Mechanics}}
+child {node [level 2] (elecTeam) {Electronics}}
+child {node [level 2] (softTeam) {Back-end}};
+
+
+
+% child {node[level 2, scale=0.7] (classTeam) {Classification}}
+% child {node[level 2] (identTeam) {Identification}}
+
+% Workers...
+\begin{scope}[every node/.style={level 3}]
+
+% Team classification
+\begin{scope}[every node/.style={level 2}]
+\node [below of = cvTeam, xshift=15pt] (classTeam) {Classification};
+\end{scope}
+\node [below of = classTeam, xshift=15pt] (asudeClassTeam) {Aydin}; 
+\node [below of = asudeClassTeam] (furkanClassTeam) {Aldemir}; 
+
+% Team identification...
+\begin{scope}[every node/.style={level 2}]
+\node [below of = furkanClassTeam, xshift=-15pt] (identTeam) {Identification};
+\end{scope}
+\node [below of = identTeam, xshift=15pt] (serhanIdentTeam) {Suiçmez};
+\node [below of = serhanIdentTeam] (eserIdentTeam) {Eser};
+
+\node [below of = mechTeam, xshift=15pt] (tolgayMechTeam) {Tolgay};
+\node [below of = tolgayMechTeam] (serhanMechTeam) {Suiçmez};
+
+\node [below of = elecTeam, xshift=15pt] (serhanElecTeam)  {Suiçmez};
+
+\node [below of = softTeam, xshift=15pt] (eserSoftTeam) {Eser};
+\node [below of = eserSoftTeam] (furkanSoftTeam) {Aldemir};
+\end{scope}
+
+% Sub-team lines...
+\draw[->] (cvTeam.west) |- (classTeam.west);
+\draw[->] (cvTeam.west) |- (identTeam.west);
+
+% Worker lines...
+\draw[->] (classTeam.195) |- (asudeClassTeam.west);
+\draw[->] (classTeam.195) |- (furkanClassTeam.west);
+
+\draw[->] (identTeam.195) |- (serhanIdentTeam.west);
+\draw[->] (identTeam.195) |- (eserIdentTeam.west);
+
+\draw[->] (mechTeam.195) |- (tolgayMechTeam.west);
+\draw[->] (mechTeam.195) |- (serhanMechTeam.west);
+
+\draw[->] (elecTeam.195) |- (serhanElecTeam.west);
+
+\draw[->] (softTeam.195) |- (eserSoftTeam.west);
+\draw[->] (softTeam.195) |- (furkanSoftTeam.west);
+  
+\end{tikzpicture}
+
+\caption{Organizational team structure}
+\label{fig:organizational_structure}
+\end{figure}
+
+The members of the team have diverse backgrounds and interests; this helps come up with a clear distribution of tasks. Foci of areas differ as follows: control and signal processing for Furkan, control for Asude, Electronics and Biomedical for Utku, Electronics and a double major in physics for Doga. Doga is also a part of the Center for Solar Energy Research and Applications (GUNAM), similary Asude is in an electronics research group (ULTRAMEMS). Therefore in distributing assignments these focused areas have been taken into consideration. 
+
+The head of the company, Fatih Eser, has experiences in Business Management, Computer Engineering and the sub area of Electrical Engineering - Power Systems. Therefore, he has been chosen as a Chief Technology Officer (CTO) due to his clearer understanding of the modules in the project and general background knowledge in project management. 
+
+As given figure \ref{fig:organizational_structure}, Doga has been given the responsibility to accomplish the mechanics of the projects, construction of the cat food container, lid designing, layout of the whole mechanics of the system and durability tests. 
+
+Utku will be held accountable of the electronics part of the project, he will be designing the ultrasonic dog repeller, battery life and its safety, motor of the lid system, sensors such as sonar (for detecting empty volume to estimate remaining cat food) and any extra sensors which might be added later on. 
+
+Asude and Furkan will work on computer vision problems like classification, time dependent testing, preprocessing to filter out noise and outliers, recognition via feature descriptors and any related problems that will be encountered later on. Furkan's internship experience in deep learning will prove useful in the given tasks in this module of the project. 
+
+Fatih is assigned to the software part because of his personal interests and experience in app and website developing. He will be the back-end developer and will be accountable of data transfer, program optimization, interface coding and eventually developing a web based application. 
+
+
+
+

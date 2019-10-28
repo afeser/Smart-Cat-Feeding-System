@@ -16,6 +16,7 @@
 \usepackage{tikz}
 \usepackage{pgfgantt}
 \usepackage{lscape}
+\usepackage{wrapfig}
 \usetikzlibrary{arrows,shapes,positioning,shadows,trees}
 \tikzset{
   basic/.style  = {draw, text width=4cm, drop shadow, font=\sffamily, rectangle},
@@ -39,6 +40,10 @@
 % =============== Page Break between Sections ===========%
 \let\oldsection\section
 \renewcommand\section{\clearpage\oldsection}
+
+% ===================== 5.1 --> a) ======================%
+
+\renewcommand{\thesubsection}{\alph{subsection})}
 
 \begin{document}
 

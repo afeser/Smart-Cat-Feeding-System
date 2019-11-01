@@ -1,0 +1,65 @@
+% V1 ve V2 birleştirip yazıyorum
+Designing the solution requires passes over the problems and finding optimal solutions with minimum cost and effort. Felerest team proposes solutions that are based not only on existing problems but also potential problems in the design and implementation processes. The main objectives Felerest promises to solve are listed below, and the implementation solutions are going to be given afterwards.
+
+There are several problems and objectives, which will then be explained in detail, such as:
+
+\begin{enumerate}
+    \item Reliably differentiating cats and dogs from other animals,
+    \item Identifying the cats and determining eating habits,
+    \item Deterring Dogs,
+    \item Giving the right amount of food and water for each cat,
+    \item Informing the user about food and water levels,
+    \item Being able to work at least 5 hours,
+    \item Being light and movable by a regular user.
+\end{enumerate}
+
+\subsection{Recognition and Identification}
+Computer vision part is responsible for detecting the cats and classifying them as well as identification of the cats. Machine learning techniques and feature descriptors will be exploited to build up a powerful computation system. Neural network technologies make it easy to differentiate cats and dogs with a very high accuracy. Moreover, feature descriptors find the objects in 3D space. Also, there are several open source codes which can be used freely in this project. By looking at these codes and improving necessary parts, detecting our little friends will no longer be a problem.
+
+\subsection{Feeding Cats and Deterring Dogs}
+
+There is also a dog deterring system to protect the product and food from dog invasion. The deterring system will be implemented in order for dogs not to eat cat food. This deterring will be harmless. In order to achieve that, there will be a web research to determine what dogs dislike. This problem can be solved by disturbing the dogs by using a high frequency signal \cite{cite:Dogrepellingdetterent} or using a harmless spray \cite{cite:Dogrepellingsprey} to which dogs are sensitive. For both of the solutions a controller should be designed such that when there is a threat, the deterring system should be triggered.
+
+\subsection{Mechanical Design}
+Mechanical part should be designed such that the system should adjust the necessary amount of food. This can be done by controlling the flow of the food with a door. This door must cut the food flow by the command coming from the controller. Therefore it must be a hard solid material that can move easily or rotate by a simple low power motor like a cheap servo\cite{cite:cheapservo}. Low power motor is preferred  since it is cheaper and consumes less energy. After deciding the gate type, food mechanism should be integrated to the gate. These two parts should be perfectly matched since controlling the flow of the food is critical for this project. In every sub-step of this mechanical part, tests will be carried out with every detail in mind. Real time examples will be tested on every sub-step.
+
+\subsection{Back-End and Informing User}
+Back-end part is responsible for the software part of the project. There will be several problems after and before detecting animals: transferring video data, communication between microprocessors and server. With a user friendly approach, Felerest will develop a web/mobile application with which users can check battery and food levels.
+
+\subsection{Electronics Solution and Considerations}
+This part consists of four different tasks: dog deterring system, design of power electronics, sensor and microprocessor selection and integration, and battery selection and placement. Since our electronic devices will only work at certain voltage levels, regulators will be needed. After the selection of the electronic devices, right regulators will be selected and tested. The amount of food and water should be checked by a precise sensor, i.e. sonar or weight sensor. In order to select the right sensor a web research will be conducted and after selecting the sensor, the necessary tests will be done until requirements are fulfilled. Moreover since our design will work for five hours, a battery must be selected according to the power consumption of the circuit. By simulating the power consumption, effective battery will be selected.
+
+\subsection{Weight Problem}
+The system should be light enough for a human to carry. The design is based on an average weight of approximately 4 kg. The weight mainly depends on the mass of the cat food. The other parts creating extra weight are electronic devices and mechanical parts. It is responsibility of the mechanics team to lower the mass as much as possible while preserving the functionalities. Research on material properties will be done to lower this mass value, in both practical and theoretical way. Some trials will be done on the system since there will be unexpected results such as adding a wheel, making the system easily movable, may cause the product to slip etc.
+
+\subsection{Cost Analysis}
+The cost limit for the entire project is \$200. All R\&D, product and manufacturing costs are included. The average expected cost is approximated as \$55. The major cost is because of the electronic parts of the project. First suggestion is using a powerful embedded system and processing data internally. However, it became a very expensive and impractical solution since only a single processor costs \$779. The second suggestion is based on computing on GPU server, and not to use a powerful embedded system. In this approach, total cost reduces dramatically which is why we constructed our system based on cloud computing. R\&D expenses are recorded as the project budget.
+
+\subsection{Test Plan}
+All parts that are going to be produced should be tested according to the correct and contemporary methods and metrics. All parts in the beginning will be tested individually which are going to be integrated after. Mechanic parts will be tested under external force for reliability which can be present in practical application. The shape change, damage ratio by looking at the shape change will be used as our metric. In addition, testing of the computer vision part will be based on real data collected from the camera during the real world application. Cats and dogs will be put in front of the product and the results will be analyzed. Accuracy will be used as the metric of the product. The communication and back-end tests will also be done based on real world application, bandwidth and accuracy of the data transfer will our measurement metrics.
+
+
+%gantt chartı editlememiz lazım 
+%gantta possible ları silmemissin onları düzeltmek lazımsomut yazın dedi hocasomut olmayanlarda bunların araştırılması gibi yazmamız  - onu duzelltik mq arastiram yaazdik lan silmemis miyim fuckkkk
+%halletsene onu
+%mail ne?
+%smartsheet yok sifresi = 12+15-12
+%inttegrationu salam mı? salma mqqqqq diğeri kadlı
+
+\subsection{Integration Plans}
+
+Integration plan is scheduled as below:
+\begin{itemize}
+\item Integration of mechanical parts.
+\item Integration of camera and microprocessor.
+\item Algorithm related integration on microprocessor.
+\item Integration of microprocessor and mechanical part.
+\end{itemize}
+
+
+
+%% BURAYI KULLANMIYORUM HOCA ISTEMEMIS
+
+% Back-end software group also working on a software program that you can check the amount of the food and water by looking your phone. Moreover, this program will also show the voltage level and will warn you when battery is low. In order to develop the software program a good literature search will be conducted 
+
+% The project can be divided into four subgroups in order to solve the problems. These subgroups can be seen at team organization part. Different approaches can be applied in order to meet the specifications. As Felerest, our goal is to determine the best solution in order to solve the problems.

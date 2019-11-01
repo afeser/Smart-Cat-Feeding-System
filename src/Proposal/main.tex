@@ -8,12 +8,26 @@
 \usepackage[utf8x]{inputenc}
 \usepackage{amsmath}
 \usepackage{graphicx}
+\usepackage[toc,page]{appendix}
+\usepackage{soul}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{hyperref}
 
-\graphicspath{{images/}}
+%objective tree
+\usepackage{tikz}
+\usetikzlibrary{shapes}
+\usepackage{amsmath}
+\usepackage{xspace}
+\newcommand{\A}{\ensuremath{\mathcal{A}}\xspace}
+\newcommand{\B}{\ensuremath{\mathcal{B}}\xspace}
+\newcommand\pa[1]{\ensuremath{\left(#1\right)}}
+
+
+% \graphicspath{{images/}}
 \usepackage{parskip}
 \usepackage{fancyhdr}
 \usepackage{vmargin}
-\usepackage{tikz}
+%\usepackage{tikz}
 \usepackage{pgfgantt}
 \usepackage{lscape}
 \usepackage{wrapfig}
@@ -33,9 +47,18 @@
 \makeatletter
 \makeatother
 
+%page yapisiini degistirelim logo falan, %% ayy selim bey inanmıyoruuum
 \pagestyle{fancy}
-\fancyhf{}
-\cfoot{\thepage}
+\fancyhead[RE,RO]{}
+\fancyhead[LE,LO]{}
+\fancyheadoffset[leh,roh]{7em} % logoyu saga alalim abicim :*
+\rhead{\includegraphics[width = .2\textwidth]{img/FelerestYesil.png}}
+\renewcommand{\headrulewidth}{0pt} % usteki cizgiyi kaldir
+\addtolength{\topmargin}{-.900in} % biraz yukari alalim tabi 
+% \addtolength{\headheight}{1pt}
+% \pagestyle{fancy}
+% \fancyhf{}
+% \cfoot{\thepage}
 
 % =============== Page Break between Sections ===========%
 \let\oldsection\section
@@ -46,6 +69,8 @@
 \renewcommand{\thesubsection}{\alph{subsection})}
 
 \begin{document}
+
+\setstcolor{red}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -60,13 +85,21 @@
 \input{content/introduction.tex}
 \input{content/team_organization.tex}
 \input{content/requirement_analysis.tex}
-\input{content/solution_procedure.tex}
+\input{content/solution_approach.tex}
 \input{content/expected_deliverables.tex}
 \input{content/conclusion.tex}
 
 
 \bibliographystyle{plain}
 \bibliography{ref}
+
+\pagebreak % ;)))
+\begin{appendices} 
+\input{appendices/AppendixA_ObjectiveTree.tex}
+\pagebreak
+\input{appendices/AppendixB_GanttChart.tex}
+\pagebreak
+\end{appendices}
 
 \end{document}
 

@@ -4,6 +4,8 @@
 
 ## [Weekly Report 2](https://github.com/afeser/FinalProject/blob/Report/Reports/Week2.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/src/Week2)
 
+## [Weekly Report 3](https://github.com/afeser/FinalProject/blob/Report/Reports/Week3.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/src/Week3)
+
 ## [Proposal Report](https://github.com/afeser/FinalProject/blob/Report/Reports/ProposalReport2.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/src/Proposal)
 
 ## Directory Structure

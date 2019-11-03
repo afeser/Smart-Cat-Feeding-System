@@ -1,0 +1,58 @@
+%%% Global variables
+\newcommand{\weekNum}{3} % Week number
+
+% === Packages and Structure === %
+\documentclass[12pt]{article}
+\usepackage[english]{babel}
+\usepackage{natbib}
+\usepackage{url}
+\usepackage[utf8x]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{subcaption}
+\usepackage{vmargin}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+
+\setmarginsrb{3 cm}{2.5 cm}{3 cm}{2.5 cm}{1 cm}{1.5 cm}{1 cm}{1.5 cm}
+
+% \title{a} % This was a problem in Week1, might be necessary
+
+\makeatletter
+\makeatother
+
+\pagestyle{fancy}
+\fancyhf{}
+\cfoot{\thepage}
+
+% === Page Break between Sections === %
+
+\let\oldsection\section
+\renewcommand\section{\clearpage\oldsection}
+
+%%% ====== The Document ====== %%%
+
+\begin{document}
+
+% ========= Title Page ========= %
+
+\input{customTitlepageFile.tex}
+
+% ===== Table of Contents ===== %
+
+\tableofcontents
+
+% ========== Content ========== %
+
+\input{content/worksDone.tex}
+\input{content/workDistribution.tex}
+\input{content/nextWeekTasks.tex}
+\input{content/references.tex}
+% ========= References ========= %
+
+\bibliographystyle{plain}
+\bibliography{ref}
+
+\end{document}

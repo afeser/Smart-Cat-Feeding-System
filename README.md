@@ -1,3 +1,3 @@
 # FinalProject
 
-## [Weekly Reports](https://github.com/afeser/FinalProject/tree/Report)
+## [Weekly Reports](https://github.com/afeser/FinalProject/tree/Report/Reports)

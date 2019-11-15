@@ -32,15 +32,15 @@ class Server:
     def getPort():
         return self._listenPort
 
-    def sendStr(self):
+    def _sendStr(self, string):
         '''
         Send string with padded with blank spaces
         '''
-        self._clientsocket.send((string + ' ' * (string._packageSize - len(size))).encode())
+        self._clientsocket.send((string + ' ' * (self._packageSize - len(string))).encode())
 
 
 
-    def receiveStr(self, string):
+    def _receiveStr(self):
         '''
         Receive string terminated by blank spaces
         '''
@@ -71,7 +71,7 @@ class VideoServer(Server):
         from PIL import Image
 
         # 1) frame request
-        self._clientsocket.send((size + ' ' * (self._packageSize - len(size))).encode())
+        self._sendStr('receiveFrame')
 
         # 2) receive image
         print('Read length of the image...')
@@ -103,9 +103,3 @@ class CommandServer(Server):
 
 
         super().__init__(constants)
-
-
-    def sendCommand(self, cmd):
-        # Determine the command, do the required actions!
-        # This method is called from a main program
-        self._clientsocket.send(cmd)

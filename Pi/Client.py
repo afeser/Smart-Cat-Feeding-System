@@ -19,15 +19,15 @@ class Client:
         # Connect
         self._socket.connect((self._destAddress, self._desPort))
 
-    def sendStr(self):
+    def _sendStr(self, string):
         '''
         Send string with padded with blank spaces
         '''
-        self._socket.send((string + ' ' * (string._packageSize - len(size))).encode())
+        self._socket.send((string + ' ' * (self._packageSize - len(string))).encode())
 
 
 
-    def receiveStr(self, string):
+    def _receiveStr(self):
         '''
         Receive string terminated by blank spaces
         '''
@@ -52,37 +52,31 @@ class VideoClient(Client):
         1) Listen for the new commands
         2) Do the corresponding command
         '''
-        pass
+        decider = self._receiveStr()
+
+        if('receiveFrame' == decider):
+            self.sendFrame()
 
 
 
-    def startFrameSender(self):
-        # Start frame sender thread
-        # save the thread to kill later on request
-        self._startFrameSender()
 
-    def _startFrameSender(self):
+    def sendFrame(self):
         """
         First send the buffer size, then send the data
         """
         cd     = self._cameraDriver
         socket = self._socket
-        while True:
-            # or wait for the transfer...
-            waitDuration = 1. / self._fps / 2
 
-            # Capture
-            cd.capture(waitDuration)
+        # Capture
+        cd.capture()
+        # Send total size
+        size = cd.getImageDataSize()
+        socket.send((size + ' ' * (self._packageSize - len(size))).encode())
 
-            # Send total size
-            size = cd.getImageDataSize()
-            socket.send((size + ' ' * (self._packageSize - len(size))).encode())
-
-            # Send the file
-            # Veriyi küçük boyutun tam katı yap
-            imDat = cd.getImageData()
-            imDat.write(b'0' * (self._packageSize - int(cd.getImageDataSize()) % self._packageSize))
-            socket.send(imDat.getvalue())
+        # Send the file
+        imDat = cd.getImageData()
+        imDat.write(b'0' * (self._packageSize - int(cd.getImageDataSize()) % self._packageSize))
+        socket.send(imDat.getvalue())
 
 
 class CommandClient(Client):
@@ -93,10 +87,7 @@ class CommandClient(Client):
         self._desPort         = constants['commandPort']
         self._packageSize     = constants['commandPackageSize']
 
-        # Server - Client commands
-        self._definedCommands = {
-            ('sayHello' + ' ' * (self._packageSize - len('sayHello'))) : self._sayHello
-        }
+
 
         super().__init__(constants)
 
@@ -105,8 +96,3 @@ class CommandClient(Client):
         cmd = self._socket.recv(self._packageSize).decode()
 
         self._definedCommands[cmd]()
-
-
-    # Commands...
-    def _sayHello(self):
-        print('Naber Cinim??')

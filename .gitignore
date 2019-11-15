@@ -1,1 +1,3 @@
 .idea
+./RunServer.sh
+./RunPi.sh

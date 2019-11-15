@@ -26,6 +26,10 @@ class Server:
         self._clientsocket  = clientsocket
         self._clientaddress = address
 
+    def __del__(self):
+        self._clientsocket.close()
+        self._serversocket.close()
+
 
     def getAddress():
         return self._listenAddress

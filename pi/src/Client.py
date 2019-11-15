@@ -8,6 +8,7 @@ from io import BytesIO
 import sys
 
 import logging
+import threading
 
 class Client:
 
@@ -48,6 +49,21 @@ class VideoClient(Client):
         self._cameraDriver      = CameraDriver.CameraDriver()
 
         super().__init__(constants)
+
+    def turnOnListenMode(self):
+        '''
+        Turn on listen mode by starting listener thread with a loop
+        '''
+        x = threading.Thread(target=self._turnOnListenMode)
+
+        x.start()
+
+    def _turnOnListenMode(self):
+        '''
+        Thread function for turnOnListenMode
+        '''
+        while True:
+            self.listener()
 
     def listener(self, config=None):
         '''

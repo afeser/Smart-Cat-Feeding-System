@@ -42,12 +42,6 @@ constants = {
     # Not need to be optimized, already small data stream.
     'commandPackageSize' : 1024,
 
-    # Frame per second, how many frames will the client send in sendFrame mode
-    # Moreover, it can be dynamic in the future depending on the vision algorithm
-    # Notice increasing fps results in overflow in socket buffer...
-    # Either a new technique will be used, or greater fps values will be avoided
-    'fps' : 1
-
 }
 
 import logging

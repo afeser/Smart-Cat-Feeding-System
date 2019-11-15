@@ -17,25 +17,23 @@ class CameraDriver():
         self._imageData = BytesIO()
         self._camera    = PiCamera()
 
-
-    def capture(self, waitDuration):
-        """
-        Capture an image and return as stream object.
-        """
-
-
         self._camera.start_preview()
 
-        sleep(waitDuration)
+    def __del__(self):
+        self._camera.stop_preview()
 
+
+
+    def capture(self):
+        '''
+        Capture an image and return as stream object.
+        '''
         # Reset imageData
         self._imageData.truncate(0)
         self._imageData.seek(0)
 
-        self._camera.capture(self._imageData, 'jpeg')
-
-        self._camera.stop_preview()
-        sleep(waitDuration)
+        # Capture new image
+        self._camera.capture(self._imageData, 'png')
 
 
     def getImageDataSize(self):

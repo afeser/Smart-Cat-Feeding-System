@@ -47,23 +47,30 @@ class VideoClient(Client):
 
         super().__init__(constants)
 
-    def listener(self):
+    def listener(self, config=None):
         '''
         1) Listen for the new commands
         2) Do the corresponding command
+
+        config=None : a list argument containing config for commands
         '''
         decider = self._receiveStr()
 
         if('receiveFrame' == decider):
-            self.sendFrame()
+            self._sendFrame(config[0])
 
 
 
 
-    def sendFrame(self):
-        """
-        First send the buffer size, then send the data
-        """
+    def _sendFrame(self, saveImage=None):
+        '''
+        First send the buffer size, then send the data.
+        Return the sent frame data.
+
+        saveImage=None : Give file name to save captured image - Test
+
+        Do not use directly, correspondence is not exact with receiveFrame in Server.py
+        '''
         cd     = self._cameraDriver
         socket = self._socket
 
@@ -75,8 +82,19 @@ class VideoClient(Client):
 
         # Send the file
         imDat = cd.getImageData()
+
+        if saveImage:
+            f = open(saveImage, 'wb')
+
+            f.write(imDat.getvalue())
+
+            f.close()
+
         imDat.write(b'0' * (self._packageSize - int(cd.getImageDataSize()) % self._packageSize))
         socket.send(imDat.getvalue())
+
+
+
 
 
 class CommandClient(Client):

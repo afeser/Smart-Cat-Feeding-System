@@ -60,11 +60,13 @@ class VideoServer(Server):
         Server.__init__(self, constants)
 
 
-    def receiveFrame(self):
+    def receiveFrame(self, returnBytesIO=False):
         """
         1) Send a frame request
         2) Receive the newly captured frame
         3) Return Image object from PIL
+
+        returnBytesIO=False : Set to true to get a BytesIO object instead of PIL Image
         """
 
         # Image library...
@@ -86,6 +88,9 @@ class VideoServer(Server):
 
 
         data.truncate(uzunluk)
+
+        if returnBytesIO:
+            return data
 
         im = Image.open(data)
 

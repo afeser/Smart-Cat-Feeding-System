@@ -44,7 +44,6 @@ class VideoClient(Client):
         import CameraDriver
         self._desPort           = constants['videoPort']
         self._packageSize       = constants['videoPackageSize']
-        self._fps               = constants['fps']
         self._frameSenderThread = None
         self._cameraDriver      = CameraDriver.CameraDriver()
 

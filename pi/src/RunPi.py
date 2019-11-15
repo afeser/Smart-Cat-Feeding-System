@@ -9,9 +9,9 @@ Client file on the Pi Zero.
 2) Connects to the CommandsServer and waits for commands...
 '''
 
-constants   = pi.src.Constants.getConstants()
+constants   = Constants.getConstants()
 
-videoClient   = pi.src.Client.VideoClient()
+videoClient   = Client.VideoClient(constants)
 # CommandClient = pi.src.Client.CommandClient()
 
 videoClient.turnOnListenMode()

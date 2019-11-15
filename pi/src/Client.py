@@ -74,7 +74,10 @@ class VideoClient(Client):
         decider = self._receiveStr()
 
         if('receiveFrame' == decider):
-            self._sendFrame(config[0])
+            if config:
+                self._sendFrame(config[0])
+            else:
+                self._sendFrame()
 
 
 

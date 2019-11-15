@@ -6,6 +6,11 @@
 # Server : computation server
 # Client : Raspberry Pi Zero W
 
+
+# Create directory etc.
+cd ../src
+cp ../tester/Tester.py ./
+
 server=pi@192.168.1.13
 port=22
 
@@ -56,7 +61,6 @@ function test1() {
   message='sayHello'
 
 
-
   # Run the server
   printf "\tStarting server\n"
   printf $yel
@@ -102,6 +106,7 @@ function test2() {
 
   dirName=pictureTest7q8hd787h3f8u
 
+  ln -s ../src/$dirName ../tester/
   # Frame test
   testNum=2
   $yesil
@@ -164,6 +169,7 @@ function test2() {
   # Clean directories
   printf "\tCleaning directories\n"
   rm -r $dirName
+  rm ../tester/$dirName
   $sshCommand "cd $remoteDir; rm -r $dirName"
 
   $yesil
@@ -181,3 +187,6 @@ if [ $? -eq 1 ]; then exit 0; fi
 
 test2
 if [ $? -eq 1 ]; then exit 0; fi
+
+
+rm ../src/Tester.py

@@ -25,6 +25,7 @@ from Client import *
 
 
 import sys
+import os
 
 constants = {
     # Some constants both for server and client
@@ -48,23 +49,36 @@ constants = {
     'fps' : 1
 
 }
+
+
 if sys.argv[1] == 'test1C':
-    vs = VideoServer()
-
-
-    for i in range(100):
-        im = vs.receiveFrame()
-        print('Writing ' + str(i+1) + '. image...')
-        im.save('/tmp/RAM/cam' + str(i) + '.png')
-        im.close()
-if sys.argv[1] == 'test1S':
-    pass
-
-if sys.argv[1] == 'test2C':
     cc = CommandClient(constants)
 
-if sys.argv[1] == 'test2S':
+    print(cc._receiveStr())
+
+if sys.argv[1] == 'test1S':
     string = sys.argv[2]
     cs = CommandServer(constants)
 
-    cs.sendCommand((string + ' ' * (constants['commandPackageSize'] - len(string))).encode())
+    cs._sendStr(string)
+
+
+if sys.argv[1] == 'test2S':
+    vs = VideoServer(constants)
+
+    dirName = sys.argv[2]
+
+    for i in range(2):
+        im = vs.receiveFrame(returnBytesIO=True)
+        # print('Writing ' + str(i+1) + '. image...')
+        with open (dirName + '/' + str(i) + '.png', 'wb') as f:
+            f.write(im.getvalue())
+
+
+if sys.argv[1] == 'test2C':
+    vc = VideoClient(constants)
+
+    dirName = sys.argv[2]
+
+    for i in range(2):
+        vc.listener([dirName + '/' + str(i) + '.png'])

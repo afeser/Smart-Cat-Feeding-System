@@ -1,16 +1,53 @@
 #!/bin/bash
 
-server=afeserpi.duckdns.org
-port=8001
 
-forwardPorts="-L 10004:localhost:10004 -L 10007:localhost:10007"
+# Test is written to be executed on the server machine
 
-remoteDir="~/FinalProject/Server" # Server directory of the files
+# Server : computation server
+# Client : Raspberry Pi Zero W
+
+server=pi@192.168.1.13
+port=22
+
+forwardPorts="-R 10004:localhost:10004 -R 10007:localhost:10007"
+
+remoteDir="~/ServerTest" # Server directory of the files
 
 sshCommand="ssh -p $port $server"
-scpCommand="scp -P $port Server.py Client.py Tester.py $server:$remoteDir"
+scpCommand="scp -P $port Server.py Client.py Tester.py CameraDriver.py $server:$remoteDir"
 
+
+# Some colors..
+red=$'\e[1;31m'
+grn=$'\e[1;32m'
+yel=$'\e[1;33m'
+blu=$'\e[1;34m'
+mag=$'\e[1;35m'
+cyn=$'\e[1;36m'
+end=$'\e[0m'
+
+yesil="printf $grn"
+beyaz="printf $end"
+# yellow -> python or ssh messages
+
+# Send files
+printf "Sending files...\n"
+$scpCommand  > /dev/null
+# Clean
+printf "Cleaning...\n"
+printf "\tKilling server\n"
+killall python3 &> /dev/null
+printf "\tKilling client ssh sessions\n"
+$sshCommand "kill \$(sudo netstat -lp | grep ':10004' | grep 'tcp ' | sed  's/tcp        0      0 localhost:10004         0.0.0.0:\*               LISTEN      //g' | sed 's/\/sshd: pi//g')"
+# $sshCommand "kill \$(sudo netstat -lp | grep ':10007' | grep 'tcp ' | sed  's/tcp        0      0 localhost:10007         0.0.0.0:\*               LISTEN      //g' | sed 's/\/sshd: pi//g')" # already the same as above line
+
+sleep 3
+
+printf "Establishing secure connection...\n"
+printf $yel
 $sshCommand $forwardPorts -fN
+sleep 3
+printf $end
 
 function test1() {
   # Command Test - sayHello
@@ -18,77 +55,120 @@ function test1() {
   echo "Starting test $testNum..."
   message='sayHello'
 
-  # Run on remote
-  printf "\tSending files\n"
-  $scpCommand  > /dev/null
-  printf "\tStarting remote command\n"
-  $sshCommand "cd $remoteDir; python3 Tester.py test1S $message" &
+
+
+  # Run the server
+  printf "\tStarting server\n"
+  printf $yel
+  python3 Tester.py test1S $message &
+  sleep 3
+  printf $end
+
+  if [ $? -ne 0 ]
+  then
+    echo "FATAL : Error establishing secure connection"
+    exit 1
+  fi
+
 
   # Wait for the server
   sleep 2
 
-  #python3 Tester.py test1S $message &
+  # Start client
+  printf "\tSending files\n"
   printf "\tGetting client response\n"
   clientResponse=$(python3 Tester.py test1C)
   if [ "$clientResponse" == "$message" ]
   then
-    echo Success!
+    printf $grn
+    printf "\tSuccess!\n"
+    printf $end
   else
-    echo Fail!
+    printf $red
+    printf "\tFail!\n"
+    printf $end
     return 1
   fi
 
-
-  # Clean
-  printf "\tKilling remote server\n"
-  $sshCommand "killall python3" &> /dev/null
-  # TODO - below is missing
-  # sshPID=$(netstat -lp | grep ":10007" | grep "tcp " | sed  's/tcp        0      0 localhost:10007          0.0.0.0:\*               LISTEN      //g' | sed 's/\/ssh//g')
-  # printf "\tKilling local ssh session\n"
-  # kill $sshPID &> /dev/null
-
+  $yesil
   echo "Test $testNum finished!"
+  $beyaz
 
   return 0
 }
 
 
 function test2() {
-  # Command Test - sayHello
-  testNum=2
-  echo "Starting test $testNum..."
-  message='sayHello'
 
-  # Run on remote
-  printf "\tSending files\n"
-  $scpCommand  > /dev/null
-  printf "\tStarting remote command\n"
-  $sshCommand "cd $remoteDir; python3 Tester.py test2S $message" &
+  dirName=pictureTest7q8hd787h3f8u
+
+  # Frame test
+  testNum=2
+  $yesil
+  echo "Starting test $testNum..."
+  $beyaz
+
+
+  # Run the server
+  printf "\tStarting server\n"
+  mkdir $dirName
+  printf $yel
+  python3 Tester.py test2S $dirName &
+  sleep 3
+  printf $end
+
+  if [ $? -ne 0 ]
+  then
+    echo "FATAL : Error establishing secure connection"
+    exit 1
+  fi
+
 
   # Wait for the server
   sleep 2
 
-  #python3 Tester.py test1S $message &
-  printf "\tGetting client response\n"
-  clientResponse=$(python3 Tester.py test2C)
-  if [ "$clientResponse" == "$message" ]
+  # Start client
+  printf "\tStarting client\n"
+  $sshCommand "cd $remoteDir; mkdir $dirName; python3 Tester.py test2C $dirName"
+  printf "\tGetting remote images\n"
+  scp -P $port $server:$remoteDir/$dirName/0.png $dirName/remote0.png  &> /dev/null
+  printf "\tTesting images\n"
+  printf "\t\tImage 1\n"
+  diff $dirName/0.png $dirName/remote0.png
+  if [ $? -eq 0 ]
   then
-    echo Success!
+    printf $grn
+    printf "\tSuccess!\n"
+    printf $end
   else
-    echo Fail!
+    printf $red
+    printf "\tFail!\n"
+    printf $end
+    return 1
+  fi
+  scp -P $port $server:$remoteDir/$dirName/1.png $dirName/remote1.png &> /dev/null
+  printf "\t\tImage 2\n"
+  diff $dirName/1.png $dirName/remote1.png
+  if [ $? -eq 0 ]
+  then
+    printf $grn
+    printf "\tSuccess!\n"
+    printf $end
+  else
+    printf $red
+    printf "\tFail!\n"
+    printf $end
     return 1
   fi
 
+  # Clean directories
+  printf "\tCleaning directories\n"
+  rm -r $dirName
+  $sshCommand "cd $remoteDir; rm -r $dirName"
 
-  # Clean
-  printf "\tKilling remote server\n"
-  $sshCommand "killall python3" &> /dev/null
-  # TODO - below is missing
-  # sshPID=$(netstat -lp | grep ":10007" | grep "tcp " | sed  's/tcp        0      0 localhost:10007          0.0.0.0:\*               LISTEN      //g' | sed 's/\/ssh//g')
-  # printf "\tKilling local ssh session\n"
-  # kill $sshPID &> /dev/null
-
+  $yesil
   echo "Test $testNum finished!"
+  $beyaz
 
   return 0
 }

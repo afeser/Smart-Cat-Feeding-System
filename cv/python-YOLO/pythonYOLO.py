@@ -2,25 +2,6 @@ import cv2
 import numpy as np
 import time
 
-import pi.src.Server
-
-# TODO - config icine tasinmali
-constants = {
-    # Some constants both for server and client
-    "address"   : 'localhost',
-    'videoPort' : 10004,
-    'commandPort' : 10007,
-
-    ### To be optimized...
-
-    # _videoPackageSize : package size that stream read is done per receive request
-    # To be optimized for performance. Used in stream server.
-    'videoPackageSize' : 4096,
-    # _commandPackageSize : package size that stream read is done per receive request
-    # Not need to be optimized, already small data stream.
-    'commandPackageSize' : 1024,
-
-}
 
 # Source :
 # https://www.youtube.com/watch?v=xKK2mkJ-pHU
@@ -40,13 +21,7 @@ colors = np.random.uniform(0, 255, size=(len(classes), 3))
 
 # Load image
 # TODO - return directly the opencv image from server...
-server = pi.src.Server.VideoServer(constants)
-
-pil_img     = server.receiveFrame()
-numpy_image = np.array(pil_img)
-frame         = opencv_image=cv2.cvtColor(numpy_image, cv2.COLOR_RGB2BGR)
-cv2.imwrite('orjinal.jpg', frame)
-# frame = cv2.imread('YOLO/cat1.jpg')
+frame = cv2.imread('YOLO/cat1.jpg')
 
 # Preprocessing
 # TODO - garip garip parametreler yaa...

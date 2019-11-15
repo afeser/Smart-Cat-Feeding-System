@@ -13,3 +13,6 @@ wget -nc https://pjreddie.com/media/files/yolov3.weights # performance issues...
 
 # Samples
 wget -nc https://cdn.cnn.com/cnnnext/dam/assets/191024091949-02-foster-cat-exlarge-169.jpg -O cat1.jpg
+wget -nc http://afeserpi.duckdns.org:8080/dosyalar/PoncikDataset.zip
+wget -nc http://192.168.1.91:8080/dosyalar/PoncikDataset.zip
+unzip PoncikDataset.zip > /dev/null

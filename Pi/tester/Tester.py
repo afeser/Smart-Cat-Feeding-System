@@ -50,6 +50,10 @@ constants = {
 
 }
 
+import logging
+
+logging.basicConfig(level=logging.INFO)
+
 
 if sys.argv[1] == 'test1C':
     cc = CommandClient(constants)

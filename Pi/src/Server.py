@@ -2,6 +2,7 @@ import threading
 import socket
 import time
 
+import logging
 
 from io import BytesIO
 
@@ -76,12 +77,12 @@ class VideoServer(Server):
         self._sendStr('receiveFrame')
 
         # 2) receive image
-        print('Read length of the image...')
+        logging.info('Read length of the image...')
         uzunluk = int(self._clientsocket.recv(self._packageSize).decode())
 
         data = BytesIO()
 
-        print('Reading total length ', uzunluk, ' bytes data...')
+        logging.info('Reading total length ' + str(uzunluk) + ' bytes data...')
         for i in range(uzunluk // 4096 + 1):
             a = self._clientsocket.recv(self._packageSize)
             data.write(a)
@@ -95,7 +96,7 @@ class VideoServer(Server):
         im = Image.open(data)
 
 
-        print('Done!')
+        logging.info('Done!')
         return im
 
 

@@ -5,6 +5,8 @@ from picamera import PiCamera
 from io import BytesIO
 from time import sleep
 
+import logging
+
 class CameraDriver():
 
     """

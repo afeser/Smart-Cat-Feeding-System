@@ -7,6 +7,8 @@ from io import BytesIO
 
 import sys
 
+import logging
+
 class Client:
 
     def __init__(self, constants):

@@ -6,6 +6,10 @@
 # Server : computation server
 # Client : Raspberry Pi Zero W
 
+# Old logs are confusing
+clear
+clear
+clear
 
 # Create directory etc.
 cd ../src
@@ -57,7 +61,9 @@ printf $end
 function test1() {
   # Command Test - sayHello
   testNum=1
+  $yesil
   echo "Starting test $testNum..."
+  $beyaz
   message='sayHello'
 
 

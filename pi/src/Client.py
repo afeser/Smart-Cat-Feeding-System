@@ -22,6 +22,9 @@ class Client:
         # Connect
         self._socket.connect((self._destAddress, self._desPort))
 
+    def __del__(self):
+        self._socket.close()
+
     def _sendStr(self, string):
         '''
         Send string with padded with blank spaces

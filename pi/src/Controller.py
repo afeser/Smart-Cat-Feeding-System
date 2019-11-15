@@ -1,6 +1,9 @@
 #!/usr/bin/python3
 import Server
 import Constants
+import cv2
+
+import numpy as np
 
 '''
 Server side

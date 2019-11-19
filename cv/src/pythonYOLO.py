@@ -101,5 +101,5 @@ def classifyCatDog(frame):
 # When none are present: 'NA'
 
 # TODO: Put threshold for detection.
-classifyCatDog(cv2.imread('../data/YOLO/36.jpg'))
+
 

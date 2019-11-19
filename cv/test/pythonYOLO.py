@@ -1,5 +1,7 @@
 import cv2
 import numpy as np
 import time
+import pythonYOLO 
 
-classifyCatDog(cv2.imread('../data/YOLO/33.jpg'))
+
+pythonYOLO.classifyCatDog(cv2.imread('../data/YOLO/33.jpg'))

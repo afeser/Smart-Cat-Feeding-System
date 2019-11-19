@@ -153,6 +153,16 @@ class CommandClient(Client):
 
 
 
+    # TODO usttekiyle ayni yapmaliyiz fonksiyon isimlerini
+    def turnOnListenMode(self):
+        '''
+        Turn on listen mode by starting listener thread with a loop
+        '''
+        x = threading.Thread(target=self.listenCommandLoop)
+
+        x.start()
+
+
     def listenCommandLoop(self):
         while True:
             self.listenCommand()

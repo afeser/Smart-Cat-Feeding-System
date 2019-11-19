@@ -27,13 +27,14 @@ What if food is already given?
 
 '''
 
+logging.getLogger().setLevel(logging.INFO)
+
 # Parameters...
 waitBetweenFrames = 1 # in seconds
 
 
 # Contruct server...
 constants   = Constants.getConstants()
-
 
 videoServer   = Server.VideoServer(constants)
 commandServer = Server.CommandServer(constants)

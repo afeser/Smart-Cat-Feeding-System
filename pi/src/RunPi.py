@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import Client
 import Constants
+import time
 
 '''
 Client file on the Pi Zero.
@@ -12,6 +13,7 @@ Client file on the Pi Zero.
 constants   = Constants.getConstants()
 
 videoClient   = Client.VideoClient(constants)
-# CommandClient = pi.src.Client.CommandClient()
+time.sleep(4)
+CommandClient = Client.CommandClient(constants)
 
 videoClient.turnOnListenMode()

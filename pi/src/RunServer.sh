@@ -1,3 +1,4 @@
 #!/bin/bash
 
-python3 pi/src/Controller.py
+
+python3 Controller.py

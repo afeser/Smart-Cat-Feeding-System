@@ -10,6 +10,10 @@ import sys
 import logging
 import threading
 
+
+import CameraDriver
+import GPIODriver
+
 class Client:
 
     def __init__(self, constants):
@@ -44,7 +48,6 @@ class Client:
 class VideoClient(Client):
 
     def __init__(self, constants):
-        import CameraDriver
         self._desPort           = constants['videoPort']
         self._packageSize       = constants['videoPackageSize']
         self._frameSenderThread = None
@@ -128,12 +131,28 @@ class CommandClient(Client):
         self._desPort         = constants['commandPort']
         self._packageSize     = constants['commandPackageSize']
 
-
+        self._GPIOController  = GPIODriver.GPIODriver()
 
         super().__init__(constants)
 
     def listenCommand(self):
         # Receive commands
-        cmd = self._socket.recv(self._packageSize).decode()
+        cmd  = self._receiveStr()
+        gpio = self._GPIOController
 
-        self._definedCommands[cmd]()
+        if cmd == 'greenLedOn':
+            gpio.greenLedOn()
+        elif cmd == 'redLedOn':
+            gpio.redLedOn()
+        elif cmd == 'greenLedOff':
+            gpio.greenLedOff()
+        elif cmd == 'redLedOff':
+            gpio.redLedOff()
+        else:
+            logging.warning('Meaningless command from server')
+
+
+
+    def listenCommandLoop(self):
+        while True:
+            self.listenCommand()

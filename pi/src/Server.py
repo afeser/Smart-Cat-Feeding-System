@@ -113,3 +113,24 @@ class CommandServer(Server):
 
 
         super().__init__(constants)
+
+
+    def greenLedOn(self):
+        self._sendStr('greenLedOn')
+
+    def redLedOn(self):
+        self._sendStr('redLedOn')
+
+    def greenLedOff(self):
+        self._sendStr('greenLedOff')
+
+    def redLedOff(self):
+        self._sendStr('redLedOff')
+
+    def allLedsOn(self):
+        self.greenLedOn()
+        self.redLedOn()
+
+    def allLedsOff(self):
+        self.greenLedOff()
+        self.redLedOff()

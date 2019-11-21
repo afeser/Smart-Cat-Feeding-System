@@ -57,7 +57,7 @@ class VideoClient(Client):
 
     def turnOnListenMode(self):
         '''
-        Turn on listen mode by starting listener thread with a loop
+        Turn on listen mode by starting thread with a loop
         '''
         x = threading.Thread(target=self._turnOnListenMode)
 
@@ -68,9 +68,9 @@ class VideoClient(Client):
         Thread function for turnOnListenMode
         '''
         while True:
-            self.listener()
+            self.listenCommand()
 
-    def listener(self, config=None):
+    def listenCommand(self, config=None):
         '''
         1) Listen for the new commands
         2) Do the corresponding command
@@ -153,16 +153,15 @@ class CommandClient(Client):
 
 
 
-    # TODO usttekiyle ayni yapmaliyiz fonksiyon isimlerini
     def turnOnListenMode(self):
         '''
-        Turn on listen mode by starting listener thread with a loop
+        Turn on listen mode by starting thread with a loop
         '''
-        x = threading.Thread(target=self.listenCommandLoop)
+        x = threading.Thread(target=self._turnOnListenMode)
 
         x.start()
 
 
-    def listenCommandLoop(self):
+    def _turnOnListenMode(self):
         while True:
             self.listenCommand()

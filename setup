@@ -5,6 +5,12 @@
 # Makefile is hard to write and optimized for compilation
 
 PI_SRC=pi/src
+INSTALL_DIR=./build
+ROOT=$(pwd)
+
+
+echo "Cleaning old installation (removing $INSTALL_DIR)"
+rm -rf $INSTALL_DIR
 
 if [ -z $1 ]
 then
@@ -14,26 +20,36 @@ fi
 
 if [ $1 == 'client' ]
 then
-	echo "Building client"
-	cp $PI_SRC/RunPi.sh ./
-	chmod +x RunPi.sh
-	exit 0
-fi
+	echo "Building client..."
 
+	mkdir $INSTALL_DIR
+	cp $PI_SRC/RunPi.sh ./
+	chmod +x $PI_SRC/RunPi.sh
+
+
+
+fi
 if [ $1 == 'server' ]
 then
-	echo "Building server"
+	echo "Building server..."
 
-	# Pi sources
-	cd pi/src/
-	bash BuildBranchPi.sh
-	cd ../..
-	cp $PI_SRC/Controller.py ./
-	cp $PI_SRC/RunServer.sh ./
-	chmod +x RunServer.sh
+	mkdir build
+
+	cp $PI_SRC/Controller/Controller.latest.py $INSTALL_DIR/Controller.py
+	cp $PI_SRC/RunServer.sh $INSTALL_DIR/
+	chmod +x $PI_SRC/RunServer.sh
 
 
-	exit 0
+
 fi
 
+printf "\t Creating symbolic links\n"
+cd $INSTALL_DIR
+ln -s ../pi
+ln -s ../cv
+cd $ROOT
 
+echo "Changes are written to $INSTALL_DIR"
+echo "Done!"
+
+exit 0

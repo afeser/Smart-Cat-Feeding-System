@@ -70,7 +70,15 @@ Example :
 
 
 ### CommandServer
-This is under development. This will send important messages and commands such as open food gate, etc.
+Based on controller, sends commands to the client.
+
+Available commands are, self explanatory :
+- `greenLedOn()`
+- `redLedOn()`
+- `greenLedOff()`
+- `redLedOff()`
+- `allLedsOn()`
+- `allLedsOff()`
 
 ## Client
 Client is an abstract module, it can be used to create a client that connects to
@@ -100,10 +108,33 @@ Example :
 `videoClient.turnOnListenMode()`
 
 ### Command Client
-Under development.
+Client listening to the server and executes the commands requested. It (currently) only uses GPIODriver to take actions.
+
+#### listenCommand
+Listen to a single command from the server, take an action.
+
+Example :
+`commandClient.listenCommand()`
+
+#### turnOnListenMode
+Client switches into listen mode, calling listenCommand in a loop.
+
+Example :
+`commandClient.turnOnListenMode()`
+
+
 
 ## Constants
 File to store constants and parameters of the project.
 
 Only a single method exists :
 `getConstants()`
+
+
+## GPIODriver
+Driver module for the GPIO pins of the Pi Zero. Pin assignments are embedded into `__init__`.
+Functions are :
+- `greenLedOn()`
+- `redLedOn()`
+- `greenLedOff()`
+- `redLedOff()`

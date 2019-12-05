@@ -1,5 +1,7 @@
 # Reports
 
+## [Weekly Report 7](https://github.com/afeser/FinalProject/blob/Report/Reports/Week7.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/Reports/src/Week7)
+
 ## [Weekly Report 6](https://github.com/afeser/FinalProject/blob/Report/Reports/Week6.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/Reports/src/Week6)
 
 ## [Weekly Report 5](https://github.com/afeser/FinalProject/blob/Report/Reports/Week5.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/Reports/src/Week5)

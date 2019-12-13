@@ -1,15 +1,40 @@
-# FinalProject
+# Reports
 
-## [Weekly Reports](https://github.com/afeser/FinalProject/tree/Report/Reports)
+## [Weekly Report 7](https://github.com/afeser/FinalProject/blob/Report/Reports/Week7.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/Reports/src/Week7)
 
-## [Eser - Documentation](https://github.com/afeser/FinalProject/tree/master/pi)
+## [Weekly Report 6](https://github.com/afeser/FinalProject/blob/Report/Reports/Week6.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/Reports/src/Week6)
+
+## [Weekly Report 5](https://github.com/afeser/FinalProject/blob/Report/Reports/Week5.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/Reports/src/Week5)
+
+## [Weekly Report 4](https://github.com/afeser/FinalProject/blob/Report/Reports/Week4.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/Reports/src/Week4)
+
+## [Weekly Report 3](https://github.com/afeser/FinalProject/blob/Report/Reports/Week3.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/Reports/src/Week3)
+
+## [Weekly Report 2](https://github.com/afeser/FinalProject/blob/Report/Reports/Week2.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/Reports/src/Week2)
+
+## [Weekly Report 1](https://github.com/afeser/FinalProject/blob/Report/Reports/Week1.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/Reports/src/Week1)
 
 
-## Installation
-Simply run "setup" file as a bash script. Arguments specify whether build is for client or server.
+## [Proposal Report](https://github.com/afeser/FinalProject/blob/Report/Reports/ProposalReport.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/Reports/src/Proposal)
 
-Under "build" folder, there are files to make the system work.
+## Directory Structure
 
-Some notes :
-- No compilation needed
-- Run both on server and client with different arguments ("./setup client" or "./setup server")
+```bash
+├── Reports
+│   ├── Week1.pdf
+│   ├── ...
+│   ├── ...
+│   ├── ...
+│   ├── Week{n}.pdf
+    ├── src 
+    │   ├── common source files
+    │   ├── Week1
+    │   │   ├── Week 1 source files
+    │   ├── ...
+    │   ├── ...
+    │   ├── ...
+    │   ├── Week{n}
+    │   │   ├── Week n source files
+
+
+```

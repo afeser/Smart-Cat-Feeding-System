@@ -1,21 +1,21 @@
 # Reports
 
-## [Weekly Report 7](https://github.com/afeser/FinalProject/blob/Report/Reports/Week7.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/Reports/src/Week7)
+## [Weekly Report 7](https://github.com/afeser/FinalProject/blob/Report/Week7.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/src/Week7)
 
-## [Weekly Report 6](https://github.com/afeser/FinalProject/blob/Report/Reports/Week6.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/Reports/src/Week6)
+## [Weekly Report 6](https://github.com/afeser/FinalProject/blob/Report/Week6.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/src/Week6)
 
-## [Weekly Report 5](https://github.com/afeser/FinalProject/blob/Report/Reports/Week5.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/Reports/src/Week5)
+## [Weekly Report 5](https://github.com/afeser/FinalProject/blob/Report/Week5.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/src/Week5)
 
-## [Weekly Report 4](https://github.com/afeser/FinalProject/blob/Report/Reports/Week4.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/Reports/src/Week4)
+## [Weekly Report 4](https://github.com/afeser/FinalProject/blob/Report/Week4.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/src/Week4)
 
-## [Weekly Report 3](https://github.com/afeser/FinalProject/blob/Report/Reports/Week3.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/Reports/src/Week3)
+## [Weekly Report 3](https://github.com/afeser/FinalProject/blob/Report/Week3.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/src/Week3)
 
-## [Weekly Report 2](https://github.com/afeser/FinalProject/blob/Report/Reports/Week2.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/Reports/src/Week2)
+## [Weekly Report 2](https://github.com/afeser/FinalProject/blob/Report/Week2.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/src/Week2)
 
-## [Weekly Report 1](https://github.com/afeser/FinalProject/blob/Report/Reports/Week1.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/Reports/src/Week1)
+## [Weekly Report 1](https://github.com/afeser/FinalProject/blob/Report/Week1.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/src/Week1)
 
 
-## [Proposal Report](https://github.com/afeser/FinalProject/blob/Report/Reports/ProposalReport.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/Reports/src/Proposal)
+## [Proposal Report](https://github.com/afeser/FinalProject/blob/Report/ProposalReport.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/src/Proposal)
 
 ## Directory Structure
 
@@ -26,6 +26,7 @@
 │   ├── ...
 │   ├── ...
 │   ├── Week{n}.pdf
+│   ├── ProposalReport.pdf 
     ├── src 
     │   ├── common source files
     │   ├── Week1
@@ -35,6 +36,8 @@
     │   ├── ...
     │   ├── Week{n}
     │   │   ├── Week n source files
-
-
+    │   ├── Proposal
+    │   │   ├── Proposal report source files
+    │   ├── Conceptual
+    │   │   ├── Conceptual design report source files
 ```

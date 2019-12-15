@@ -86,6 +86,8 @@
 	  
 	  ###### Justification of requirements
 	  
+	  ###### Error sources, their impact and ways to mitigate
+	  
 	  ###### Comparison with alternative solutions
 
     + #### Planned Work
@@ -97,8 +99,6 @@
     + #### Test Plans
 
       ###### Measure of success
-	  
-	  ###### Error sources, their impact and ways to mitigate
 
   + #### Identification
 
@@ -121,6 +121,8 @@
       ###### Procedures and results of tests
 	  
 	  ###### Justification of requirements
+	
+	  ###### Error sources, their impact and ways to mitigate
 	  
 	  ###### Comparison with alternative solutions
 
@@ -133,8 +135,6 @@
     + #### Test Plans
 
       ###### Measure of success
-	
-	  ###### Error sources, their impact and ways to mitigate
 
 + ### Mechanics
 
@@ -159,6 +159,8 @@
     ###### Procedures and results of tests
 	  
 	###### Justification of requirements
+	
+	###### Error sources, their impact and ways to mitigate
 	  
 	###### Comparison with alternative solutions
 
@@ -171,8 +173,6 @@
   + #### Test Plans
 
     ###### Measure of success
-	
-	###### Error sources, their impact and ways to mitigate
 
 + ### Electronics
 
@@ -195,6 +195,8 @@
     ###### Procedures and results of tests
 	  
 	###### Justification of requirements
+	
+	###### Error sources, their impact and ways to mitigate
 	  
 	###### Comparison with alternative solutions
 
@@ -207,8 +209,6 @@
   + #### Test Plans
 
     ###### Measure of success
-	
-	###### Error sources, their impact and ways to mitigate
 
 + ### Integration of the Subsystems
 

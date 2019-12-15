@@ -83,12 +83,18 @@
     + #### Tests
 
       ###### Procedures and results of tests
+	  
+	  ###### Justification of requirements
+	  
+	  ###### Comparison with alternative solutions
 
     + #### Planned Work
 
       ###### Name names
 
     + #### Anticipated Difficulties
+	
+	  ###### Error sources, their impact and ways to mitigate
 
     + #### Test Plans
 
@@ -113,12 +119,18 @@
     + #### Tests
 
       ###### Procedures and results of tests
+	  
+	  ###### Justification of requirements
+	  
+	  ###### Comparison with alternative solutions
 
     + #### Planned Work
 
       ###### Name names
 
     + #### Anticipated Difficulties
+	
+	  ###### Error sources, their impact and ways to mitigate
 
     + #### Test Plans
 
@@ -145,12 +157,18 @@
   + #### Tests
 
     ###### Procedures and results of tests
+	  
+	###### Justification of requirements
+	  
+	###### Comparison with alternative solutions
 
   + #### Planned Work
 
     ###### Name names
 
   + #### Anticipated Difficulties
+	
+	###### Error sources, their impact and ways to mitigate
 
   + #### Test Plans
 
@@ -175,12 +193,18 @@
   + #### Tests
 
     ###### Procedures and results of tests
+	  
+	###### Justification of requirements
+	  
+	###### Comparison with alternative solutions
 
   + #### Planned Work
 
     ###### Name names
 
   + #### Anticipated Difficulties
+	
+	###### Error sources, their impact and ways to mitigate
 
   + #### Test Plans
 

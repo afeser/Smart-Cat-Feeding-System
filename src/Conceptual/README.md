@@ -93,12 +93,12 @@
       ###### Name names
 
     + #### Anticipated Difficulties
-	
-	  ###### Error sources, their impact and ways to mitigate
 
     + #### Test Plans
 
       ###### Measure of success
+	  
+	  ###### Error sources, their impact and ways to mitigate
 
   + #### Identification
 
@@ -129,12 +129,12 @@
       ###### Name names
 
     + #### Anticipated Difficulties
-	
-	  ###### Error sources, their impact and ways to mitigate
 
     + #### Test Plans
 
       ###### Measure of success
+	
+	  ###### Error sources, their impact and ways to mitigate
 
 + ### Mechanics
 
@@ -167,12 +167,12 @@
     ###### Name names
 
   + #### Anticipated Difficulties
-	
-	###### Error sources, their impact and ways to mitigate
 
   + #### Test Plans
 
     ###### Measure of success
+	
+	###### Error sources, their impact and ways to mitigate
 
 + ### Electronics
 
@@ -203,12 +203,12 @@
     ###### Name names
 
   + #### Anticipated Difficulties
-	
-	###### Error sources, their impact and ways to mitigate
 
   + #### Test Plans
 
     ###### Measure of success
+	
+	###### Error sources, their impact and ways to mitigate
 
 + ### Integration of the Subsystems
 

@@ -1,9 +1,10 @@
 # Reports
-## [Weekly Report 8](https://github.com/afeser/FinalProject/blob/Report/Week8.pdf)
 
-## [Weekly Report 7](https://github.com/afeser/FinalProject/blob/Report/Week7.pdf) - [Source Files](#)
+## [Weekly Report 8](https://github.com/afeser/FinalProject/blob/Report/Week8.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/src/Week8)
 
-## [Weekly Report 6](https://github.com/afeser/FinalProject/blob/Report/Week6.pdf) - [Source Files](#)
+## [Weekly Report 7](https://github.com/afeser/FinalProject/blob/Report/Week7.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/src/Week7)
+
+## [Weekly Report 6](https://github.com/afeser/FinalProject/blob/Report/Week6.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/src/Week6)
 
 ## [Weekly Report 5](https://github.com/afeser/FinalProject/blob/Report/Week5.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/src/Week5)
 

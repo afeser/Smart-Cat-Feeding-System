@@ -1,0 +1,8 @@
+# Required connections of pins.
+# Please make sure these are the same as in "pi/src/GPIODriver.py"
+# All of the numbers are GPIO pin numbers, not physical pins!
+
+Green Led Pin : 0
+Red   Led Pin : 2
+
+# TODO - PWM

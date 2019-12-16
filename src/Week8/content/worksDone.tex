@@ -1,0 +1,108 @@
+\section{Works Done}
+\label{sec:worksDone}
+
+\subsection{Table of Contents for Conceptual Design Report}
+The requested table of content for the conceptual report is given in {\color{blue} \href{https://github.com/afeser/FinalProject/tree/Report/src/Conceptual}{this link}}.
+
+\subsection{Mechanics}
+
+This week the integration of the electronic devices to our box is done. Batteries and chargers are fitted into the box. The connections are established between batteries and other devices such that raspberry pi and motors. The connections works for now however, their appearance are not aesthetic. Moreover the food flows through this cables. Therefore also, their design should be changed, such that the food and the cables should not be in contact. Moreover since we enlarged the box at last week, the isn't enough blockage between the food and electronic devices and therefor food can also flow on them. In order to prevent this we should put a necessary blockage between them.
+
+A new apparatus is printed in order to controls the amount of the food flow. First trials showed that it works well. We have controlled the amount of the flowed food, however it need more testing to be sure. The integration of the flow mechanism to the overall system is also done.
+
+
+\subsection{Electronics}
+
+ In this week, all electronics part are integrated. Batteries, charge circuits, regulators, raspberry pi connections, servo motor connections and ultrasonic sonar sensor connections are completed. We used connectors and solder in the cable connections. Also, we combined the electronics part with the computer vision parts. We showed the results of detecting cats, dogs or nothing by 3 leds. If a cat is detected, green led turns on. If a dog is detected, red led turns on. When there is no cat or dog, yellow led is turned on. Also, if both cat and dog are detected, red led turns on. A dog deterrent system will be triggered when a dog is detected, or red led is on. Furthermore, the food flow mechanism is tested with detection system. The gate system works when cat is detected but we faced with some problems. While camera is working, raspberry generates an unstable PWM signal, and this caused motor noise and unwanted gate openings. We have conducted some research on this problem  and find some solutions, but since we do not have the materials, we could not test these solutions. We shortened the power cables of the power cables of the motor, used separate power supplies however these did not solve the problem. Possible solutions that will be tested are listed below: 
+ 
+\begin{itemize}
+\item Using capacitors at the input of servo motor and output of batteries. By this way, motor noise can be suppressed since the noise will be filtered.. [1]
+\item Using ferrite choke in order to eliminate high frequency noise.
+\item Using motor drivers.
+\end{itemize}
+
+
+GPIO Driver module is integrated with the other parts. In this module Pi pins are assigned, pwm and led libraries from python library are used. There are commands for opening/closing LEDs, setting duty cycles of the PWM signal in order to control rotation of the gate. Duty cycles are found from the tests of food flow. When feedCat function is called from the top module, duty cycle changes and gate turns. More details are present in repository documentation.
+
+\iffalse
+\begin{lstlisting} [language=Python]
+
+from gpiozero import LED
+import time
+import RPi.GPIO as GPIO
+
+'''
+Control GPIO pins.
+Pin configuration and actions handled.
+TODO- FeedCat is returning immediately, asynchronous call will be implemented.
+'''
+
+class GPIODriver:
+    def __init__(self):
+
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setwarnings(False)
+
+        # Initialize I/O constants
+        # GPIO17 = Green Led #RGB PINS
+        self._greenLedPin  = 17
+        # GPIO22           = Red Led
+        self._redLedPin    = 22
+        # GPIO27           = Yellow Led
+        self._yellowLedPin = 27
+        # GPIO12           = PWM output Servo
+        self._pwmPin       = 12
+        # GPIO12           = Trig input Sonar
+        self._sonartrigPin = 23
+        # GPIO12           = Echo output Sonar
+        self._sonarechoPin = 18
+
+
+        # I/O objects
+        self._greenLed  = LED(self._greenLedPin)
+        self._redLed    = LED(self._redLedPin)
+        self._yellowLed = LED(self._yellowLedPin)
+
+
+
+        #setups of PWM inputs and outputs
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(12,GPIO.OUT)
+        p = GPIO.PWM(12,50)
+        p.start(7.5)
+
+        self._pwm  = p
+
+    def greenLedOn(self):
+        self._greenLed.on()
+
+    def redLedOn(self):
+        self._redLed.on()
+
+    def yellowLedOn(self):
+        self._yellowLed.on()
+
+    def greenLedOff(self):
+        self._greenLed.off()
+
+    def redLedOff(self):
+        self._redLed.off()
+
+    def yellowLedOff(self):
+        self._yellowLed.off()
+
+    def openFoodGate(self):
+        self._pwm.ChangeDutyCycle(12.5)
+
+
+    def closeFoodGate(self):
+        self._pwm.ChangeDutyCycle(2.5)
+
+    def feedCat(self):
+        self.openFoodGate()
+        time.sleep(5)
+        self.closeFoodGate()
+
+
+\end{lstlisting}
+\fi

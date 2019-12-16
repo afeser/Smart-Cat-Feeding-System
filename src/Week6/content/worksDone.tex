@@ -1,0 +1,35 @@
+\section{Works Done}
+\label{sec:worksDone}
+
+\subsection{Computer Vision}
+\subsubsection{Classification}
+
+\begin{itemize}
+    \item Optimization of the classification code for faster execution.
+    \item Adding debug mode for identifying problems easily during testing.
+\end{itemize}
+
+\subsection{Electronics}
+
+In this week, we have tested the PWM generation with microprocesor, and ultrasonic sonar sensor.
+
+In PWM generation part, we generated PWM signals from raspberry pi that turns the servo motor 45degrees back and forth in every 2 seconds. Rotation of the servo motor was correct, but sometimes jittering occured. We will test the code with a better servo motor and try to solve this jittering issue.
+
+Test of ultrasonic sonar sensor was successful. We used a ruler to measure the distance and compared this distance with the acquired data coming from sonar sensor. Sonar sensor measures the distances correctly if the it is placed 2cm above the surface. We will place the sensor above the reservoir, so we will be able to measure correct distance. From this distance measurement, we will calculate amount of remaining food in reservoir.
+
+We will use 2 different batteries for raspberry pi and servo motor and boost converters to supply stable voltage. Test and integration of battery and converters will be done in the following week. Also, since we will use 2 batteries, parallel charging will be researched.
+
+\subsection{Mechanics}
+
+This week the old servo is testes, which supplies a 1.4kg-cm torque to rotate the lower disk. In is observed that although this servo works under low weight when it faces with a higher torque needed problems like, friction between two disk, it becomes ineffective. Therefore it is a must to buy a better servo. We decided to buy a MG996R servo motor and a metal head to it. By trying this servo, we will decide to use this design or not.
+
+As mentioned above test are conducted on the Sg90 Mini servo for rotating the lower disk. It is observed that when the load is, loaded in an unbalanced way, the lower disk becomes tottering. In order to solve this problem, we decided to buy a metal head for the servo, and attaching this metal head to another low massed sturdy material (like a hard plastic). By this way we can increase the contact area and deal with the the tottering behaviour, however as contact area increases the mass that we can rotate decreases. Therefore, by making realistic tests, we will measure the ideal material size. 
+
+The outer design for the box is started. We have managed to implement the rough shape of the outer design. Depending on the doors behaviour the fine details (the attachment which will hold motor constant, the path which food will flow) will be implemented.
+
+\subsection{Raspberry Pi}
+\begin{itemize}
+    \item Added new network access points to access pi everywhere, injecting eduroam to wpa\_supplicant
+    \item Pin assignments and hardware management code is generated
+    \item Team members are educated on the general topics and abstraction on specific parts, interface and document writing
+\end{itemize}

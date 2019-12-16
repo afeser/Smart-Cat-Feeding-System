@@ -1,20 +1,20 @@
 # Reports
 
-## [Weekly Report 8](https://github.com/afeser/FinalProject/blob/Report/Week8.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/src/Week8)
+## [Weekly Report 8](https://github.com/afeser/FinalProject/blob/Report/Week8.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/src/Week8) (15.12.2019)
 
-## [Weekly Report 7](https://github.com/afeser/FinalProject/blob/Report/Week7.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/src/Week7)
+## [Weekly Report 7](https://github.com/afeser/FinalProject/blob/Report/Week7.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/src/Week7) (08.12.2019)
 
-## [Weekly Report 6](https://github.com/afeser/FinalProject/blob/Report/Week6.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/src/Week6)
+## [Weekly Report 6](https://github.com/afeser/FinalProject/blob/Report/Week6.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/src/Week6) (01.12.2019)
 
-## [Weekly Report 5](https://github.com/afeser/FinalProject/blob/Report/Week5.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/src/Week5)
+## [Weekly Report 5](https://github.com/afeser/FinalProject/blob/Report/Week5.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/src/Week5) (24.11.2019)
 
-## [Weekly Report 4](https://github.com/afeser/FinalProject/blob/Report/Week4.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/src/Week4)
+## [Weekly Report 4](https://github.com/afeser/FinalProject/blob/Report/Week4.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/src/Week4) (17.11.2019)
 
-## [Weekly Report 3](https://github.com/afeser/FinalProject/blob/Report/Week3.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/src/Week3)
+## [Weekly Report 3](https://github.com/afeser/FinalProject/blob/Report/Week3.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/src/Week3) (10.11.2019)
 
-## [Weekly Report 2](https://github.com/afeser/FinalProject/blob/Report/Week2.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/src/Week2)
+## [Weekly Report 2](https://github.com/afeser/FinalProject/blob/Report/Week2.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/src/Week2) (03.11.2019)
 
-## [Weekly Report 1](https://github.com/afeser/FinalProject/blob/Report/Week1.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/src/Week1)
+## [Weekly Report 1](https://github.com/afeser/FinalProject/blob/Report/Week1.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/src/Week1) (27.10.2019)
 
 
 ## [Proposal Report](https://github.com/afeser/FinalProject/blob/Report/ProposalReport.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/src/Proposal)

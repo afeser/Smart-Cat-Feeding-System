@@ -34,6 +34,6 @@ echo "$dirName/titlepage.tex" >> ../.gitignore
 echo "$dirName/METU_Logo.jpg" >> ../.gitignore
 # 3)
 cd ..
-zip $dirName.zip $dirName -r
+zip Week$dirName.zip $dirName -r
 chmod 777 $dirName -R
 rm -r $dirName

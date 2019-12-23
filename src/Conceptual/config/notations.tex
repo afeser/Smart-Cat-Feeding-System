@@ -1,0 +1,42 @@
+\setmarginsrb{3 cm}{2.5 cm}{3 cm}{2.5 cm}{1 cm}{1.5 cm}{1 cm}{1.5 cm}
+
+\tikzset{
+  basic/.style  = {draw, text width=4cm, drop shadow, font=\sffamily, rectangle},
+  root/.style   = {basic, rounded corners=2pt, thin, align=center,
+                   fill=blue!20},
+  level 2/.style = {basic, rounded corners=6pt, thin,align=center, fill=blue!10,
+                   text width=8em},
+  level 3/.style = {basic, thin, align=left, fill=pink!30, text width=6.5em}
+}
+
+\makeatletter
+\makeatother
+
+\newcommand{\A}{\ensuremath{\mathcal{A}}\xspace}
+\newcommand{\B}{\ensuremath{\mathcal{B}}\xspace}
+\newcommand\pa[1]{\ensuremath{\left(#1\right)}}
+
+% ========= page yapisiini degistirelim logo falan ===========
+
+\pagestyle{fancy}
+\fancyhead[RE,RO]{}
+\fancyhead[LE,LO]{}
+\fancyheadoffset[leh,roh]{7em}
+\rhead{\includegraphics[width = .2\textwidth]{img/felerest_logo.png}}
+\renewcommand{\headrulewidth}{0pt}
+\addtolength{\topmargin}{-.900in}
+
+% =============== Page Break between Sections ================
+
+\let\oldsection\section
+\renewcommand\section{\clearpage\oldsection}
+
+% ===================== 5 --> a) --> 2. ======================
+
+\renewcommand{\thesubsection}{\alph{subsection})}
+
+\renewcommand{\thesubsubsection}{\arabic{subsubsection}.}
+
+% ===============  Strike-through color ======================
+
+\setstcolor{red}

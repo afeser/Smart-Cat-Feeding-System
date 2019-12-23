@@ -1,6 +1,6 @@
 # Reports
 
-## [Conceptual Design Report](https://github.com/afeser/FinalProject/blob/Report/ConceptualDesignReport.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/src/ConceptualDesignReport) (22.12.2019)
+## [Conceptual Design Report](https://github.com/afeser/FinalProject/blob/Report/ConceptualDesignReport.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/src/Conceptual) (22.12.2019)
 
 ## [Weekly Report 9](https://github.com/afeser/FinalProject/blob/Report/Week9.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/src/Week9) (22.12.2019)
 

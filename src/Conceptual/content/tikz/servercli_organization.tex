@@ -1,0 +1,43 @@
+% Objeleri yazalim
+%\tikzstyle{block}=[fill=white,draw=red,minimum size=1.5cm, rounded  corners,align=center]
+
+
+\begin{figure}[ht!]
+\centering
+\resizebox{\linewidth}{!}{
+\begin{tikzpicture}[auto,node distance=3.5cm]
+% Create nodes
+\node[rect] (controller) {Controller};
+\node[draw=none, above of=controller] (controllerTop) {};
+\node[rect, left of=controllerTop] (commandServer) {Command\\Server};
+\node[rect, right of=controllerTop] (videoServer) {Video\\Server};
+\node[rect, above of=commandServer] (commandClient) {Command\\Client};
+\node[rect, above of=videoServer] (videoClient) {Video\\Client};
+\node[rect, right of=videoClient] (camera) {Camera};
+\node[rect, left of=commandClient] (GPIO) {GPIO};
+
+
+% Connections
+    % Controller
+    \path [->,bend left=10] (controller) edge node {Commands} (commandServer);
+    \path [->,bend left=10] (commandServer) edge node {Status} (controller);
+    \path [->,bend left=20] (controller) edge node {Request} (videoServer);
+    \path [->,bend left=10] (videoServer) edge node {Data} (controller);
+
+    % Server - Client
+    \path [->,bend left=10] (commandClient) edge node {Response} (commandServer);
+    \path [->,bend left=10] (commandServer) edge node {Request} (commandClient);
+    \path [->,bend left=10] (videoClient) edge node {Data} (videoServer);
+    \path [->,bend left=10] (videoServer) edge node {Request} (videoClient);
+
+    % Pi
+    \path [->] (camera) edge node {Data} (videoClient);
+    \path [->,bend left=10] (commandClient) edge node {Action} (GPIO);
+    \path [->,bend left=10] (GPIO) edge node {Status} (commandClient);
+
+
+\end{tikzpicture}
+}
+\caption{Server and Client Organization}
+\label{fig:serverClieOverview}
+\end{figure}

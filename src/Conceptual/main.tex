@@ -1,0 +1,52 @@
+% ======================= Import packages and definitions ===============================
+
+\input{config/includes.tex}
+\input{config/notations.tex}
+\input{content/tikz/tikzSources.tex}
+
+% ========================== Beginning of the Document ==================================
+
+\begin{document}
+
+% ================================= Title Page ==========================================
+
+\input{title/titlepage.tex}
+
+% ============================= Table of Contents =======================================
+
+\tableofcontents
+
+% ================================== Content ============================================
+\input{content/00_executive_summary.tex}
+\input{content/01_introduction.tex}
+\input{content/02_0overall_system.tex}
+\input{content/02_1servercli.tex}
+\input{content/03_computer_vision.tex}
+\input{content/06_electronics.tex}
+\input{content/07_mechanics.tex}
+\input{content/08_integration.tex}
+\input{content/09_cost_analysis.tex}
+\input{content/10_expected_deliverables.tex}
+\input{content/11_conclusion.tex}
+\input{content/12_appendix.tex}
+% TODO
+% Further possible improvements to the product, in case of extra circumstances
+% Not going to be implemented
+% 1) Server - Client specs
+% 2) Tests on communication and data transfer
+
+% ================================ References ===========================================
+
+\bibliographystyle{plain}
+\bibliography{ref}
+\pagebreak
+
+% ================================= Appendix ============================================
+
+% \begin{appendices}
+% \input{appendices/00_GanttChart.tex}
+% \end{appendices}
+
+% ========================== Bunu da ben mi yazayım =====================================
+
+\end{document}

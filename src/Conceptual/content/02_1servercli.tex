@@ -1,0 +1,156 @@
+\section{Server and Client}
+\label{sec:serverClient}
+The overall system implementation is based on server - client model. Server is mainly responsible for computations and decisions that the system is going to be take. Server - client model make it possible to use advanced techniques, use powerful computation models, create cost advantage, easy user interaction as well powerful product design that is open to a lot of further improvements. Server - client model provides very powerful features that would be impossible if there were no server. Server - client model provides extensibility, flexibility, and usability of the system. Database management, extra features addition capability, light structure of the system are all constituting the reasonable choice of the server - client model.
+
+Server - client model can be thought as basically two different computers located on the same network, and communicating over TCP/IP layer. There are certain responsibilites assigned to each of these two. High computational requirements and user interactions are handled in server side, whereas; hardware drivers, peripheral management, and data collection are located on the client side. Based on this model, much cheaper products can be produced and their optimization and feature addition can be done remotely and whenever needed. Therefore, after support services can cost very little in addition to the life time value of the prouct thanks to the extensibility of feature addition over internet. For better understanding, some certain responsibilities and tasks assigned to the server and client are given below.
+
+Responsibilities of the server :
+\begin{itemize}
+    \item Handling the required computations
+    \begin{itemize}
+        \item Neural network train
+        \item Neural network prediction
+        \item SIFT vector extraction
+        \item SIFT comparison algorithm
+    \end{itemize}
+    \item Decision making of every action the client takes
+    \begin{itemize}
+        \item Notifying user with on-board LEDs
+        \item Deciding whether to run food mechanism or not
+        \item Activating dog deterring system
+        \item Turn the product on or off
+    \end{itemize}
+    \item Complex decisions and computations excluded above
+    \begin{itemize}
+        \item The time cat needs to eat food
+        \item Measure of the food to give to cat
+        \item Multiple animal cases
+        \item Different situations where environment interruptions can arise
+        \begin{itemize}
+            \item Holidays - no people to supply food
+            \item Physical damage
+            \item Overloading of internal system, specifically batteries
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+
+Responsibilities of the client :
+\begin{itemize}
+    \item Taking measurements and sending to the server
+    \item Taking photos and sending to the server
+    \item Driving output devices and, such as motor for the food gate
+    \item Handling extra ordinary emergency situations
+    \begin{itemize}
+        \item Connection lost
+        \item Environmental risks under connection lost cases
+    \end{itemize}
+\end{itemize}
+
+%% beni takip etsene
+
+Figure \ref{fig:serverClieOverview} shows the overall communication. Command Server, Video Server, and Controller are located on the server side, whereas Command Client, Video Client, GPIO, and Camera are located in the client side. Each module has a different job to do, and they communicate with each other with black box method.
+
+\input{content/tikz/servercli_organization.tex}
+
+
+In this section, the remaining structure is as follows, comparison of server - client model over regular compute on product model, risks related to this model, planned solutions, and cost analysis. Following sections present these to the full extent. 
+
+\subsection{Comparison}
+Every decision comes with a cost. Trade-off between the proposed model and the regular old model is better explained in comparison table \ref{table:serverCliComparison}. 
+
+\begin{table}
+\begin{tabular}{|p{0.45\linewidth}|p{0.45\linewidth}|}
+\begin{center}
+Regular Design (On-Board)
+\end{center}
+&
+\begin{center}
+Server - Client Design
+\end{center}
+\\
+\\
+
+\hline
+Narrower variety of tools   & Much wider variety of tools \\
+\hline
+No further updates on product & Online and continuously evolving features and updates\\
+\hline
+Higher  burden, higher product prices & Burden done on server, less product prices\\
+\hline
+Difficult fault detection & Easy and fast fault detection\\
+\hline
+Poor and limited data management & Very efficient and broader data capacity\\ 
+\hline
+Only on-product interface & Online, real-time interface\\
+\hline
+Limited after sale product support & Extensible after sale product support\\
+\hline
+Expensive product, no steal protection & Cheaper product, steak protection\\
+\hline
+
+\end{tabular}
+\caption{Comparison of Server Client and Regular desıgn}
+\label{table:serverCliComparison}
+\end{table}
+
+\subsection{Risks}
+Risks related to the server - client model are mainly because of communication interruptions or bad pipes between server and client. Sometimes drop of packages over network, or wrong data transmitted causes system to fail, or temporarily become unavailable. It seems most of the problems can easily be solved with a proper programming practices and exception handling techniques. However, some more important problems may require decision making on client if there may be dangerous or destructive consequences. Finally, some risks related to the model includes :
+
+\begin{itemize}
+    \item Connection lost
+    \item Wrong data transmitted
+    \item Unexpected data received
+    \item Cyberattack
+\end{itemize}
+
+
+\subsection{Planned Solutions}
+As mentioned, most of the risks can be eliminated using proper algorithms and coding practices. Exception handling and emergency behaviour are also the key solutions to the risks. Solution approaches to the risks mentioned above are given in table \ref{table:risksSolutions}.
+
+
+\begin{table}[h!]
+\begin{tabular}{|p{0.45\linewidth}|p{0.45\linewidth}|}
+\begin{center}
+Risks
+\end{center}
+&
+\begin{center}
+Solutions
+\end{center}\\
+
+\hline
+Connection lost & Reconnect, emergency codes, compute on client, sleep mode\\
+\hline
+Wrong data transmitted & Data checking, re-claiming data\\
+\hline
+Unexpected data received & Exception handling, ignore on some cases\\
+\hline
+Cyber attacks & 4096-bit RSA encryption\\
+\hline
+
+\end{tabular}
+\caption{Comparison of Server Client and Regular desıgn}
+\label{table:risksSolutions}
+\end{table}
+
+Although the table is self-explanatory, some points are clarified. In case of a connection lost, the first procedure will try to reconnect. After some unsuccessful connection attempts, it generates some emergency codes on both server and client. Client computes some needed information such as battery voltages, etc. and sleeps for a while to try in a future step. If an important measurements taken, and dangerous situations possibility arises like overheating of batteries, then client decides to shut the system down completely. The server on the other hand both informs the user and support services for the fastest solution.
+
+Wrong and unexpected data will be handled according to the rules python socket provides. try-catch blocks, and re-claim of data are core two concepts for the system. Server will simply re-claim the data, and handle the error with try-catch blocks.
+
+Cyberattack is another vulnerability that can be exploited when the system connect to the internet. 4096 RSA encryption will be used to transfer both command data and video data. Also, public-key authentication, disabling password authentication, and SSH tunnels are going to eliminate big amount of vulnerabilities. Since any client is not vulnerable because of the completely closed firewall. Location of the only vulnerability target becomes the servers. Moreover, there are only a few number of servers, which makes it much easier to protect the system. Consequently, there is only a limited number of servers are investigated for security purposes.
+
+
+\subsection{Tests}
+Reliability and performance tests are done on the server - client model. System logs, debug mode outputs, router log information is used in the test process. The following results are obtained :
+
+\begin{itemize}
+    \item Bandwidth : 121 KB/s on METU internet(depends on connection speed, fps rate)
+    \item Classification Lag : 0.78 s on LAN, 1.7 s on METU internet, 12 s on DSL connection
+    \item Number of program crashes, recovered : 1 crash per 16 minute
+    \item Memory usage (server) : 624 MB
+    \item CPU usage (server) : 13.3 \% (i7-4770S)
+    \item Memory usage (client) : 1.99 MB
+    \item CPU usage (client) : 2.2 \% (ARM1176)
+\end{itemize}
+
+Results show that, with a regular old computer, the server can handle 40 clients at a time. Increase in computational power and optimizations are going to produce better results. More discussion on the computation burden is investigated in the Computer Vision section of the report.

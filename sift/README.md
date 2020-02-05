@@ -1,2 +1,3 @@
-# FinalProject - Sift
+# FinalProject
 
+## Sift

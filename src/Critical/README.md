@@ -1,3 +1,7 @@
+Refer to : https://capstone.eee.metu.edu.tr/critical-design-review-report/ for general instructions.
+Refer to : http://capstone.eee.metu.edu.tr/files/2019/02/EE494_CriticalDesignReviewRubric_2019.pdf for evaluation rubric.
+
+
 # Critical Design Review Report
 
 It is expected that essential parts of the system design should not change after the submission of this report.

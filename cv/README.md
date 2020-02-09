@@ -1,9 +1,9 @@
 DOCUMENTATION
 
-Asude - pythonYOLO
+Asude - Classifier
 
 
-Class Name: NeuralNetwork
+Class Name: Classifier
 
 classifyCatDog(frame,debug=False)
 

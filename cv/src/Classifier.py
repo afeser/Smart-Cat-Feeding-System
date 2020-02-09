@@ -3,7 +3,7 @@ import numpy as np
 import time
 import logging
 
-class NeuralNetwork:
+class Classifier:
 
     def __init__(self, debugMode=False):
 

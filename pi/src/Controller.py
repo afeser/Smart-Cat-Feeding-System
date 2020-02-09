@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import pi.src.Server as Server
 import pi.src.Constants as Constants
-import cv.src.pythonYOLO as pythonYOLO
+from cv.src.Classifier import Classifier
 
 
 import cv2
@@ -45,7 +45,7 @@ constants   = Constants.getConstants()
 videoServer   = Server.VideoServer(constants)
 commandServer = Server.CommandServer(constants)
 
-neuralNetwork = pythonYOLO.NeuralNetwork(debugMode=debugMode)
+neuralNetwork = Classifier(debugMode=debugMode)
 
 # TODO - bunu dogru yere tasimaliyiz...
 

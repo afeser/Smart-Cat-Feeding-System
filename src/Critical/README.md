@@ -10,6 +10,8 @@ As a rule of thumb 75% to 90% of all product design should be complete. Note tha
 
 You should follow a top-down approach for this rreport. 
 
+Submitted report fully complies with the technical report writing rules. Spelling, punctuation and grammar mistakes are minimum. The organization of the report is easy to follow and understand. 
+
 ## What is expected?
 
 ### System under review can proceed into:
@@ -72,171 +74,105 @@ All control and data signals within the system are illustrated clearly including
 
 All the blocks and the signals are clearly labelled.
 
+  + #### Test Procedures and Assesment of Test Results
+  
+  A test plan for each subsystem is provided along with the expected quantitative test results for success. Test results, encountered problems, and implemented/proposed solutions are clearly indicated and discussed. 
+
   + #### Requirements
+  
+ System and subsystem level requirements are illustrated in detail in a structural manner. 
+ 
+  + #### Design Modifications
+  No modifications to the conceptual design are done with justifications or design modifications at the system level and subsystem level are explained in detail with full justifications. 
 
-  + #### Solution
-
-    ###### An extensive feasibility analysis for main solution and its alternatives
-
-    ###### Expected weight, dimensions, and total power consumption `of the robot`
+  + #### Compatibility Analysis of Overall System
+  
+  A detailed discussion on the compatibility between subsystems is provided. Their signal interfaces are clearly described. 
 
 + ### Computer Vision
 
-  ###### Describe subsystem
+	+ ##### Subsystem Description
+		
+		+ ###### Block diagrams
+		+ ###### Flow Charts 
+		+ ###### 3D Drawings 
+		+ ###### Control and data signal illustrations
+		
+	+ ##### Test Procedures and Assesment of Test Results
+	
+	+ ##### Requirements 
+	
+	+ ##### Modifications
+	
+	+ ##### Compatibility Analysis of Computer Vision
 
   + #### Classification
-
-    ###### Describe subsystem
-
-    + #### Requirements
-
-      ###### Relation to system level requirements
-
-    + #### Solution
-
-      ###### Algorithms, among other content, belong here
-
-    + #### Risks
-
-      ###### Indicate alternative solutions
-
-    + #### Tests
-
-      ###### Procedures and results of tests
-	  
-	  ###### Justification of requirements
-	  
-	  ###### Error sources, their impact and ways to mitigate
-	  
-	  ###### Comparison with alternative solutions
-
-    + #### Planned Work
-
-      ###### Name names
-
-    + #### Anticipated Difficulties
-
-    + #### Test Plans
-
-      ###### Measure of success
-
-  + #### Identification
-
-    ###### Describe subsystem
-
-    + #### Requirements
-
-      ###### Relation to system level requirements
-
-    + #### Solution
-
-      ###### Algorithms, among other content, belong here
-
-    + #### Risks
-
-      ###### Indicate alternative solutions
-
-    + #### Tests
-
-      ###### Procedures and results of tests
-	  
-	  ###### Justification of requirements
+  
+  	+ ##### Sub Subsystem Description
+		
+		+ ###### Block diagrams
+		+ ###### Flow Charts 
+		+ ###### 3D Drawings 
+		+ ###### Control and data signal illustrations
+		
+	+ ##### Test Procedures and Assesment of Test Results
 	
-	  ###### Error sources, their impact and ways to mitigate
-	  
-	  ###### Comparison with alternative solutions
-
-    + #### Planned Work
-
-      ###### Name names
-
-    + #### Anticipated Difficulties
-
-    + #### Test Plans
-
-      ###### Measure of success
+	+ ##### Requirements 
+	
+	+ ##### Modifications
+	
+  + #### Identification
+  
+  	+ ##### Subsystem Description
+	
+		+ ###### Block diagrams
+		+ ###### Flow Charts 
+		+ ###### 3D Drawings 
+		+ ###### Control and data signal illustrations
+		
+	+ ##### Test Procedures and Assesment of Test Results
+	
+	+ ##### Requirements 
+	
+	+ ##### Modifications
 
 + ### Mechanics
 
-  ###### Describe subsystem
-
-  + #### Requirements
-
-    ###### Relation to system level requirements
-
-  + #### Solution
-
-    ###### Technical drawing of the expected design
-
-    ###### Expected weight, dimensions
-
-  + #### Risks
-
-    ###### Indicate alternative solutions
-
-  + #### Tests
-
-    ###### Procedures and results of tests
-	  
-	###### Justification of requirements
+	+ ##### Subsystem Description
+		
+		+ ###### Block diagrams
+		+ ###### Flow Charts 
+		+ ###### 3D Drawings 
+		+ ###### Control and data signal illustrations
+		
+	+ ##### Tests and Results
 	
-	###### Error sources, their impact and ways to mitigate
-	  
-	###### Comparison with alternative solutions
-
-  + #### Planned Work
-
-    ###### Name names
-
-  + #### Anticipated Difficulties
-
-  + #### Test Plans
-
-    ###### Measure of success
+	+ ##### Requirements 
+	
+	+ ##### Modifications
+	
+	+ ##### Compatibility Analysis of Mechanics
 
 + ### Electronics
 
-  ###### Describe subsystem
-
-  + #### Requirements
-
-    ###### Relation to system level requirements
-
-  + #### Solution
-
-    ###### Power consumption
-
-  + #### Risks
-
-    ###### Indicate alternative solutions
-
-  + #### Tests
-
-    ###### Procedures and results of tests
-	  
-	###### Justification of requirements
+	+ ##### Subsystem Description
+		
+		+ ###### Block diagrams
+		+ ###### Flow Charts 
+		+ ###### 3D Drawings 
+		+ ###### Control and data signal illustrations
+		
+	+ ##### Test Procedures and Assesment of Test Results
 	
-	###### Error sources, their impact and ways to mitigate
-	  
-	###### Comparison with alternative solutions
+	+ ##### Requirements 
+	
+	+ ##### Modifications
+	
+	+ ##### Compatibility Analysis of Electronics
 
-  + #### Planned Work
++ ### Cost Analysis (Resource Management)
 
-    ###### Name names
-
-  + #### Anticipated Difficulties
-
-  + #### Test Plans
-
-    ###### Measure of success
-
-+ ### Integration of the Subsystems
-
-  ###### Measure of success for the complete system
-
-+ ### Cost Analysis
-
-+ ### Deliverables
+Updated cost breakdown and analysis are discussed in detail with clear justifications. A power distribution diagram and a power management analysis (resources and consumption) for the system are clearly described with associated test results. Updated project schedule (with a Gantt Chart) is given in detail.
 
 + ### Conclusion
 

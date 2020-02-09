@@ -58,7 +58,7 @@ Submitted report fully complies with the technical report writing rules. Spellin
 
 + Please avoid dumping data sheets, reference designs, etc. in the text as these are distracting from the focus of your report. Only segments from relevant data sheets can be given, and preferably in appendices.
 
-+Using illustrative diagrams, tables, and lists are strongly recommended over writing long explanatory texts.
++ Using illustrative diagrams, tables, and lists are strongly recommended over writing long explanatory texts.
 
 ## Proposed Table of Contents
 

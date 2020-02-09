@@ -215,9 +215,11 @@ class Identifier:
 
     def importDirectory(self, directoryPath):
         '''
+        TODO - it only works for empty database
+
         Import every file in a directory based on their base names
 
-        poncik.jpg -> imported with unique id 'poncik'
+        poncik_1.jpg -> imported with unique id 'poncik'
 
         Parameters
         ----------
@@ -226,10 +228,58 @@ class Identifier:
         Returns
         -------
         None
-        '''
-        pass
 
-    def resetDatabase(self):
+        Algorithm :
+        1) Import an image, extract vectors, add to database
+        2) When no other class member remains, match images for key points
+        3) For every keypoint matched, store in a variable, discard mismatched ones
+        '''
+        files = os.listdir(directoryPath)
+
+        # 1)
+        for file in files:
+            logging.debug('Reading file ' + file)
+            basename  = file.split('_')[0]
+
+            targetFile = self._databaseDir + '/' + basename + '/' + basename + '.pickle'
+            # Load relevant class
+            vectors = []
+            if os.path.exists(targetFile):
+                with open(targetFile, 'rb') as f:
+                    vectors = pickle.load(f)
+
+
+            logging.debug('Adding vectors into ' + basename)
+            im = cv2.imread(directoryPath + '/' + file)
+            newVectors = self._getSiftVectors(im)
+
+            vectors.extend(newVectors)
+
+            with open(targetFile, 'wb') as f:
+                pickle.dump(vectors, f)
+
+            if not basename in self._savedCats:
+                self._savedCats.append(basename)
+
+
+        # 2)
+        for cl in self._savedCats:
+            targetFile = self._databaseDir + '/' + cl + '/' + cl + '.pickle'
+
+            vectors = []
+            with open(targetFile, 'rb') as f:
+                vectors = pickle.load(f)
+
+            for index1, kp1 in enumerate(vectors):
+                for index2, kp2 in enumerate(vectors):
+                    if np.linalg.norm(kp1[1] - kp2[1]) < 0.0001:
+                        print('DENEME ', index1, index2)
+
+            # TODO
+
+
+
+    def resetDatabase(self, force=False):
         '''
         Remove everything from database, delete any imported, saved data.
         Be careful when using!
@@ -242,5 +292,9 @@ class Identifier:
         -------
         None
         '''
-        if input('Are you sure want to delete whole database? (y/N)') == 'y':
+        if force or input('Are you sure want to delete whole database? (y/N)') == 'y':
+            # logging.warning('Resetting feature database...')
+            logging.warning('Not implemented')
+        else:
+            # Nothing made
             pass

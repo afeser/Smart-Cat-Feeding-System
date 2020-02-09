@@ -56,6 +56,11 @@ a.displaySIFT(doga2High, work_dir + '/TEST/HighDogaOutput2.jpg')
 a.displaySIFT(doga1crop, work_dir + '/TEST/Doga1Crop.jpg')
 a.displaySIFT(doga2crop, work_dir + '/TEST/Doga2Crop.jpg')
 
+
+
+b = Identifier()
+b.resetDatabase(force=True)
+b.importDirectory(work_dir + '/dataset')
 sys.exit(0)
 
 print(a.getCatName(doga5))

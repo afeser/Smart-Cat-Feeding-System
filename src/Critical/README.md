@@ -89,14 +89,18 @@ All the blocks and the signals are clearly labelled.
   
   A detailed discussion on the compatibility between subsystems is provided. Their signal interfaces are clearly described. 
 
-+ ### Software Architecture
++ ### System Architecture -> top down approach
+
 	+ #### Server - Client Model
+	
 		+ ##### Reasons and requirements
 		+ ##### Ways to satisfy the requirements
 		+ ##### Software design
-		+ ##### Implementation details(roughly)
+		+ ##### Implementation details(roughly) - technologies used
 		+ ##### Test methods and results
+		
 	+ #### Customer Interface
+	
 		+ ###### TODO - Furkan
 	
 + ### Computer Vision

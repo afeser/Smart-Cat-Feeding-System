@@ -1,0 +1,75 @@
+\section{Works Done}
+\label{sec:worksDone}
+This week is dedicated to conceptual design report. In addition to writing the report, tests are done for system stability and measurements are taken. Server - client test results are given in table \ref{tab:serverClieMeasures}, whereas computer vision test results are given in table \ref{tab:cvMeasures}. Extreme distances are measured for the ones where the detection is successful and not where as simple farthermost distances are the ones with stable behaviour with all of the samples tested.
+
+
+%Other electronic measurements are given in table \ref{tab:elecMeasures}.
+
+
+
+
+\begin{table}[]
+    \centering
+    \begin{tabular}{|c|c|}
+         \hline
+         Bandwidth(FPS 0.588, depending on FPS)                              &  121 KB / s  \\
+         \hline
+         Classification Lag (DSL, 80KB/s upload)                             & 12 s \\
+         \hline
+         Classification Lag (METU, 10 MB/s upload)                           & 1.70 s \\
+         \hline
+         Classification Lag (LAN, 100 MB/s upload)                           & 1.78 s \\
+         \hline
+         Number of Errors - Wrong Packages (DSL)                             & 0.0625 events/min \\
+         \hline
+         Memory Usage (server)                                               & 624 MB \\
+         \hline
+         Memory Usage (client)                                               & 1.99 MB \\
+         \hline
+         CPU Usage (server-average)                                          & 13.3 \% \\
+         \hline
+         CPU Usage (client-average)                                          & 2.2 \% \\
+         \hline
+    \end{tabular}
+    \caption{Server - Client Measurements}
+    \label{tab:serverCliMeasures}
+\end{table}
+
+
+\begin{table}[]
+    \centering
+    \begin{tabular}{|c|c|}
+         \hline
+         Horizontal Angle of View                                            & 53.50 degrees  \\
+         \hline
+         Vertical Angle of View                                              & 41.41 degrees \\
+         \hline
+         Nearest recognized cat at distance                                  & 15 cm \\
+         \hline
+         Farthermost extreme cat distance                                    & 153 cm \\
+         \hline
+         Nearest recognized dog at distance                                  & 10 cm \\
+         \hline
+         Farthermost recognized dog at distance                              & 110 cm \\
+         \hline
+         Farthermost extreme recognize dog at distance                       & 180 cm \\
+         \hline
+    \end{tabular}
+    \caption{Computer Vision Measurements}
+    \label{tab:cvMeasures}
+\end{table}
+
+\iffalse
+\begin{table}[]
+    \centering
+    \begin{tabular}{|c|c|}
+        \hline
+        Charge current (voltage = 5V)                                       & 0.8 A  \\
+        \hline
+        
+        \hline
+    \end{tabular}
+    \caption{Electronic Measurements}
+    \label{tab:elecMeasures}
+\end{table}
+\fi

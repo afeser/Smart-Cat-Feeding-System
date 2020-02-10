@@ -89,6 +89,16 @@ All the blocks and the signals are clearly labelled.
   
   A detailed discussion on the compatibility between subsystems is provided. Their signal interfaces are clearly described. 
 
++ ### Software Architecture
+	+ #### Server - Client Model
+		+ ##### Reasons and requirements
+		+ ##### Ways to satisfy the requirements
+		+ ##### Software design
+		+ ##### Implementation details(roughly)
+		+ ##### Test methods and results
+	+ #### Customer Interface
+		+ ###### TODO - Furkan
+	
 + ### Computer Vision
 
 	+ ##### Subsystem Description

@@ -79,9 +79,7 @@ class Classifier:
         # TODO - buna bakacagiz
         indexes = cv2.dnn.NMSBoxes(boxes, confidences, 0.5, 0.4)
 
-
         detectedClasses = [self._classes[id] for id in class_ids]
-
 
         def debugFunc():
             font = cv2.FONT_HERSHEY_PLAIN
@@ -96,14 +94,10 @@ class Classifier:
                     cv2.rectangle(frame, (x, y), (x + w, y + h), color, 2)
                     cv2.putText(frame, label + " " + str(round(confidence, 2)), (x, y + 30), font, 3, color, 3)
 
-
-
             logging.info('Writing the image to the folder...')
             t = time.localtime()
             timestamp = time.strftime('%b-%d-%Y_%H%M%S', t)
             cv2.imwrite("frame_" + timestamp + ".jpg", frame)
-
-
 
         logging.info('Calling nested debug function (debugFunc)...')
         if debug:
@@ -111,12 +105,19 @@ class Classifier:
 
         logging.info('Elapsed time + str(time.time() - startTime) : ' + str(time.time() - startTime))
 
+        if   'dog' in   detectedClasses :
+            return {'type': 'dog', 'frame': None}
+        elif 'cat' in   detectedClasses :
+            catIndex = detectedClasses.index('cat')
+            x, y, w, h = boxes[catIndex]
+            croppedCat = frame[y:y+h,x:x+w]
+            return {'type': 'cat', 'frame': croppedCat}
+        else                            :
+            return {'type': 'NA' , 'frame': None}
 
-        if   'dog' in   detectedClasses :  return "dog"
-        elif 'cat' in   detectedClasses :  return "cat"
-        else                            :  return "NA"
 
-
+    def cropCat(self):
+        pass
 
     def getObjectCoordinates(self):
 
@@ -137,3 +138,12 @@ class Classifier:
 # im = cv2.imread('wallpaper.jpg')
 # a.classifyCatDog(im)
 # print('APRTILEasdasd')
+
+
+'''
+a = Classifier(False)
+b = cv2.imread('cv/data/SIFT/23.jpg')
+sucuk = a.classifyCatDog(b)
+cv2.imshow('abc',sucuk['frame'])
+cv2.waitKey()
+'''

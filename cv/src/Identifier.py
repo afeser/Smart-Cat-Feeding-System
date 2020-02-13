@@ -14,11 +14,21 @@ class Identifier:
     This class contains scalability problems. Storage, processing power, computation
     time is designed for very few data such as 100-200 different cats. Generalizing to
     more data makes this class obsolete, new improvements would be requred.
+
+    Dictionary is used as a database. Each cat name has the corresponding SIFT vectors.
+    These are dumped into pickle file.
     '''
 
-    def __init__(self):
-        # self._sift = cv2.xfeatures2d.SIFT_create(contrastThreshold=0.05, edgeThreshold=10, sigma = 1.8)
-        self._sift = cv2.xfeatures2d.SIFT_create()
+    def __init__(self, featureDescriptor='SIFT'):
+        if featureDescriptor == 'SIFT':
+            self._featureDescriptor = cv2.xfeatures2d.SIFT_create()
+        elif featureDescriptor == 'ORB':
+            self._featureDescriptor = cv2.ORB_create()
+
+        else:
+            raise NameError('Feature descriptor ' + str(featureDescriptor) + ' is not defined!')
+
+        # self._featureDescriptor = cv2.xfeatures2d.SIFT_create(contrastThreshold=0.15, edgeThreshold=10, sigma = 1.8)
 
         '''
         Database directory
@@ -31,44 +41,87 @@ class Identifier:
         '''
         self._databaseDir = 'cv/data/SIFT/database'
 
-
+        # Create new database if does not exist
         if not os.path.exists(self._databaseDir):
-            logging.info('No database found, creating an empty one')
+            logging.info('No database directory found, creating an empty one')
             os.makedirs(self._databaseDir, exist_ok=True)
+            self._database = {}
 
 
-        self._savedCats = os.listdir(self._databaseDir)
+        if not os.path.exists(self._databaseDir + '/siftVectors.pickle'):
+            logging.info('No database file found, creating an empty one')
+            self._database = {}
+        else:
+            logging.info('Found a database file, loading...')
+            self.loadDatabase()
 
 
-    def _getSavedSiftVectors(self, id):
+        self._vectorThreshold = 60
+
+
+    def loadDatabase(self):
         '''
-        Get saved sift vectors from given id.
+        Load the whole database.
 
-        Return list of vectors matching the cat
+        Data is a simple dictionary object.
         '''
-        vectors = []
-        dirName = self._databaseDir + '/' + id + '/'
-        for filename in os.listdir(dirName):
-            with open(dirName + filename, 'rb') as f:
-                vectors.extend(pickle.load(f))
+        dirName = self._databaseDir + '/siftVectors.pickle'
+        with open(dirName, 'rb') as f:
+            self._database = pickle.load(f)
 
-        return vectors
 
-    def _getSiftVectors(self, im):
+
+    def saveDatabase(self):
+        '''
+        Save the whole database.
+
+        Data is a simple dictionary object.
+        '''
+        logging.info('Overwriting the existing database')
+
+        dirName = self._databaseDir + '/siftVectors.pickle'
+        with open(dirName, 'wb') as f:
+            pickle.dump(self._database, f)
+
+
+
+    def _getSiftVectors(self, im, returnKP=False):
         '''
         Return vectors for the given image
         '''
-        kp, desc = self._sift.detectAndCompute(im, None)
+        kp, desc = self._featureDescriptor.detectAndCompute(im, None)
         if desc is None:
-            return  np.random.randint(190, size=(1, 128))
+            # TODO - dense sift olacak burada...
+            desc =  []
+            kp   =  []
         # self._display_feature_vectors(img,kp)
-        return desc
 
-    def displaySIFT(self, img, dest='SiftImage.jpg'):
-        """ Displays the feature vectors of an image. """
-        kp, desc = self._sift.detectAndCompute(img, None)
+        if returnKP:
+            return (kp, desc)
+        else:
+            return desc
 
+    def saveSIFTImage(self, img, dest='SiftImage.jpg', sourceDesc=None):
+        '''
+        Create SIFT image and save it to the file.
+
+        Parameters
+        ----------
+        desc : a list of descriptors to highlight, only show this descriptors if they exist
+        '''
+        kp, desc_source = self._getSiftVectors(img, returnKP=True)
+
+        desc = []
         keypoints = cv2.drawKeypoints(img,kp,img)
+        if not sourceDesc is None:
+            for des in desc_source:
+                for sourceDes in sourceDesc:
+                    if self.equal(sourceDes, des):
+                        desc.append(des)
+
+        else:
+            desc = desc_source
+
         # winname = 'Feature Vectors'
         # cv2.namedWindow(winname)
         # cv2.moveWindow(winname, 0, 0)
@@ -81,50 +134,6 @@ class Identifier:
             # cv2.circle(img, point, 1, (0,180,0))
         cv2.imwrite(dest, img)
 
-
-    def check_image(self, img1):
-        """ Compares img1 with the stored images.
-
-        All feature vectors in img1 is compared with all stored image vectors.
-        Stored images will be referred as img2. Each vector of img1 stores its
-        eulidean distance to the closest vector in img2. The minimum distances
-        for all img1 vectors are summed up together to decide an overall loss
-        between the two images. This comparison is then done for each img2. The
-        returned dictionary stores the loss values.
-
-        Parameters
-        ----------
-        img1 : cv2.image
-            The input image that needs to be compared to the stored images
-
-        Returns
-        -------
-        dict
-            {
-            string: float,
-            ...
-            string: float
-            }
-
-            Where each string stands for a stored image and each float is its error with respect to img1
-
-        """
-        descriptors1 = self._get_descriptors(img1)
-        losses = {}
-        for img_name in self._stored_images:
-            img = cv2.imread(img_name)
-            descriptors2 = self._get_descriptors(img)
-            losses[img_name[24:]] = 0
-            for descriptor1 in descriptors1:
-                min = -1
-                for descriptor2 in descriptors2:
-                    distance = np.linalg.norm(descriptor1-descriptor2)
-                    if distance < min or min < 0:
-                        min = distance
-                    if min == 0:
-                        break
-                losses[img_name[24:]] += min
-        return losses
 
 
     def getCatName(self, catImage):
@@ -170,21 +179,24 @@ class Identifier:
         # Ids, distance
         # [smallest distance, ..., greatest distance]
         nearests = ([-1]*10, [10000]*10)
-        for cat in self._savedCats:
+        for catName in self._database:
+
             # Each vector
-            savedVectors = np.array(self._getSavedSiftVectors(cat))
-            for savedVector in savedVectors:
+            for catVector in self._database[catName]:
                 for currentVector in currentVectors:
-                    dist = np.linalg.norm(currentVectors - savedVector)
+                    dist = np.linalg.norm(currentVectors - catVector)
                     if nearests[1][9] > dist:
-                        ekle(nearests, dist, cat)
+                        ekle(nearests, dist, catName)
 
 
         endTime = (datetime.datetime.now() - startTime).total_seconds()
         logging.info('Identified in ' + str(endTime) + ' seconds')
 
         # TODO - birkac taneye bakilmali!
-        return nearests[0][0]
+        if nearests[0][0] == -1:
+            return 'nothing'
+        else:
+            return nearests[0][0]
 
 
     def saveCat(self, catImage, uniqueId):
@@ -201,17 +213,7 @@ class Identifier:
         -------
         None
         '''
-        vectors = self._getSiftVectors(catImage)
-        logging.info('Saving ' + str(len(vectors)) + ' SIFT vectors for ' + uniqueId)
-
-        if not os.path.exists(self._databaseDir + '/' + uniqueId):
-            os.makedirs(self._databaseDir + '/' + uniqueId, exist_ok=True)
-
-        with open(self._databaseDir + '/' + uniqueId + '/' + datetime.datetime.now().strftime('%d-%b-%Y_%H-%M-%S') + '.pickle', 'wb') as f:
-            pickle.dump(vectors, f)
-
-        if not uniqueId in self._savedCats:
-            self._savedCats.append(uniqueId)
+        # TODO...
 
     def importDirectory(self, directoryPath):
         '''
@@ -230,53 +232,87 @@ class Identifier:
         None
 
         Algorithm :
-        1) Import an image, extract vectors, add to database
-        2) When no other class member remains, match images for key points
-        3) For every keypoint matched, store in a variable, discard mismatched ones
+        1) Read each image
+        2) When finished, send them to the sift creator
+        3) Compile all of them into database
         '''
         files = os.listdir(directoryPath)
 
+        localImages = {
+
+        }
         # 1)
         for file in files:
             logging.debug('Reading file ' + file)
             basename  = file.split('_')[0]
 
             targetFile = self._databaseDir + '/' + basename + '/' + basename + '.pickle'
-            # Load relevant class
-            vectors = []
-            if os.path.exists(targetFile):
-                with open(targetFile, 'rb') as f:
-                    vectors = pickle.load(f)
 
 
-            logging.debug('Adding vectors into ' + basename)
+            if basename not in localImages:
+                localImages[basename] = []
+
             im = cv2.imread(directoryPath + '/' + file)
-            newVectors = self._getSiftVectors(im)
-
-            vectors.extend(newVectors)
-
-            with open(targetFile, 'wb') as f:
-                pickle.dump(vectors, f)
-
-            if not basename in self._savedCats:
-                self._savedCats.append(basename)
+            im = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
+            localImages[basename].append(im)
 
 
         # 2)
-        for cl in self._savedCats:
-            targetFile = self._databaseDir + '/' + cl + '/' + cl + '.pickle'
+        for catName in localImages:
+            logging.info('Processing ' + str(catName) + ' to import from directory')
+            vectors = self._createSiftVectors(localImages[catName])
 
-            vectors = []
-            with open(targetFile, 'rb') as f:
-                vectors = pickle.load(f)
+            print('Total vectors adding to database for class ' + str(catName) + ' is ' + str(len(vectors)))
 
-            for index1, kp1 in enumerate(vectors):
-                for index2, kp2 in enumerate(vectors):
-                    if np.linalg.norm(kp1[1] - kp2[1]) < 0.0001:
-                        print('DENEME ', index1, index2)
+            if catName not in self._database:
+                self._database[catName] = []
 
-            # TODO
+            # 3)
+            self._database[catName].extend(vectors)
 
+    def equal(self, vector1, vector2):
+        return np.linalg.norm(vector1 - vector2) < self._vectorThreshold
+
+    def _createSiftVectors(self, images):
+        '''
+        This is the method to extract sift vectors based on the common ones among
+        pictures. Note that, every time a new picture is added, whole database
+        should be updated. Note this is very computationally expensive and
+        future versions may need to improve the algorithm.
+
+
+        Algorithm :
+        - Find common features in images by
+            for each image1 in images:
+                for each image2 in images except image1:
+                    if a feature matches, include it in the sift vectors for this class
+        '''
+
+
+        completeVectors = []
+        for index1, image1 in enumerate(images):
+            logging.debug('Creating SIFT vectors for image ' + str(index1) + ' and all of the remaining images for that class.')
+            for index2, image2 in enumerate(images):
+
+                # pdb.set_trace()
+                if index1 != index2:
+                    siftVectors1 = self._getSiftVectors(image1)
+                    siftVectors2 = self._getSiftVectors(image2)
+
+                    # Brute force match all of the vectors
+                    for index3, vector1 in enumerate(siftVectors1):
+                        # logging.debug('Vector ' + str(index3) + ' is being processed')
+                        for vector2 in siftVectors2:
+                            if self.equal(vector1, vector2):
+                                completeVectors.append(vector1)
+
+        # Eliminate duplicates
+        for index1, vector1 in enumerate(completeVectors):
+            for index2, vector2 in enumerate(completeVectors):
+                if index1 != index2 and np.array_equal(vector1, vector2):
+                    completeVectors.pop(index1)
+
+        return completeVectors
 
 
     def resetDatabase(self, force=False):
@@ -293,8 +329,8 @@ class Identifier:
         None
         '''
         if force or input('Are you sure want to delete whole database? (y/N)') == 'y':
-            # logging.warning('Resetting feature database...')
-            logging.warning('Not implemented')
+            logging.warning('Resetting feature database...')
+            os.remove(self._databaseDir + '/siftVectors.pickle')
         else:
             # Nothing made
             pass

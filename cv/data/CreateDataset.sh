@@ -25,12 +25,12 @@ wget -nc https://pjreddie.com/media/files/yolov3.weights # performance issues...
 cd ../SIFT
 
 
-wget -nc http://dosya.afeserpi.duckdns.org:8080/dataset/PoncikDataset.zip
-wget -nc http://dosya.afeserpi.duckdns.org:8080/dataset/METUDataset.zip
-wget -nc http://dosya.afeserpi.duckdns.org:8080/dataset/BitirimIkiliDataset.zip
-wget -nc http://dosya.afeserpi.duckdns.org:8080/dataset/frameExamples.zip
-wget -nc http://dosya.afeserpi.duckdns.org:8080/dataset/SIFTDogaUtku.zip
-
+#wget -nc http://dosya.afeserpi.duckdns.org:8080/dataset/PoncikDataset.zip
+#wget -nc http://dosya.afeserpi.duckdns.org:8080/dataset/METUDataset.zip
+#wget -nc http://dosya.afeserpi.duckdns.org:8080/dataset/BitirimIkiliDataset.zip
+#wget -nc http://dosya.afeserpi.duckdns.org:8080/dataset/frameExamples.zip
+#wget -nc http://dosya.afeserpi.duckdns.org:8080/dataset/SIFTDogaUtku.zip
+wget -nc http://dosya.afeserpi.duckdns.org:8080/dataset/FacebookDataset13.zip
 
 for f in *.zip
 do

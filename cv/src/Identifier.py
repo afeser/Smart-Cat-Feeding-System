@@ -140,9 +140,9 @@ class Identifier:
         allDescriptors = []
         boundaries     = [0]
         for catName in self._database:
-            boundaries.append(boundaries[-1] + len(self._database))
+            boundaries.append(boundaries[-1] + len(self._database[catName]))
             allDescriptors.extend(self._database[catName])
-
+        boundaries = np.array(boundaries)
 
         matches = self._flann.match(catDesc, np.array(allDescriptors))
 
@@ -169,25 +169,11 @@ class Identifier:
 
         # Map indices to cat names...
         catNames = list(self._database)
-        # catNames.reverse()
-        previousCatName = catNames[0]
-        for catName in catNames:
 
-            currentCatDataSize = len(self._database[catName])
-            k_temp = 0
-            while k_temp < k:
-                if type(smallestIndices[k_temp]) == int:
-                    smallestIndices[k_temp] = smallestIndices[k_temp] - currentCatDataSize
-
-                    if smallestIndices[k_temp] < 0:
-                        smallestIndices[k_temp] = previousCatName
-
-                k_temp = k_temp + 1
-
-            print(smallestIndices[0])
-            previousCatName = catName
-
-
+        for k_temp in range(k):
+            # pdb.set_trace()
+            # print(smallestIndices[k_temp] > boundaries)
+            smallestIndices[k_temp] = catNames[np.sum(smallestIndices[k_temp] > boundaries)-1]
 
         # logging.info('Identified with ' + str(maxMatchNumber) + ' vectors as ' + maxMatchName + ' in ' + str(time.time() - startTime) + ' seconds')
         return str(smallestIndices[0])

@@ -11,6 +11,7 @@ import pdb
 import matplotlib.pyplot as plt
 import datetime
 import time
+import sys
 
 class Identifier:
     '''
@@ -130,29 +131,66 @@ class Identifier:
 
         Find the maximum number of matches...
         '''
+        k = 5 # another hyperparameter, look below...
+
         startTime = time.time()
         catDesc = self._getSiftVectors(catImage)
 
-        matchNumber = {}
+        matchNumber    = {}
+        allDescriptors = []
+        boundaries     = [0]
         for catName in self._database:
-            matches = self._flann.knnMatch(catDesc, self._database[catName])
+            boundaries.append(boundaries[-1] + len(self._database))
+            allDescriptors.extend(self._database[catName])
 
-            matchNumber[catName] = 0
-            for i, match in enumerate(matches):
-                if match[0].distance < match[1].distance*self._ratioTestThreshold:
-                    # Add it!
-                    matchNumber[catName] = matchNumber[catName] + 1
 
-        # Find maximum number of match class
-        maxMatchName   = 'nothing'
-        maxMatchNumber = 0
-        for catName in matchNumber:
-            if matchNumber[catName] > maxMatchNumber:
-                maxMatchNumber = matchNumber[catName]
-                maxMatchName   = catName
+        matches = self._flann.match(catDesc, np.array(allDescriptors))
 
-        logging.info('Identified with ' + str(maxMatchNumber) + ' vectors as ' + maxMatchName + ' in ' + str(time.time() - startTime) + ' seconds')
-        return maxMatchName
+        # find the smallest k distances, these distances give the correct class
+        smallestIndices   = [-1] * k
+        smallestDistances = [100000] * k
+        for match in matches:
+            if smallestDistances[k-1] > match.distance:
+                k_temp = k - 1
+                while k_temp >= 1 and smallestDistances[k_temp-1] > match.distance:
+                    smallestDistances[k_temp] = smallestDistances[k_temp-1]
+                    smallestIndices[k_temp]   = smallestIndices[k_temp-1]
+                    k_temp = k_temp - 1
+
+                smallestDistances[k_temp] = match.distance
+                smallestIndices[k_temp]   = match.trainIdx
+
+                # Correctness test, check if sorted...
+                # if not all(smallestDistances[i] <= smallestDistances[i+1] for i in range(len(smallestDistances)-1)):
+                #     print('FAILED!')
+                #     sys.exit(1)
+
+                # print(smallestDistances)
+
+        # Map indices to cat names...
+        catNames = list(self._database)
+        # catNames.reverse()
+        previousCatName = catNames[0]
+        for catName in catNames:
+
+            currentCatDataSize = len(self._database[catName])
+            k_temp = 0
+            while k_temp < k:
+                if type(smallestIndices[k_temp]) == int:
+                    smallestIndices[k_temp] = smallestIndices[k_temp] - currentCatDataSize
+
+                    if smallestIndices[k_temp] < 0:
+                        smallestIndices[k_temp] = previousCatName
+
+                k_temp = k_temp + 1
+
+            print(smallestIndices[0])
+            previousCatName = catName
+
+
+
+        # logging.info('Identified with ' + str(maxMatchNumber) + ' vectors as ' + maxMatchName + ' in ' + str(time.time() - startTime) + ' seconds')
+        return str(smallestIndices[0])
 
 
     def saveCat(self, catImage, uniqueId):

@@ -33,17 +33,8 @@ class Identifier:
         else:
             raise NameError('Feature descriptor ' + str(featureDescriptor) + ' is not defined!')
 
-        # self._featureDescriptor = cv2.xfeatures2d.SIFT_create(contrastThreshold=0.15, edgeThreshold=10, sigma = 1.8)
 
-        '''
-        Database directory
-            - cat name(unqiue id)
-                - vector stack 1
-                - vector stack 2
-                - ...
 
-        Each vector stack contains a list of vectors
-        '''
         self._databaseDir = 'cv/data/SIFT/database'
 
         # Create new database if does not exist
@@ -63,6 +54,7 @@ class Identifier:
 
         # Descriptor and matching parameters other than the object itself
         self._ratioTestThreshold = 0.55
+        self._flann = cv2.FlannBasedMatcher({'algorithm' : 0, 'trees' : 5})
 
 
         # Performance measurement
@@ -133,47 +125,34 @@ class Identifier:
         '''
         Algorithm
 
-        1) Compare all vectors
-        2) For the best match 10 !! Hyperparameter, identify it
+        for each iamge class :
+            Compare with FLANN
+
+        Find the maximum number of matches...
         '''
-        startTime = datetime.datetime.now()
-        def ekle(nearests, distance, id):
-            '''
-            Find the point to insert, and insert it...
-            '''
-            for i in range(len(nearests[0])):
-                if nearests[1][i] > distance:
-                    nearests[1].insert(i, distance)
-                    nearests[0].insert(i, id)
-                    nearests[1].pop()
-                    nearests[0].pop()
+        startTime = time.time()
+        catDesc = self._getSiftVectors(catImage)
 
-
-
-        currentVectors = np.array(self._getSiftVectors(catImage))
-
-        # TODO - dynamic yapilcak
-        # Ids, distance
-        # [smallest distance, ..., greatest distance]
-        nearests = ([-1]*10, [10000]*10)
+        matchNumber = {}
         for catName in self._database:
+            matches = self._flann.knnMatch(catDesc, self._database[catName])
 
-            # Each vector
-            for catVector in self._database[catName]:
-                for currentVector in currentVectors:
-                    dist = np.linalg.norm(currentVectors - catVector)
-                    if nearests[1][9] > dist:
-                        ekle(nearests, dist, catName)
+            matchNumber[catName] = 0
+            for i, match in enumerate(matches):
+                if match[0].distance < match[1].distance*self._ratioTestThreshold:
+                    # Add it!
+                    matchNumber[catName] = matchNumber[catName] + 1
 
+        # Find maximum number of match class
+        maxMatchName   = 'nothing'
+        maxMatchNumber = 0
+        for catName in matchNumber:
+            if matchNumber[catName] > maxMatchNumber:
+                maxMatchNumber = matchNumber[catName]
+                maxMatchName   = catName
 
-        endTime = (datetime.datetime.now() - startTime).total_seconds()
-        logging.info('Identified in ' + str(endTime) + ' seconds')
-
-        # TODO - birkac taneye bakilmali!
-        if nearests[0][0] == -1:
-            return 'nothing'
-        else:
-            return nearests[0][0]
+        logging.info('Identified with ' + str(maxMatchNumber) + ' vectors as ' + maxMatchName + ' in ' + str(time.time() - startTime) + ' seconds')
+        return maxMatchName
 
 
     def saveCat(self, catImage, uniqueId):
@@ -228,6 +207,7 @@ class Identifier:
         3) Compile all of them into database
         '''
         files = os.listdir(directoryPath)
+        files.sort()
 
         localImages = {
 
@@ -268,7 +248,6 @@ class Identifier:
                 debugDir = self._databaseDir + '/debug'
                 logging.debug('Debug mode on, saving match results into ' + debugDir)
                 os.makedirs(debugDir, exist_ok=True)
-                flann = cv2.FlannBasedMatcher({'algorithm' : 0, 'trees' : 5})
 
                 completeVectors = []
                 for index1, image1 in enumerate(images):
@@ -279,7 +258,7 @@ class Identifier:
                             keypoints2, siftVectors2 = self._getSiftVectors(image2, returnKP=True)
 
                             logging.debug('Matching key points with flann matcher')
-                            matches = flann.knnMatch(siftVectors1, siftVectors2, k=2)
+                            matches = self._flann.knnMatch(siftVectors1, siftVectors2, k=2)
                             self.debugTime('flann match')
                             # Save the matches
                             matchesMask = [[0, 0] for i in range(len(matches))]
@@ -304,20 +283,30 @@ class Identifier:
                             img3 = cv2.drawMatchesKnn(image1, keypoints1, image2, keypoints2, matches, None, **draw_params)
                             new_fig = plt.figure(figsize=(32, 32))
                             plt.imshow(img3)
-                            plt.savefig(debugDir + '/' + catName + '_' + str(index1) + '_' + str(index2) + '.png')
+                            plt.savefig(debugDir + '/' + catName + '_' + str(index1+1) + '_' + str(index2+1) + '.png')
                             plt.close(new_fig)
 
 
-
+                logging.debug('Eliminating the duplicates')
+                self.debugTime(reset=True)
+                eliminated = 0
                 # Eliminate duplicates
+                eliminateThose = []
                 for index1, vector1 in enumerate(completeVectors):
                     for index2, vector2 in enumerate(completeVectors):
                         if index1 != index2 and np.array_equal(vector1, vector2):
-                            completeVectors.pop(index1)
+                            eliminateThose.append(index1)
+                            eliminated = eliminated + 1
+
+                eliminateThose.reverse()
+                for el in eliminateThose:
+                    completeVectors.pop(el)
+                    
+                self.debugTime('eliminating duplicates')
+                logging.debug('Eliminated duplicates ' + str(eliminated))
 
                 return completeVectors
 
-            flann = cv2.FlannBasedMatcher({'algorithm' : 0, 'trees' : 5})
 
             completeVectors = []
             for index1, image1 in enumerate(images):
@@ -328,7 +317,7 @@ class Identifier:
                         siftVectors2 = self._getSiftVectors(image2)
 
                         # pdb.set_trace()
-                        matches = flann.knnMatch(siftVectors1, siftVectors2, k=2)
+                        matches = self._flann.knnMatch(siftVectors1, siftVectors2, k=2)
 
                         for match in matches:
                             if match[0].distance < match[1].distance*self._ratioTestThreshold:

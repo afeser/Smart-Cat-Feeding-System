@@ -80,12 +80,12 @@ def test2():
 
 
     print('Importing directory...')
-    a.resetDatabase(force=True)
+    # a.resetDatabase(force=True)
     a.importDirectory(work_dir + '/FacebookDataset13')
     a.saveDatabase()
 
     # pdb.set_trace()
-    # files = os.listdir(root_name)
+    files = os.listdir(root_name)
     # print('Plotting recognized vectors over images')
     # for file in files:
     #     basename  = file.split('_')[0]

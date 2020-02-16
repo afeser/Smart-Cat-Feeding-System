@@ -45,14 +45,6 @@ class Identifier:
             self._database = {}
 
 
-        if not os.path.exists(self._databaseDir + '/siftVectors.pickle'):
-            logging.warning('No database file found, creating an empty one')
-            self._database = {}
-        else:
-            logging.warning('Found a database file, loading...')
-            self.loadDatabase()
-
-
         # Descriptor and matching parameters other than the object itself
         self._ratioTestThreshold = 0.55
         self._flann = cv2.FlannBasedMatcher({'algorithm' : 0, 'trees' : 5})

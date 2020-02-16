@@ -8,6 +8,9 @@ import os
 import logging
 import datetime
 import pdb
+import matplotlib.pyplot as plt
+import datetime
+import time
 
 class Identifier:
     '''
@@ -23,6 +26,8 @@ class Identifier:
         if featureDescriptor == 'SIFT':
             self._featureDescriptor = cv2.xfeatures2d.SIFT_create()
         elif featureDescriptor == 'ORB':
+            # TODO - also set matchers!!!
+            # pdb.set_trace()
             self._featureDescriptor = cv2.ORB_create()
 
         else:
@@ -49,15 +54,19 @@ class Identifier:
 
 
         if not os.path.exists(self._databaseDir + '/siftVectors.pickle'):
-            logging.info('No database file found, creating an empty one')
+            logging.warning('No database file found, creating an empty one')
             self._database = {}
         else:
-            logging.info('Found a database file, loading...')
+            logging.warning('Found a database file, loading...')
             self.loadDatabase()
 
 
-        self._vectorThreshold = 60
+        # Descriptor and matching parameters other than the object itself
+        self._ratioTestThreshold = 0.55
 
+
+        # Performance measurement
+        self._timeStart = time.time()
 
     def loadDatabase(self):
         '''
@@ -101,38 +110,6 @@ class Identifier:
         else:
             return desc
 
-    def saveSIFTImage(self, img, dest='SiftImage.jpg', sourceDesc=None):
-        '''
-        Create SIFT image and save it to the file.
-
-        Parameters
-        ----------
-        desc : a list of descriptors to highlight, only show this descriptors if they exist
-        '''
-        kp, desc_source = self._getSiftVectors(img, returnKP=True)
-
-        desc = []
-        keypoints = cv2.drawKeypoints(img,kp,img)
-        if not sourceDesc is None:
-            for des in desc_source:
-                for sourceDes in sourceDesc:
-                    if self.equal(sourceDes, des):
-                        desc.append(des)
-
-        else:
-            desc = desc_source
-
-        # winname = 'Feature Vectors'
-        # cv2.namedWindow(winname)
-        # cv2.moveWindow(winname, 0, 0)
-        # TODO - cross
-        logging.info('Writing to file ' + dest)
-
-        # for keypoint in kp:
-            # pdb.set_trace()
-            # point = (int(keypoint.pt[0]), int(keypoint.pt[1]))
-            # cv2.circle(img, point, 1, (0,180,0))
-        cv2.imwrite(dest, img)
 
 
 
@@ -215,6 +192,20 @@ class Identifier:
         '''
         # TODO...
 
+    def debugTime(self, customStr='', reset=False):
+        if reset:
+            # Reset time without writing anything
+            self._timeStart = time.time()
+            return
+
+        if customStr != '':
+            logging.debug('Time elapsed for ' + customStr + ' ' + str(- self._timeStart + time.time()) + ' seconds')
+        else:
+            logging.debug('Time elapsed ' + ' ' + str(- self._timeStart + time.time()) + ' seconds')
+
+        self._timeStart = time.time()
+
+
     def importDirectory(self, directoryPath):
         '''
         TODO - it only works for empty database
@@ -257,62 +248,117 @@ class Identifier:
             localImages[basename].append(im)
 
 
+        def _createSiftVectorsFromImageSet(images, catName):
+            '''
+            This is the method to extract sift vectors based on the common ones among
+            pictures. Note that, every time a new picture is added, whole database
+            should be updated. Note this is very computationally expensive and
+            future versions may need to improve the algorithm.
+
+
+            Algorithm :
+            - Find common features in images by brute force approach (BFMatcher) or FLANN based approach
+            - Add them for each combination!
+
+            A better algorithm may be found, feel free to add and change it. However,
+            common ones are the only useful thing I imagined.
+            '''
+            # Debug mode
+            if logging.getLogger().level <= 10:
+                debugDir = self._databaseDir + '/debug'
+                logging.debug('Debug mode on, saving match results into ' + debugDir)
+                os.makedirs(debugDir, exist_ok=True)
+                flann = cv2.FlannBasedMatcher({'algorithm' : 0, 'trees' : 5})
+
+                completeVectors = []
+                for index1, image1 in enumerate(images):
+                    for index2, image2 in enumerate(images):
+
+                        if index1 != index2:
+                            keypoints1, siftVectors1 = self._getSiftVectors(image1, returnKP=True)
+                            keypoints2, siftVectors2 = self._getSiftVectors(image2, returnKP=True)
+
+                            logging.debug('Matching key points with flann matcher')
+                            matches = flann.knnMatch(siftVectors1, siftVectors2, k=2)
+                            self.debugTime('flann match')
+                            # Save the matches
+                            matchesMask = [[0, 0] for i in range(len(matches))]
+                            # ratio test as per Lowe's paper
+                            logging.debug('Finding the correct key points according to Lowe\'s paper')
+                            self.debugTime(reset=True)
+                            for i, match in enumerate(matches):
+                                if match[0].distance < match[1].distance*self._ratioTestThreshold:
+                                    # Add it!
+                                    completeVectors.append(siftVectors1[match[0].queryIdx])
+                                    completeVectors.append(siftVectors2[match[0].trainIdx])
+
+                                    matchesMask[i] = [0, 1]
+                            self.debugTime('find keys')
+
+
+                            draw_params = dict(matchColor=(0, 255, 0),
+                                            singlePointColor=(255, 0, 0),
+                                            matchesMask=matchesMask,
+                                            flags=0)
+
+                            img3 = cv2.drawMatchesKnn(image1, keypoints1, image2, keypoints2, matches, None, **draw_params)
+                            new_fig = plt.figure(figsize=(32, 32))
+                            plt.imshow(img3)
+                            plt.savefig(debugDir + '/' + catName + '_' + str(index1) + '_' + str(index2) + '.png')
+                            plt.close(new_fig)
+
+
+
+                # Eliminate duplicates
+                for index1, vector1 in enumerate(completeVectors):
+                    for index2, vector2 in enumerate(completeVectors):
+                        if index1 != index2 and np.array_equal(vector1, vector2):
+                            completeVectors.pop(index1)
+
+                return completeVectors
+
+            flann = cv2.FlannBasedMatcher({'algorithm' : 0, 'trees' : 5})
+
+            completeVectors = []
+            for index1, image1 in enumerate(images):
+                for index2, image2 in enumerate(images):
+
+                    if index1 != index2:
+                        siftVectors1 = self._getSiftVectors(image1)
+                        siftVectors2 = self._getSiftVectors(image2)
+
+                        # pdb.set_trace()
+                        matches = flann.knnMatch(siftVectors1, siftVectors2, k=2)
+
+                        for match in matches:
+                            if match[0].distance < match[1].distance*self._ratioTestThreshold:
+                                # Add it!
+                                completeVectors.append(siftVectors1[match[0].queryIdx])
+                                completeVectors.append(siftVectors2[match[0].trainIdx])
+
+
+            # Eliminate duplicates
+            for index1, vector1 in enumerate(completeVectors):
+                for index2, vector2 in enumerate(completeVectors):
+                    if index1 != index2 and np.array_equal(vector1, vector2):
+                        completeVectors.pop(index1)
+
+            return completeVectors
+
         # 2)
         for catName in localImages:
             logging.info('Processing ' + str(catName) + ' to import from directory')
-            vectors = self._createSiftVectors(localImages[catName])
 
-            print('Total vectors adding to database for class ' + str(catName) + ' is ' + str(len(vectors)))
+
+            vectors = _createSiftVectorsFromImageSet(localImages[catName], catName)
+
+            logging.info('Total vectors adding to database for class ' + str(catName) + ' is ' + str(len(vectors)))
 
             if catName not in self._database:
                 self._database[catName] = []
 
             # 3)
             self._database[catName].extend(vectors)
-
-    def equal(self, vector1, vector2):
-        return np.linalg.norm(vector1 - vector2) < self._vectorThreshold
-
-    def _createSiftVectors(self, images):
-        '''
-        This is the method to extract sift vectors based on the common ones among
-        pictures. Note that, every time a new picture is added, whole database
-        should be updated. Note this is very computationally expensive and
-        future versions may need to improve the algorithm.
-
-
-        Algorithm :
-        - Find common features in images by
-            for each image1 in images:
-                for each image2 in images except image1:
-                    if a feature matches, include it in the sift vectors for this class
-        '''
-
-
-        completeVectors = []
-        for index1, image1 in enumerate(images):
-            logging.debug('Creating SIFT vectors for image ' + str(index1) + ' and all of the remaining images for that class.')
-            for index2, image2 in enumerate(images):
-
-                # pdb.set_trace()
-                if index1 != index2:
-                    siftVectors1 = self._getSiftVectors(image1)
-                    siftVectors2 = self._getSiftVectors(image2)
-
-                    # Brute force match all of the vectors
-                    for index3, vector1 in enumerate(siftVectors1):
-                        # logging.debug('Vector ' + str(index3) + ' is being processed')
-                        for vector2 in siftVectors2:
-                            if self.equal(vector1, vector2):
-                                completeVectors.append(vector1)
-
-        # Eliminate duplicates
-        for index1, vector1 in enumerate(completeVectors):
-            for index2, vector2 in enumerate(completeVectors):
-                if index1 != index2 and np.array_equal(vector1, vector2):
-                    completeVectors.pop(index1)
-
-        return completeVectors
 
 
     def resetDatabase(self, force=False):
@@ -329,8 +375,12 @@ class Identifier:
         None
         '''
         if force or input('Are you sure want to delete whole database? (y/N)') == 'y':
-            logging.warning('Resetting feature database...')
-            os.remove(self._databaseDir + '/siftVectors.pickle')
+            try:
+                logging.warning('Resetting feature database...')
+                os.remove(self._databaseDir + '/siftVectors.pickle')
+            except FileNotFoundError:
+                logging.warning('No feature database found, skipping...')
+
         else:
             # Nothing made
             pass

@@ -70,9 +70,6 @@ class Identifier:
         dirName = self._databaseDir + '/siftVectors.pickle'
         with open(dirName, 'rb') as f:
             self._database = pickle.load(f)
-
-
-
     def saveDatabase(self):
         '''
         Save the whole database.
@@ -84,8 +81,6 @@ class Identifier:
         dirName = self._databaseDir + '/siftVectors.pickle'
         with open(dirName, 'wb') as f:
             pickle.dump(self._database, f)
-
-
 
     def _getSiftVectors(self, im, returnKP=False):
         '''
@@ -102,10 +97,6 @@ class Identifier:
             return (kp, desc)
         else:
             return desc
-
-
-
-
     def getCatName(self, catImage):
         '''
         See check_image for detailed calculation.
@@ -177,24 +168,6 @@ class Identifier:
 
         # logging.info('Identified with ' + str(maxMatchNumber) + ' vectors as ' + maxMatchName + ' in ' + str(time.time() - startTime) + ' seconds')
         return str(smallestIndices[0])
-
-
-    def saveCat(self, catImage, uniqueId):
-        '''
-        Extract SIFT vectors and save to database with uniqueId.
-
-        Parameters
-        ----------
-        catImage : cv2.image
-            The input image whose vectors will be stored
-        uniqueId : A string, which uniquely defines the cat image given
-
-        Returns
-        -------
-        None
-        '''
-        # TODO...
-
     def debugTime(self, customStr='', reset=False):
         if reset:
             # Reset time without writing anything
@@ -207,12 +180,8 @@ class Identifier:
             logging.debug('Time elapsed ' + ' ' + str(- self._timeStart + time.time()) + ' seconds')
 
         self._timeStart = time.time()
-
-
     def importDirectory(self, directoryPath):
         '''
-        TODO - it only works for empty database
-
         Import every file in a directory based on their base names
 
         poncik_1.jpg -> imported with unique id 'poncik'
@@ -232,6 +201,7 @@ class Identifier:
         '''
         files = os.listdir(directoryPath)
         files.sort()
+
 
         localImages = {
 
@@ -378,8 +348,6 @@ class Identifier:
 
             # 3)
             self._database[catName].extend(vectors)
-
-
     def resetDatabase(self, force=False):
         '''
         Remove everything from database, delete any imported, saved data.
@@ -403,3 +371,17 @@ class Identifier:
         else:
             # Nothing made
             pass
+    def databaseInfo(self):
+        '''
+        Print database information
+        '''
+        print('Number of classes in total : ' + str(len(self._database)))
+
+        print('{0:30s}'.format('Number of vectors per class : '))
+        total = 0
+        for className in self._database:
+            print('\t{0:30s} : {1:5d}'.format(className, len(self._database[className])))
+            total = total + len(self._database[className])
+
+        print('\t' + '_' * 30 + ' : ' + '_' * 4 + '+')
+        print('\t{0:30s} : {1:5d}'.format('Total', total))

@@ -74,40 +74,93 @@ def test1():
 
 def test2():
 
-    root_name = work_dir + '/FacebookDataset13/'
+    train_root_name = work_dir + '/FacebookDataset13_Train/'
+    test_root_name  = work_dir + '/FacebookDataset13_Test/'
+
     a = Identifier(featureDescriptor='SIFT')
 
 
 
     print('Importing directory...')
-    # a.resetDatabase(force=True)
-    a.importDirectory(work_dir + '/FacebookDataset13')
+    a.resetDatabase(force=True)
+    a.importDirectory(work_dir + '/FacebookDataset13_Train')
     a.saveDatabase()
 
-    # pdb.set_trace()
-    files = os.listdir(root_name)
-    # print('Plotting recognized vectors over images')
-    # for file in files:
-    #     basename  = file.split('_')[0]
-    #     im = cv2.imread(root_name + file)
-    #     a.saveSIFTImage(im, dest=work_dir + '/FacebookDataset13SIFTOutput/' + file, sourceDesc=a._database[basename])
 
-    # Accuracy calculation
-    total   = 0
-    correct = 0
-    for file in files:
-        basename = file.split('_')[0]
-        im = cv2.imread(root_name + file)
+    def accuracyTrain():
+        # Accuracy calculation
+        files = os.listdir(train_root_name)
+        # TODO - static...
+        files.remove('test')
 
-        predictedClass = a.getCatName(im)
+        total   = 0
+        correct = 0
+        print('Train set accuracy computations...')
+        totalClass        = {}
+        totalCorrectClass = {}
+        for file in files:
+            basename = file.split('_')[0]
+            if not basename in totalClass:
+                totalClass[basename]        = 0
+                totalCorrectClass[basename] = 0
 
-        print('Cat name is ' + basename + ' and predicted name is ' + predictedClass)
 
-        total = total + 1
-        if basename == predictedClass:
-            correct = correct + 1
+            im = cv2.imread(train_root_name + file)
 
-    print('Calculated accuracy is ' + str(correct / total))
+            predictedClass = a.getCatName(im)
+
+            print(basename + ' -> ' + predictedClass)
+
+            total = total + 1
+            totalClass[basename] = totalClass[basename] + 1
+            if basename == predictedClass:
+                totalCorrectClass[basename] = totalCorrectClass[basename] + 1
+                correct = correct + 1
+
+        print('Detailed accuracy report : ')
+
+        for catName in totalClass:
+            print('\t{0:30s} : {1:4f}'.format('Cat name ' + catName + ' with accuracy ', totalCorrectClass[catName] / totalClass[catName]))
+
+        print('Calculated accuracy is ' + str(correct / total))
+
+    def accuracyTest():
+        # Accuracy calculation
+        files = os.listdir(test_root_name)
+        total   = 0
+        correct = 0
+        print('Test set accuracy computations...')
+        totalClass        = {}
+        totalCorrectClass = {}
+        for file in files:
+            basename = file.split('_')[0]
+            if not basename in totalClass:
+                totalClass[basename]        = 0
+                totalCorrectClass[basename] = 0
+
+
+            im = cv2.imread(test_root_name + file)
+
+            predictedClass = a.getCatName(im)
+
+            print(basename + ' -> ' + predictedClass)
+
+            total = total + 1
+            totalClass[basename] = totalClass[basename] + 1
+            if basename == predictedClass:
+                totalCorrectClass[basename] = totalCorrectClass[basename] + 1
+                correct = correct + 1
+
+        print('Detailed accuracy report : ')
+
+        for catName in totalClass:
+            print('\t{0:30s} : {1:4f}'.format('Cat name ' + catName + ' with accuracy ', totalCorrectClass[catName] / totalClass[catName]))
+
+        print('Calculated accuracy is ' + str(correct / total))
+
+
+    accuracyTrain()
+    accuracyTest()
     return a
 
 # a = test2()

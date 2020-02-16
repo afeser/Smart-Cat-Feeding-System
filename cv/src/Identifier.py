@@ -37,7 +37,7 @@ class Identifier:
 
 
         self._databaseDir = 'cv/data/SIFT/database'
-
+        self._database    = {}
         # Create new database if does not exist
         if not os.path.exists(self._databaseDir):
             logging.info('No database directory found, creating an empty one')
@@ -46,7 +46,7 @@ class Identifier:
 
 
         # Descriptor and matching parameters other than the object itself
-        self._ratioTestThreshold = 0.55
+        self._ratioTestThreshold = 0.75
         self._flann = cv2.FlannBasedMatcher({'algorithm' : 0, 'trees' : 5})
 
 

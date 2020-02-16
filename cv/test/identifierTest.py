@@ -85,13 +85,14 @@ def test2():
     a.resetDatabase(force=True)
     a.importDirectory(work_dir + '/FacebookDataset13_Train')
     a.saveDatabase()
+    # a.loadDatabase()
+    a.databaseInfo()
 
 
     def accuracyTrain():
         # Accuracy calculation
         files = os.listdir(train_root_name)
         # TODO - static...
-        files.remove('test')
 
         total   = 0
         correct = 0

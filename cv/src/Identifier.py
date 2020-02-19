@@ -226,35 +226,6 @@ class Identifier:
             im = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
             localImages[basename].append(im)
 
-        def eliminateDuplicateVectors(self):
-            '''
-            Since it requires a lot of time, importing directory does not call
-            eliminate duplicate vectors from database.
-            It can be done by manually calling this function.
-
-            It eliminates for every class...
-            '''
-
-            for catName in self._database:
-                logging.debug('Eliminating the duplicates')
-                self.debugTime(reset=True)
-                eliminated = 0
-                # Eliminate duplicates
-                eliminateThose = []
-                for index1, vector1 in enumerate(self._database[catName]):
-                    for index2, vector2 in enumerate(self._database[catName]):
-                        if index1 != index2 and np.array_equal(vector1, vector2):
-                            eliminateThose.append(index1)
-                            eliminated = eliminated + 1
-
-                eliminateThose.reverse()
-                for el in eliminateThose:
-                    logging.debug('Removing duplicated at index ' + str(el))
-                    self._database.pop(el)
-
-                self.debugTime('eliminating duplicates')
-                logging.debug('Eliminated duplicates ' + str(eliminated))
-
 
         def _createSiftVectorsFromImageSet(images, catName):
             '''
@@ -353,6 +324,47 @@ class Identifier:
 
             # 3)
             self._database[catName].extend(vectors)
+
+    def optimizeDatabase(self):
+        '''
+        Optimizing database by;
+            - eliminating duplicate vectors
+            - eliminating vectors that are very similar but in `different class of images`!
+
+        '''
+        def eliminateDuplicateVectors():
+            '''
+            Since it requires a lot of time, importing directory does not call
+            eliminate duplicate vectors from database.
+            It can be done by manually calling this function.
+
+            It eliminates for every class...
+            '''
+            for catName in self._database:
+                logging.debug('Eliminating the duplicates')
+                self.debugTime(reset=True)
+                eliminated = 0
+                # Eliminate duplicates
+                eliminateThose = []
+                for index1, vector1 in enumerate(self._database[catName]):
+                    for index2, vector2 in enumerate(self._database[catName]):
+                        if index1 != index2 and np.array_equal(vector1, vector2):
+                            eliminateThose.append(index1)
+                            eliminated = eliminated + 1
+
+                eliminateThose.reverse()
+                for el in eliminateThose:
+                    logging.debug('Removing duplicated at index ' + str(el))
+                    self._database.pop(el)
+
+                self.debugTime('eliminating duplicates')
+                logging.debug('Eliminated duplicates ' + str(eliminated))
+        def eliminateVectorsInDiffirentClasses():
+            pass
+
+        # Invoke functions...
+        eliminateDuplicateVectors()
+        eliminateVectorsInDiffirentClasses()
 
     def resetDatabase(self, force=False):
         '''

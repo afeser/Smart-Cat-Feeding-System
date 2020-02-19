@@ -30,25 +30,20 @@ class Identifier:
             # TODO - also set matchers!!!
             # pdb.set_trace()
             self._featureDescriptor = cv2.ORB_create()
-
         else:
             raise NameError('Feature descriptor ' + str(featureDescriptor) + ' is not defined!')
 
-
-
+        # Database stuff
         self._databaseDir = 'cv/data/SIFT/database'
         self._database    = {}
-        # Create new database if does not exist
         if not os.path.exists(self._databaseDir):
             logging.info('No database directory found, creating an empty one')
             os.makedirs(self._databaseDir, exist_ok=True)
             self._database = {}
 
-
-        # Descriptor and matching parameters other than the object itself
-        self._ratioTestThreshold = 0.75
+        # Descriptor and matching
+        self._ratioTestThreshold = 0.55
         self._flann = cv2.FlannBasedMatcher({'algorithm' : 0, 'trees' : 5})
-
 
         # Performance measurement
         self._timeStart = time.time()
@@ -62,6 +57,7 @@ class Identifier:
         dirName = self._databaseDir + '/siftVectors.pickle'
         with open(dirName, 'rb') as f:
             self._database = pickle.load(f)
+
     def saveDatabase(self):
         '''
         Save the whole database.
@@ -89,6 +85,7 @@ class Identifier:
             return (kp, desc)
         else:
             return desc
+
     def getCatName(self, catImage):
         '''
         See check_image for detailed calculation.
@@ -159,7 +156,22 @@ class Identifier:
             smallestIndices[k_temp] = catNames[np.sum(smallestIndices[k_temp] > boundaries)-1]
 
         # logging.info('Identified with ' + str(maxMatchNumber) + ' vectors as ' + maxMatchName + ' in ' + str(time.time() - startTime) + ' seconds')
-        return str(smallestIndices[0])
+        mostFrequent = {}
+        for label in smallestIndices:
+            if label in mostFrequent:
+                mostFrequent[label] = mostFrequent[label] + 1
+            else:
+                mostFrequent[label] = 0 # or 1, does not matter
+
+        maxLabel = list(mostFrequent)[0]
+        maxVal   = mostFrequent[maxLabel]
+        for key in mostFrequent:
+            if mostFrequent[key] > maxVal:
+                maxLabel = key
+                maxVal   = mostFrequent[key]
+
+        return str(list(mostFrequent))
+
     def debugTime(self, customStr='', reset=False):
         if reset:
             # Reset time without writing anything
@@ -172,6 +184,7 @@ class Identifier:
             logging.debug('Time elapsed ' + ' ' + str(- self._timeStart + time.time()) + ' seconds')
 
         self._timeStart = time.time()
+
     def importDirectory(self, directoryPath):
         '''
         Import every file in a directory based on their base names
@@ -340,6 +353,7 @@ class Identifier:
 
             # 3)
             self._database[catName].extend(vectors)
+
     def resetDatabase(self, force=False):
         '''
         Remove everything from database, delete any imported, saved data.
@@ -363,6 +377,7 @@ class Identifier:
         else:
             # Nothing made
             pass
+
     def databaseInfo(self):
         '''
         Print database information

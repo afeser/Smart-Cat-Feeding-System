@@ -86,7 +86,7 @@ def test2():
     a.importDirectory(work_dir + '/FacebookDataset13_Train')
     a.saveDatabase()
     # a.loadDatabase()
-    a.databaseInfo()
+    # a.databaseInfo()
 
 
     def accuracyTrain():
@@ -160,7 +160,7 @@ def test2():
         print('Calculated accuracy is ' + str(correct / total))
 
 
-    accuracyTrain()
+    # accuracyTrain()
     accuracyTest()
     return a
 

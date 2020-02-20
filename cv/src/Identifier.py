@@ -22,7 +22,7 @@ class Identifier:
     Dictionary is used as a database. Each cat name has the corresponding SIFT vectors.
     These are dumped into pickle file.
     '''
-
+    # Initialization...
     def __init__(self, featureDescriptor='SIFT'):
         if featureDescriptor == 'SIFT':
             self._featureDescriptor = cv2.xfeatures2d.SIFT_create()
@@ -48,6 +48,7 @@ class Identifier:
         # Performance measurement
         self._timeStart = time.time()
 
+    # Database stuff...
     def loadDatabase(self):
         '''
         Load the whole database.
@@ -57,7 +58,6 @@ class Identifier:
         dirName = self._databaseDir + '/siftVectors.pickle'
         with open(dirName, 'rb') as f:
             self._database = pickle.load(f)
-
     def saveDatabase(self):
         '''
         Save the whole database.
@@ -70,6 +70,7 @@ class Identifier:
         with open(dirName, 'wb') as f:
             pickle.dump(self._database, f)
 
+    # Private definitions...
     def _getSiftVectors(self, im, returnKP=False):
         '''
         Return vectors for the given image
@@ -85,7 +86,20 @@ class Identifier:
             return (kp, desc)
         else:
             return desc
+    def _debugTime(self, customStr='', reset=False):
+        if reset:
+            # Reset time without writing anything
+            self._timeStart = time.time()
+            return
 
+        if customStr != '':
+            logging.debug('Time elapsed for ' + customStr + ' ' + str(- self._timeStart + time.time()) + ' seconds')
+        else:
+            logging.debug('Time elapsed ' + ' ' + str(- self._timeStart + time.time()) + ' seconds')
+
+        self._timeStart = time.time()
+
+    # Most commonly used in public...
     def getCatName(self, catImage):
         '''
         See check_image for detailed calculation.
@@ -171,20 +185,15 @@ class Identifier:
                 maxVal   = mostFrequent[key]
 
         return str(list(mostFrequent))
+    def addNewCat(self, catName, catVectors):
+        '''
+        When a cat seen firstly, add it to the database.
 
-    def debugTime(self, customStr='', reset=False):
-        if reset:
-            # Reset time without writing anything
-            self._timeStart = time.time()
-            return
-
-        if customStr != '':
-            logging.debug('Time elapsed for ' + customStr + ' ' + str(- self._timeStart + time.time()) + ' seconds')
-        else:
-            logging.debug('Time elapsed ' + ' ' + str(- self._timeStart + time.time()) + ' seconds')
-
-        self._timeStart = time.time()
-
+        - Take at least 2 shots, find the matching vectors,
+            - Find the maximum distance between these vectors, based on this distance
+                remove the ones that exists on other images smaller than this threshold.
+        '''
+        pass
     def importDirectory(self, directoryPath):
         '''
         Import every file in a directory based on their base names
@@ -258,12 +267,12 @@ class Identifier:
 
                             logging.debug('Matching key points with flann matcher')
                             matches = self._flann.knnMatch(siftVectors1, siftVectors2, k=2)
-                            self.debugTime('flann match')
+                            self._debugTime('flann match')
                             # Save the matches
                             matchesMask = [[0, 0] for i in range(len(matches))]
                             # ratio test as per Lowe's paper
                             logging.debug('Finding the correct key points according to Lowe\'s paper')
-                            self.debugTime(reset=True)
+                            self._debugTime(reset=True)
                             for i, match in enumerate(matches):
                                 if match[0].distance < match[1].distance*self._ratioTestThreshold:
                                     # Add it!
@@ -271,7 +280,7 @@ class Identifier:
                                     completeVectors.append(siftVectors2[match[0].trainIdx])
 
                                     matchesMask[i] = [0, 1]
-                            self.debugTime('find keys')
+                            self._debugTime('find keys')
 
 
                             draw_params = dict(matchColor=(0, 255, 0),
@@ -324,7 +333,6 @@ class Identifier:
 
             # 3)
             self._database[catName].extend(vectors)
-
     def optimizeDatabase(self):
         '''
         Optimizing database by;
@@ -342,7 +350,7 @@ class Identifier:
             '''
             for catName in self._database:
                 logging.debug('Eliminating the duplicates')
-                self.debugTime(reset=True)
+                self._debugTime(reset=True)
                 eliminated = 0
                 # Eliminate duplicates
                 eliminateThose = []
@@ -357,15 +365,20 @@ class Identifier:
                     logging.debug('Removing duplicated at index ' + str(el))
                     self._database.pop(el)
 
-                self.debugTime('eliminating duplicates')
+                self._debugTime('eliminating duplicates')
                 logging.debug('Eliminated duplicates ' + str(eliminated))
-        def eliminateVectorsInDiffirentClasses():
+        def eliminateVectorsInDifferentClasses():
+            '''
+                An idea!
+                    Find the matching vectors in the same class of images and
+                    find the common vectors among two different classes of images.
+                    Then eliminate the ones with greater threshold.
+            '''
             pass
 
         # Invoke functions...
         eliminateDuplicateVectors()
-        eliminateVectorsInDiffirentClasses()
-
+        eliminateVectorsInDifferentClasses()
     def resetDatabase(self, force=False):
         '''
         Remove everything from database, delete any imported, saved data.
@@ -389,7 +402,6 @@ class Identifier:
         else:
             # Nothing made
             pass
-
     def databaseInfo(self):
         '''
         Print database information

@@ -75,10 +75,16 @@ Based on controller, sends commands to the client.
 Available commands are, self explanatory :
 - `greenLedOn()`
 - `redLedOn()`
+- `yellowLedOn()`
 - `greenLedOff()`
 - `redLedOff()`
+- `yellowLedOff()`
 - `allLedsOn()`
 - `allLedsOff()`
+- `openFoodGate()`
+- `closeFoodGate()`
+- `feedcat()`
+- `sonarMeasure()`
 
 ## Client
 Client is an abstract module, it can be used to create a client that connects to
@@ -136,5 +142,52 @@ Driver module for the GPIO pins of the Pi Zero. Pin assignments are embedded int
 Functions are :
 - `greenLedOn()`
 - `redLedOn()`
+- `yellowLedOn()`
 - `greenLedOff()`
 - `redLedOff()`
+- `yellowLedOff()`
+- `openFoodGate()`
+- `closeFoodGate()`
+- `feedcat()`
+- `sonarMeasure()`
+
+
+Methods :
+#### colorLedOn
+Turns on the LED. Green led is turned on when a cat is detected, red led is turned on when a dog is detected and yellow led is turned on when there is no cat or dog detection.
+
+`GPIODriver.greenLedOn()`
+
+`GPIODriver.redLedOn()`
+
+`GPIODriver.yellowLedOn()`
+
+#### colorLedOff
+Turns off the LED. Green led is turned off when there is no cat detection. Red led is turned off where there is no dog detection. Yellow led is turned off when a cat or dog is detected.
+
+`GPIODriver.greenLedOff()`
+
+`GPIODriver.redLedOff()`
+
+`GPIODriver.yellowLedOff()`
+
+#### openFoodGate
+Opens the gate when a cat is detected. Servo motor is controlled by changing the duty cycle of PWM signal.in this module. Food in the gate reservoir is dropped.
+
+`GPIODriver.openFoodGate()`
+
+#### closeFoodGate
+Closes the gate. Gate is turned back to its initial position and food is stored in the reservoir of gate.
+
+`GPIODriver.openFoodGate()`
+
+#### feedCat
+Opens and closes the gate when a cat is detected. 
+
+`GPIODriver.feedCat()`
+
+
+#### sonarMeasure
+Returns the distance between the top of the reservoir and food level. Remaining food level will be determined from the measured distance. 
+
+`GPIODriver.sonarMeasure()`

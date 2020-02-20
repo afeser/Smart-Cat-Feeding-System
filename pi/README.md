@@ -23,6 +23,24 @@ This is a very powerful module that organizes everything and puts all stuff toge
 It runs on server and manages all of the process. Not to be used during development
 since operation is for self-management.
 
+### Decision Making
+Decision making module is embedded inside Controller module. Decisions are determined
+before the operation and every possibility is considered. The followings are some
+rules that determine the decision making process. Decision making module is designed
+like a black box. There are inputs and outputs defining the situation and the action.
+Inputs are listed, behaviour is defined per each action.
+
+Classifying an image as cat triggers the followings.
+
+**DecisionMaker.decideOnCat** :
+Requirements :
+  - Cat has not been fed 5 hours before now
+  - Cat is in database, and it is allowed to eat, the amount is fetched
+  -
+Results :
+  - Cat name is added to database as ate
+  -
+
 ## Camera Driver
 Camera driver for client camera.
 - Holds camera resource throughout it's lifetime
@@ -182,12 +200,12 @@ Closes the gate. Gate is turned back to its initial position and food is stored 
 `GPIODriver.openFoodGate()`
 
 #### feedCat
-Opens and closes the gate when a cat is detected. 
+Opens and closes the gate when a cat is detected.
 
 `GPIODriver.feedCat()`
 
 
 #### sonarMeasure
-Returns the distance between the top of the reservoir and food level. Remaining food level will be determined from the measured distance. 
+Returns the distance between the top of the reservoir and food level. Remaining food level will be determined from the measured distance.
 
 `GPIODriver.sonarMeasure()`

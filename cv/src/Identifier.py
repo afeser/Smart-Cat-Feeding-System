@@ -34,12 +34,11 @@ class Identifier:
             raise NameError('Feature descriptor ' + str(featureDescriptor) + ' is not defined!')
 
         # Database stuff
-        self._databaseDir = 'cv/data/SIFT/database'
+        self._databaseDir = 'database'
         self._database    = {}
         if not os.path.exists(self._databaseDir):
-            logging.info('No database directory found, creating an empty one')
-            os.makedirs(self._databaseDir, exist_ok=True)
-            self._database = {}
+            # logging.info('No database directory found, creating an empty one')
+            os.makedirs(self._databaseDir)
 
         # Descriptor and matching
         self._ratioTestThreshold = 0.55

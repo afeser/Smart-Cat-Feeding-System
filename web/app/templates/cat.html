@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>User: {{ current_user.username }}</h1>
+    <h2>Device: {{ device.location }}</h2>
+    <h3>Cat: {{ cat.name }}</h3>
+{% endblock %}

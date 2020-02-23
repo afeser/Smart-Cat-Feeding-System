@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>User: {{ current_user.username }}</h1>
+    <h2>Device: {{ device.location }}</h2>
+    <hr>
+    {% for cat in cats %}
+    <p>
+    <b><a href="{{ url_for ( 'cat', username=current_user.username, device_id=device.id, cat_id=cat_ids[loop.index0] ) }}">{{ cat.name }}</a><b>
+    </p>
+    {% endfor %}
+{% endblock %}

@@ -6,6 +6,9 @@
     {% for device in devices %}
     <p>
     <b><a href="{{ url_for('device', username=current_user.username, device_id=device_ids[loop.index0]) }}">{{ device.location }}</a><b>
+      <p class="battery">
+    <b class="battery-level" style="height:{{ device.battery_percentage }}%;"></b>
+  </p>
     </p>
     {% endfor %}
 {% endblock %}

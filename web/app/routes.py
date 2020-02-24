@@ -41,7 +41,7 @@ def user(username):
     device_ids = []
     for device in devices:
         device_ids.append(device.id)
-    return render_template('user.html', devices=devices, device_ids=device_ids)
+    return render_template('user.html', title=user.username, devices=devices, device_ids=device_ids)
 
 @app.route('/user/<username>/<device_id>')
 @login_required
@@ -52,13 +52,12 @@ def device(username,device_id):
     cat_ids = []
     for cat in cats:
         cat_ids.append(cat.id)
-    return render_template('device.html', device=device, cats=cats,cat_ids=cat_ids)
+    return render_template('device.html', title=device.location, device=device, cats=cats,cat_ids=cat_ids)
 
 @app.route('/user/<username>/<device_id>/<cat_id>')
 @login_required
 def cat(username,device_id,cat_id):
     user = User.query.filter_by(username=username).first_or_404()
-    print(device_id)
     device = user.devices.filter_by(id=device_id).first()
     cat = device.cats.filter_by(id=cat_id).first()
-    return render_template('cat.html', device=device, cat=cat)
+    return render_template('cat.html', title=cat.name, device=device, cat=cat)

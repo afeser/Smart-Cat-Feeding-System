@@ -1,4 +1,4 @@
-#!/home/aldemir/github-shit/felerest-web/venv/bin/python3
+#!/home/felerest/finalproject/web/venv/bin/python3
 # EASY-INSTALL-ENTRY-SCRIPT: 'Mako==1.1.1','console_scripts','mako-render'
 __requires__ = 'Mako==1.1.1'
 import re

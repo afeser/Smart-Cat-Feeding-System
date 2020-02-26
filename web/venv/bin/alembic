@@ -1,4 +1,4 @@
-#!/home/aldemir/github-shit/felerest-web/venv/bin/python3
+#!/home/felerest/finalproject/web/venv/bin/python3
 # EASY-INSTALL-ENTRY-SCRIPT: 'alembic==1.4.0','console_scripts','alembic'
 __requires__ = 'alembic==1.4.0'
 import re

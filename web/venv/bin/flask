@@ -1,4 +1,4 @@
-#!/home/aldemir/github-shit/felerest-web/venv/bin/python3
+#!/home/felerest/finalproject/web/venv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys

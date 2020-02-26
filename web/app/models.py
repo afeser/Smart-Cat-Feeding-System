@@ -31,10 +31,10 @@ class Device(db.Model):
         self.location = location
 
     def set_battery(self, battery):
-        self.battery = battery
+        self.battery_percentage = battery
 
     def set_food_level(self, food_level):
-        self.food_level = food_level
+        self.food_percentage = food_level
 
     def __repr__(self):
         return '<Device {}>'.format(self.location)

@@ -2,7 +2,10 @@
 
 {% block content %}
     <h1>User: {{ current_user.username }}</h1>
-    <h2>Device: {{ device.location }}</h2>
+    <h2><div class="batteryContainer">
+      <div class="batteryOuter"><div id="batteryLevel" style="width:{{ device.battery_percentage }}px"></div></div>
+      <div class="batteryBump"></div> Device: {{ device.location }}
+    </div></h2>
     <hr>
     {% for cat in cats %}
     <p>

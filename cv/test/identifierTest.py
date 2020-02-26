@@ -68,9 +68,9 @@ def test1():
     b.importDirectory(work_dir + '/dataset')
     sys.exit(0)
 
-    print(a.getCatName(doga5))
-    print(a.getCatName(utku5))
-    print(a.getCatName(im1))
+    print(a.getCatId(doga5))
+    print(a.getCatId(utku5))
+    print(a.getCatId(im1))
 
 def test2():
 
@@ -82,11 +82,11 @@ def test2():
 
 
     print('Importing directory...')
-    a.resetDatabase(force=True)
-    a.importDirectory(work_dir + '/FacebookDataset13_Train')
-    a.saveDatabase()
-    # a.loadDatabase()
-    # a.databaseInfo()
+    #a.resetDatabase(force=True)
+    #a.importDirectory(work_dir + '/FacebookDataset13_Train')
+    #a.saveDatabase()
+    a.loadDatabase()
+    a.databaseInfo()
 
 
     def accuracyTrain():
@@ -108,7 +108,7 @@ def test2():
 
             im = cv2.imread(train_root_name + file)
 
-            predictedClass = a.getCatName(im)
+            predictedClass = a.getCatId(im)
 
             print(basename + ' -> ' + predictedClass)
 
@@ -142,7 +142,7 @@ def test2():
 
             im = cv2.imread(test_root_name + file)
 
-            predictedClass = a.getCatName(im)
+            predictedClass = a.getCatId(im)
 
             print(basename + ' -> ' + predictedClass)
 

@@ -22,7 +22,8 @@ class Cat:
         self._eatTimes   = []
         self._eatAmounts = []
         # Usual amount that cat eats, specified by the user
-        self._normalEatAmount = 0
+        self._normalEatAmount = 16 # in grams...
+        self._normalEatTime   = 5 # hours to wait to feed again, 5 by default
 
         # Database
         self._databaseDir = 'database'
@@ -82,3 +83,13 @@ class Cat:
 
         self._eatTimes.append(datetime.datetime.now())
         self._eatAmounts.append(foodAmount)
+    def isAbleToEat(self):
+        # If there are more than 5 hours, give again
+        timePassed = datetime.datetime.now() - self.getLastEatTime()
+        eatTime    = datetime.timedelta(hours=self._normalEatTime
+        if timePassed < eatTime:
+            logging.info('Cat came after ' + str(timePassed) + ' however waiting for '+ str(eatTime) + ' hours to feed it')
+            return False
+
+
+        return True

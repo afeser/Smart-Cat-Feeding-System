@@ -23,7 +23,7 @@ class Identifier:
     These are dumped into pickle file.
     '''
     # Initialization...
-    def __init__(self, featureDescriptor='SIFT'):
+    def __init__(self, featureDescriptor='SIFT', debug=False):
         if featureDescriptor == 'SIFT':
             self._featureDescriptor = cv2.xfeatures2d.SIFT_create()
         elif featureDescriptor == 'ORB':
@@ -46,6 +46,7 @@ class Identifier:
 
         # Performance measurement
         self._timeStart = time.time()
+        self._debug = debug
 
     # Database stuff...
     def loadDatabase(self):
@@ -99,7 +100,7 @@ class Identifier:
         self._timeStart = time.time()
 
     # Most commonly used in public...
-    def getCatName(self, catImage):
+    def getCatId(self, catImage):
         '''
         See check_image for detailed calculation.
 
@@ -132,9 +133,9 @@ class Identifier:
         matchNumber    = {}
         allDescriptors = []
         boundaries     = [0]
-        for catName in self._database:
-            boundaries.append(boundaries[-1] + len(self._database[catName]))
-            allDescriptors.extend(self._database[catName])
+        for catId in self._database:
+            boundaries.append(boundaries[-1] + len(self._database[catId]))
+            allDescriptors.extend(self._database[catId])
         boundaries = np.array(boundaries)
 
         matches = self._flann.match(catDesc, np.array(allDescriptors))
@@ -161,12 +162,12 @@ class Identifier:
                 # print(smallestDistances)
 
         # Map indices to cat names...
-        catNames = list(self._database)
+        catIds = list(self._database)
 
         for k_temp in range(k):
             # pdb.set_trace()
             # print(smallestIndices[k_temp] > boundaries)
-            smallestIndices[k_temp] = catNames[np.sum(smallestIndices[k_temp] > boundaries)-1]
+            smallestIndices[k_temp] = catIds[np.sum(smallestIndices[k_temp] > boundaries)-1]
 
         # logging.info('Identified with ' + str(maxMatchNumber) + ' vectors as ' + maxMatchName + ' in ' + str(time.time() - startTime) + ' seconds')
         mostFrequent = {}
@@ -183,8 +184,8 @@ class Identifier:
                 maxLabel = key
                 maxVal   = mostFrequent[key]
 
-        return str(list(mostFrequent))
-    def addNewCat(self, catName, catVectors):
+        return maxLabel # str(list(mostFrequent))
+    def addNewCat(self, catId, catVectors):
         '''
         When a cat seen firstly, add it to the database.
 
@@ -235,7 +236,7 @@ class Identifier:
             localImages[basename].append(im)
 
 
-        def _createSiftVectorsFromImageSet(images, catName):
+        def _createSiftVectorsFromImageSet(images, catId):
             '''
             This is the method to extract sift vectors based on the common ones among
             pictures. Note that, every time a new picture is added, whole database
@@ -251,7 +252,7 @@ class Identifier:
             common ones are the only useful thing I imagined.
             '''
             # Debug mode
-            if logging.getLogger().level <= 10:
+            if self._debug:
                 debugDir = self._databaseDir + '/debug'
                 logging.debug('Debug mode on, saving match results into ' + debugDir)
                 os.makedirs(debugDir, exist_ok=True)
@@ -290,7 +291,7 @@ class Identifier:
                             img3 = cv2.drawMatchesKnn(image1, keypoints1, image2, keypoints2, matches, None, **draw_params)
                             new_fig = plt.figure(figsize=(32, 32))
                             plt.imshow(img3)
-                            plt.savefig(debugDir + '/' + catName + '_' + str(index1+1) + '_' + str(index2+1) + '.png')
+                            plt.savefig(debugDir + '/' + catId + '_' + str(index1+1) + '_' + str(index2+1) + '.png')
                             plt.close(new_fig)
 
 
@@ -319,19 +320,19 @@ class Identifier:
             return completeVectors
 
         # 2)
-        for catName in localImages:
-            logging.info('Processing ' + str(catName) + ' to import from directory')
+        for catId in localImages:
+            logging.info('Processing ' + str(catId) + ' to import from directory')
 
 
-            vectors = _createSiftVectorsFromImageSet(localImages[catName], catName)
+            vectors = _createSiftVectorsFromImageSet(localImages[catId], catId)
 
-            logging.info('Total vectors adding to database for class ' + str(catName) + ' is ' + str(len(vectors)))
+            logging.info('Total vectors adding to database for class ' + str(catId) + ' is ' + str(len(vectors)))
 
-            if catName not in self._database:
-                self._database[catName] = []
+            if catId not in self._database:
+                self._database[catId] = []
 
             # 3)
-            self._database[catName].extend(vectors)
+            self._database[catId].extend(vectors)
     def optimizeDatabase(self):
         '''
         Optimizing database by;
@@ -347,14 +348,14 @@ class Identifier:
 
             It eliminates for every class...
             '''
-            for catName in self._database:
+            for catId in self._database:
                 logging.debug('Eliminating the duplicates')
                 self._debugTime(reset=True)
                 eliminated = 0
                 # Eliminate duplicates
                 eliminateThose = []
-                for index1, vector1 in enumerate(self._database[catName]):
-                    for index2, vector2 in enumerate(self._database[catName]):
+                for index1, vector1 in enumerate(self._database[catId]):
+                    for index2, vector2 in enumerate(self._database[catId]):
                         if index1 != index2 and np.array_equal(vector1, vector2):
                             eliminateThose.append(index1)
                             eliminated = eliminated + 1

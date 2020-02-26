@@ -26,20 +26,16 @@ since operation is for self-management.
 ### Decision Making
 Decision making module is embedded inside Controller module. Decisions are determined
 before the operation and every possibility is considered. The followings are some
-rules that determine the decision making process. Decision making module is designed
-like a black box. There are inputs and outputs defining the situation and the action.
-Inputs are listed, behaviour is defined per each action.
+rules that determine the decision making process.
 
-Classifying an image as cat triggers the followings.
-
-**DecisionMaker.decideOnCat** :
+**Cat Detected :**
 Requirements :
   - Cat has not been fed 5 hours before now
   - Cat is in database, and it is allowed to eat, the amount is fetched
   -
 Results :
   - Cat name is added to database as ate
-  -
+  - 
 
 ## Camera Driver
 Camera driver for client camera.

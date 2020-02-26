@@ -85,6 +85,11 @@ class Classifier:
             font = cv2.FONT_HERSHEY_PLAIN
             colors = np.random.uniform(0, 255, size=(len(classes), 3))
 
+            logging.info('Writing the image to the folder...')
+            t = time.localtime()
+            timestamp = time.strftime('%b-%d-%Y_%H%M%S', t)
+            cv2.imwrite('frame_original_' + timestamp + '.jpg', frame)
+
             for i in range(len(boxes)):
                 if i in indexes:
                     x, y, w, h = boxes[i]
@@ -94,9 +99,6 @@ class Classifier:
                     cv2.rectangle(frame, (x, y), (x + w, y + h), color, 2)
                     cv2.putText(frame, label + " " + str(round(confidence, 2)), (x, y + 30), font, 3, color, 3)
 
-            logging.info('Writing the image to the folder...')
-            t = time.localtime()
-            timestamp = time.strftime('%b-%d-%Y_%H%M%S', t)
             cv2.imwrite("frame_" + timestamp + ".jpg", frame)
 
         logging.info('Calling nested debug function (debugFunc)...')

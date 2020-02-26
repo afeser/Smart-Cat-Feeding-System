@@ -162,8 +162,11 @@ class CommandClient(Client):
         elif cmd == 'closeFoodGate':
             gpio.closeFoodGate()
         elif cmd == 'feedCat':
-            gpio.feedCat()
-
+            amount = cmd._receiveStr()
+            try:
+                gpio.feedCat(int(amount))
+            except:
+                logging.warning('Can not decode amount of the food "' + amount + '"\nNot feeding cat...')
 
             # WTF are u saying??
         else:

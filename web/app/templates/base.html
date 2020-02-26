@@ -15,10 +15,14 @@
         {% endif %}
     </head>
     <body>
-        <nav>
+
+
+
+      <nav>
     <div class="nav-wrapper">
       <a href="{{ url_for('index') }}" class="brand-logo">Felerest</a>
-      <ul id="nav-mobile" class="right hide-on-med-and-down">
+      <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+      <ul class="right hide-on-med-and-down">
         {% if current_user.is_anonymous %}
         <li><a href="{{ url_for('login') }}">Login</a></li>
         {% else %}
@@ -28,6 +32,15 @@
       </ul>
     </div>
   </nav>
+
+  <ul class="sidenav" id="mobile-demo">
+    {% if current_user.is_anonymous %}
+        <li><a href="{{ url_for('login') }}">Login</a></li>
+        {% else %}
+        <li><a href="{{ url_for('user', username=current_user.username) }}">Devices</a></li>
+        <li><a href="{{ url_for('logout') }}">Logout</a></li>
+        {% endif %}
+  </ul>
   <div class="container">
 
         <hr>
@@ -43,8 +56,14 @@
         {% block content %}{% endblock %}
       </div>
 
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+
         <!-- Compiled and minified JavaScript -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-
+        <script>
+            $(document).ready(function(){
+    $('.sidenav').sidenav();
+  });
+        </script>
     </body>
 </html>

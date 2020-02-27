@@ -74,8 +74,9 @@
     {% if current_user.is_anonymous %}
         <li><a href="{{ url_for('login') }}">Login</a></li>
         {% else %}
-        <li><a href="{{ url_for('user', username=current_user.username) }}">Devices</a></li>
-        <li><a href="{{ url_for('logout') }}">Logout</a></li>
+        <li><a href="{{ url_for('user')     }}">Devices</a></li>
+        <li><a href="{{ url_for('settings') }}">Account</a></li>
+        <li><a href="{{ url_for('logout')   }}">Logout</a></li>
         {% endif %}
   </ul>
   <div class="container">

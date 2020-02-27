@@ -9,18 +9,21 @@
     </div>
     </div>
     <hr>
-    {% for cat in cats %}
+    {% for cat in device.cats %}
   <div class="row">
     <div class="col s6 m3">
-      <div class="card blue-grey darken-1" style="height:400px">
-        <div class="card-content white-text">
-          <span class="card-title">{{ cat.name }}</span>
-        </div>
-        <div class="card-action">
-          <a href="{{ url_for ( 'cat', username=current_user.username, device_id=device.id, cat_id=cat_ids[loop.index0] ) }}">Info</a>
-          <p>{{ cat_last_feds[loop.index0] }}</p>
-        </div>
-      </div>
+      <div class="card">
+    <div class="card-image waves-effect waves-block waves-light">
+      <img class="activator" src="/static/cats/{{ device.id }}_{{ cat.id }}.jpeg">
+    </div>
+    <div class="card-content">
+      <span class="card-title activator grey-text text-darken-4">{{ cat.name }}<i class="material-icons right">more_vert</i></span>
+    </div>
+    <div class="card-reveal">
+      <span class="card-title grey-text text-darken-4">{{ cat.name }}<i class="material-icons right">close</i></span>
+      <p>{{ cat.get_time_after_last_feeding() }}</p>
+    </div>
+  </div>
     </div>
     {% endfor %}
 {% endblock %}

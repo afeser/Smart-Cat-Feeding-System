@@ -12,6 +12,8 @@ class User(UserMixin, db.Model):
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
+        db.session.add(self)
+        db.session.commit()
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
@@ -29,12 +31,18 @@ class Device(db.Model):
 
     def set_location(self, location):
         self.location = location
+        db.session.add(self)
+        db.session.commit()
 
     def set_battery(self, battery):
         self.battery_percentage = battery
+        db.session.add(self)
+        db.session.commit()
 
     def set_food_level(self, food_level):
         self.food_percentage = food_level
+        db.session.add(self)
+        db.session.commit()
 
     def __repr__(self):
         return '<Device {}>'.format(self.location)
@@ -47,6 +55,8 @@ class Cat(db.Model):
 
     def set_name(self, name):
         self.name = name
+        db.session.add(self)
+        db.session.commit()
 
     def get_time_after_last_feeding(self):
         diff = datetime.utcnow() - self.last_feeding_time

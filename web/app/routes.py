@@ -21,7 +21,7 @@ def login():
         if user is None or not user.check_password(form.password.data):
             flash('Invalid username or password')
             return redirect(url_for('login'))
-        login_user(user, remember=form.remember_me.data)
+        login_user(user, remember=True)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('index')
@@ -33,35 +33,37 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
-@app.route('/user/<username>')
+@app.route('/user/')
 @login_required
-def user(username):
-    user = User.query.filter_by(username=username).first_or_404()
+def user():
+    user = User.query.filter_by(username=current_user.username).first_or_404()
     devices = user.devices
-    device_ids = []
-    for device in devices:
-        device_ids.append(device.id)
     title = user.username + ' - Devices'
-    return render_template('user.html', title=title, devices=devices, device_ids=device_ids)
+    return render_template('user.html', title=title, devices=devices)
 
-@app.route('/user/<username>/<device_id>')
+@app.route('/device/<device_id>')
 @login_required
-def device(username,device_id):
-    user = User.query.filter_by(username=username).first_or_404()
-    device = user.devices.filter_by(id=device_id).first()
-    cats = device.cats
-    cat_ids = []
-    cat_last_feds = []
-    for cat in cats:
-        cat_ids.append(cat.id)
-        cat_last_feds.append(cat.get_time_after_last_feeding())
+def device(device_id):
+    user = User.query.filter_by(username=current_user.username).first_or_404()
+    device = user.devices.filter_by(id=device_id).first_or_404()
     title = user.username + ' - ' + device.location
-    return render_template('device.html', title=title, device=device, cats=cats, cat_ids=cat_ids, cat_last_feds=cat_last_feds)
+    return render_template('device.html', title=title, device=device)
 
-@app.route('/user/<username>/<device_id>/<cat_id>')
+@app.route('/settings/', methods=['GET', 'POST'])
 @login_required
-def cat(username,device_id,cat_id):
-    user = User.query.filter_by(username=username).first_or_404()
-    device = user.devices.filter_by(id=device_id).first()
-    cat = device.cats.filter_by(id=cat_id).first()
-    return render_template('cat.html', title=cat.name, device=device, cat=cat)
+def settings():
+    user = User.query.filter_by(username=current_user.username).first_or_404()
+    devices = user.devices
+    title = user.username + ' - Devices'
+    if request.method == 'POST':
+        result = request.form
+        input_id = list(result.keys())[0]
+        edited = input_id.split('_')
+        if len(edited) == 2 and edited[0] == 'device':
+            device = Device.query.filter_by(id=int(edited[1])).first_or_404()
+            device.set_location(result[input_id])
+        elif len(edited) == 3 and edited[0] == 'cat':
+            device = Device.query.filter_by(id=int(edited[1])).first_or_404()
+            cat = device.cats.filter_by(id=edited[2]).first_or_404()
+            cat.set_name(result[input_id])
+    return render_template('settings.html', title=title, devices=devices)

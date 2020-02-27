@@ -13,7 +13,7 @@
           </div>
         </div>
         <div class="card-action">
-          <a href="{{ url_for('device', username=current_user.username, device_id=device_ids[loop.index0]) }}">Cats</a>
+          <a href="{{ url_for('device', device_id=device.id) }}">Cats</a>
         </div>
       </div>
     </div>

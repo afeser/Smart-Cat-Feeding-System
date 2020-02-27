@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    {% for device in devices %}
+
+    <form action = "" method = post>
+      <div class="row">
+          <div class="input-field col s9">
+                <input id="device_{{device.id}}" type="text" name="device_{{device.id}}" class="validate">
+                <label for="device_{{device.id}}">{{device.location}}</label>
+          </div>
+          <div class="col s3">
+          <button class="btn waves-effect waves-light" type="submit" name="action">
+            <i class="material-icons">done</i>
+          </button>
+          </div>
+          </div>
+    </form>
+
+
+    {% for cat in device.cats %}
+
+    <form action = "" method = post>
+
+    <div class="row">
+        <div class="input-field col s6">
+          <input id="cat_{{device.id}}_{{cat.id}}" type="text" name="cat_{{device.id}}_{{cat.id}}" class="validate">
+          <label for="cat_{{device.id}}_{{cat.id}}">{{cat.name}}</label>
+          </div>
+          <div class="col s6">
+          <button class="btn waves-effect waves-light" type="submit" name="action">
+            <i class="material-icons">done</i>
+          </button>
+          </div>
+          </div>
+        </form>
+
+    {% endfor %}
+
+    {% endfor %}
+
+{% endblock %}

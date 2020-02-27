@@ -42,11 +42,20 @@ class Device(db.Model):
 class Cat(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), index=True, default='name')
-    last_feeding_time = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    last_feeding_time = db.Column(db.DateTime, index=True, default=datetime.utcnow())
     device_id = db.Column(db.Integer, db.ForeignKey('device.id'))
 
     def set_name(self, name):
         self.name = name
+
+    def get_time_after_last_feeding(self):
+        diff = datetime.utcnow() - self.last_feeding_time
+        if diff.days != 0:
+            return str(diff.days) + ' day(s) ago'
+        elif diff.seconds > 3600:
+            return str(diff.seconds // 3600) + ' hour(s) ago'
+        else:
+            return str(diff.seconds) + ' second(s) ago'
 
     def __repr__(self):
         return '<Cat {}>'.format(self.name)

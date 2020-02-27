@@ -47,12 +47,13 @@
   height: 30px;
 }
 
+.nav-wrapper .brand-logo svg {
+  height: 64px;
+}
+
         </style>
     </head>
     <body>
-
-
-
       <nav>
     <div class="nav-wrapper">
       <a href="{{ url_for('index') }}" class="brand-logo">Felerest</a>
@@ -78,7 +79,6 @@
   </ul>
   <div class="container">
 
-        <hr>
         {% with messages = get_flashed_messages() %}
         {% if messages %}
         <ul>

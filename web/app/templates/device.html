@@ -1,15 +1,26 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>User: {{ current_user.username }}</h1>
-    <h2><div class="batteryContainer">
+    <h3 align="center">Location: {{ device.location }}</h3>
+    <div style="margin: 0 auto">
+    <div class="batteryContainer">
       <div class="batteryOuter"><div id="batteryLevel" style="width:{{ device.battery_percentage }}px"></div></div>
-      <div class="batteryBump"></div> Device: {{ device.location }}
-    </div></h2>
+      <div class="batteryBump"></div>
+    </div>
+    </div>
     <hr>
     {% for cat in cats %}
-    <p>
-    <b><a href="{{ url_for ( 'cat', username=current_user.username, device_id=device.id, cat_id=cat_ids[loop.index0] ) }}">{{ cat.name }}</a><b>
-    </p>
+  <div class="row">
+    <div class="col s6 m3">
+      <div class="card blue-grey darken-1" style="height:400px">
+        <div class="card-content white-text">
+          <span class="card-title">{{ cat.name }}</span>
+        </div>
+        <div class="card-action">
+          <a href="{{ url_for ( 'cat', username=current_user.username, device_id=device.id, cat_id=cat_ids[loop.index0] ) }}">Info</a>
+          <p>{{ cat_last_feds[loop.index0] }}</p>
+        </div>
+      </div>
+    </div>
     {% endfor %}
 {% endblock %}

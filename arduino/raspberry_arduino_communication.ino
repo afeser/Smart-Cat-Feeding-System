@@ -48,24 +48,13 @@ void receiveData(int byteCount){
                                       
     if (0 < number < 181) {
       Serial.print("data received: ");
-      Serial.println(number);                          
+      Serial.println(number);    
+      digitalWrite(13, LOW);                      
       myservo.write(number-1);    // servo 0-180 derece arası calısıyor.
-      delay(50);
+      delay(500);
+      digitalWrite(13, HIGH); 
     }
-    
-    // Toggles led
-    
-    if (number == 181){
-    
-      if (state == 0){
-      digitalWrite(13, HIGH); // set the LED on
-      state = 1;
-      }
-      else{
-      digitalWrite(13, LOW); // set the LED off
-      state = 0;
-        }
-    }     
+       
                                      
     if (number == 182) {
                                 

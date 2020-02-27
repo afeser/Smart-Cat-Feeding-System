@@ -67,6 +67,11 @@ class Cat(db.Model):
         else:
             return str(diff.seconds) + ' second(s) ago'
 
+    def update_last_feeding_time(self):
+        self.last_feeding_time = datetime.utcnow()
+        db.session.add(self)
+        db.session.commit()
+
     def __repr__(self):
         return '<Cat {}>'.format(self.name)
 

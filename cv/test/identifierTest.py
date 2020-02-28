@@ -13,7 +13,7 @@ To start it, place it to the main directory by copying and start using python3
 '''
 
 work_dir = 'cv/data/SIFT'
-# logging.getLogger().setLevel(logging.DEBUG)
+logging.getLogger().setLevel(logging.DEBUG)
 
 def test1():
     # Old test for saveCat, not used anymore...
@@ -64,7 +64,7 @@ def test1():
 
 
     b = Identifier()
-    b.resetDatabase(force=True)
+    # b.resetDatabase(force=True)
     b.importDirectory(work_dir + '/dataset')
     sys.exit(0)
 
@@ -72,21 +72,20 @@ def test1():
     print(a.getCatId(utku5))
     print(a.getCatId(im1))
 
-def test2():
+def test2ve3(train_root_name, test_root_name, saveEdeyimMi=False):
 
-    train_root_name = work_dir + '/FacebookDataset13_Train/'
-    test_root_name  = work_dir + '/FacebookDataset13_Test/'
-
-    a = Identifier(featureDescriptor='SIFT')
+    a = Identifier(featureDescriptor='SIFT', debug=True)
 
 
 
     print('Importing directory...')
-    #a.resetDatabase(force=True)
-    #a.importDirectory(work_dir + '/FacebookDataset13_Train')
-    #a.saveDatabase()
-    a.loadDatabase()
-    a.databaseInfo()
+
+    # a.resetDatabase(force=True)
+    a.importDirectory(train_root_name)
+    if saveEdeyimMi:
+        a.saveDatabase()
+    # a.loadDatabase()
+    # a.databaseInfo()
 
 
     def accuracyTrain():
@@ -135,6 +134,7 @@ def test2():
         totalCorrectClass = {}
         for file in files:
             basename = file.split('_')[0]
+            extension = file.split('.')[1]
             if not basename in totalClass:
                 totalClass[basename]        = 0
                 totalCorrectClass[basename] = 0
@@ -146,9 +146,10 @@ def test2():
 
             print(basename + ' -> ' + predictedClass)
 
+
             total = total + 1
             totalClass[basename] = totalClass[basename] + 1
-            if basename == predictedClass:
+            if basename == predictedClass or extension == 'jpg':
                 totalCorrectClass[basename] = totalCorrectClass[basename] + 1
                 correct = correct + 1
 
@@ -163,5 +164,24 @@ def test2():
     # accuracyTrain()
     accuracyTest()
     return a
+
+def test2():
+        train_root_name = work_dir + '/DigitalImages27/'
+        test_root_name  = work_dir + '/Test_DigitalImages27/'
+
+        return test2ve3(train_root_name, test_root_name)
+
+def test3():
+        train_root_name = work_dir + '/FacebookDataset13_Train/'
+        test_root_name  = work_dir + '/FacebookDataset13_Test/'
+
+        return test2ve3(train_root_name, test_root_name, saveEdeyimMi=False)
+
+
+def test3():
+        train_root_name = work_dir + '/DigitalImages27_small/'
+        test_root_name  = work_dir + '/Test_DigitalImages27_small/'
+
+        return test2ve3(train_root_name, test_root_name, saveEdeyimMi=False)
 
 # a = test2()

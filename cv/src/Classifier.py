@@ -5,7 +5,7 @@ import logging
 
 class Classifier:
 
-    def __init__(self, debugMode=False):
+    def __init__(self, debug=False):
 
         logging.info('Loading YOLO weights and configuration...')
 
@@ -20,7 +20,7 @@ class Classifier:
         self._output_layers = [layer_names[i[0] - 1] for i in self._net.getUnconnectedOutLayers()]
 
 
-        self._debugMode = debugMode
+        self._debugMode = debug
 
     def classifyCatDog(self, frame):
         '''
@@ -90,16 +90,18 @@ class Classifier:
             timestamp = time.strftime('%b-%d-%Y_%H%M%S', t)
             cv2.imwrite('frame_original_' + timestamp + '.jpg', frame)
 
+            frameChanged = frame.copy()
+
             for i in range(len(boxes)):
                 if i in indexes:
                     x, y, w, h = boxes[i]
                     label = str(classes[class_ids[i]])
                     confidence = confidences[i]
                     color = colors[class_ids[i]]
-                    cv2.rectangle(frame, (x, y), (x + w, y + h), color, 2)
-                    cv2.putText(frame, label + " " + str(round(confidence, 2)), (x, y + 30), font, 3, color, 3)
+                    cv2.rectangle(frameChanged, (x, y), (x + w, y + h), color, 2)
+                    cv2.putText(frameChanged, label + " " + str(round(confidence, 2)), (x, y + 30), font, 3, color, 3)
 
-            cv2.imwrite("frame_" + timestamp + ".jpg", frame)
+            cv2.imwrite("frame_" + timestamp + ".jpg", frameChanged)
 
         logging.info('Calling nested debug function (debugFunc)...')
         if debug:

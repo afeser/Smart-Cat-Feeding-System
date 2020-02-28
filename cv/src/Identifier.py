@@ -125,7 +125,10 @@ class Identifier:
 
         Find the maximum number of matches...
         '''
+        self._debugTime(reset=True)
+
         k = 5 # another hyperparameter, look below...
+
 
         startTime = time.time()
         catDesc = self._getSiftVectors(catImage)
@@ -184,7 +187,15 @@ class Identifier:
                 maxLabel = key
                 maxVal   = mostFrequent[key]
 
-        return maxLabel # str(list(mostFrequent))
+        self._debugTime('flann match')
+        # pdb.set_trace()
+        if smallestDistances[0] < 100:
+            return maxLabel # str(list(mostFrequent))
+        else:
+             return 'None'
+
+
+
     def addNewCat(self, catId, catVectors):
         '''
         When a cat seen firstly, add it to the database.
@@ -232,6 +243,7 @@ class Identifier:
                 localImages[basename] = []
 
             im = cv2.imread(directoryPath + '/' + file)
+            # pdb.set_trace()
             im = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
             localImages[basename].append(im)
 

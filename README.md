@@ -1,5 +1,8 @@
 # Reports
 
+
+## [Critical Design Report](https://github.com/afeser/FinalProject/blob/Report/CriticalDesignReport.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/src/CriticalDesignReport) (28.02.2020)
+
 ## [Weekly Report 12](https://github.com/afeser/FinalProject/blob/Report/Week12.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/src/Week12) (26.02.2020)
 
 ## [Weekly Report 11](https://github.com/afeser/FinalProject/blob/Report/Week11.pdf) - [Source Files](https://github.com/afeser/FinalProject/tree/Report/src/Week11) (19.02.2020)

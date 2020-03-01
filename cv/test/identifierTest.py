@@ -72,19 +72,20 @@ def test1():
     print(a.getCatId(utku5))
     print(a.getCatId(im1))
 
-def test2ve3(train_root_name, test_root_name, saveEdeyimMi=False):
+def test2ve3(train_root_name, test_root_name, saveEdeyimMi=False, databaseLocation=None):
 
     a = Identifier(featureDescriptor='SIFT', debug=True)
 
 
 
-    print('Importing directory...')
 
     # a.resetDatabase(force=True)
-    a.importDirectory(train_root_name)
+    if databaseLocation is None or saveEdeyimMi:
+        a.importDirectory(train_root_name)
     if saveEdeyimMi:
-        a.saveDatabase()
-    # a.loadDatabase()
+        a.saveDatabase(databaseLocation=databaseLocation)
+    if not databaseLocation is None:
+        a.loadDatabase(databaseLocation=databaseLocation)
     # a.databaseInfo()
 
 
@@ -169,7 +170,7 @@ def test2():
         train_root_name = work_dir + '/DigitalImages27/'
         test_root_name  = work_dir + '/Test_DigitalImages27/'
 
-        return test2ve3(train_root_name, test_root_name)
+        return test2ve3(train_root_name, test_root_name, databaseLocation='database/siftVectorsTest2.pickle')
 
 def test3():
         train_root_name = work_dir + '/FacebookDataset13_Train/'
@@ -183,5 +184,17 @@ def test3():
         test_root_name  = work_dir + '/Test_DigitalImages27_small/'
 
         return test2ve3(train_root_name, test_root_name, saveEdeyimMi=False)
+
+def test4():
+        train_root_name = work_dir + '/DigitalImages27/'
+        test_root_name  = work_dir + '/Test_DigitalImages27/'
+
+        return test2ve3(train_root_name, test_root_name)
+
+def test5():
+        train_root_name = work_dir + '/DigitalImages27_2/'
+        test_root_name  = work_dir + '/Test_DigitalImages27_2/'
+
+        return test2ve3(train_root_name, test_root_name)
 
 # a = test2()

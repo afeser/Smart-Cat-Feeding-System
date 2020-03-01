@@ -41,7 +41,7 @@ class Identifier:
             os.makedirs(self._databaseDir)
 
         # Descriptor and matching
-        self._ratioTestThreshold = 0.55
+        self._ratioTestThreshold = 0.35
         self._flann = cv2.FlannBasedMatcher({'algorithm' : 0, 'trees' : 5})
 
         # Performance measurement
@@ -49,16 +49,20 @@ class Identifier:
         self._debug = debug
 
     # Database stuff...
-    def loadDatabase(self):
+    def loadDatabase(self, databaseLocation=None):
         '''
         Load the whole database.
 
         Data is a simple dictionary object.
         '''
-        dirName = self._databaseDir + '/siftVectors.pickle'
+        if databaseLocation is None:
+            dirName = self._databaseDir + '/siftVectors.pickle'
+        else:
+            dirName = databaseLocation
+
         with open(dirName, 'rb') as f:
             self._database = pickle.load(f)
-    def saveDatabase(self):
+    def saveDatabase(self, databaseLocation=None):
         '''
         Save the whole database.
 
@@ -66,7 +70,11 @@ class Identifier:
         '''
         logging.info('Overwriting the existing database')
 
-        dirName = self._databaseDir + '/siftVectors.pickle'
+        if databaseLocation is None:
+            dirName = self._databaseDir + '/siftVectors.pickle'
+        else:
+            dirName = databaseLocation
+
         with open(dirName, 'wb') as f:
             pickle.dump(self._database, f)
 
@@ -428,3 +436,18 @@ class Identifier:
 
         print('\t' + '_' * 30 + ' : ' + '_' * 4 + '+')
         print('\t{0:30s} : {1:5d}'.format('Total', total))
+    def getValidationResults(self, validationSetImages):
+        '''
+        input :
+        validationSetImages = [im1_location, im2_location, ...]
+
+        output :
+        dictionary = {
+            'accuracy' : overall accuracy,
+            'classAccuracy' : accuracy per class,
+            'distances' : list of distances per validation image, the nearest
+            TODO ?????
+        }
+
+        '''
+        pass

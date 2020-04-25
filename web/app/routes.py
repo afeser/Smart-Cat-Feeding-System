@@ -61,9 +61,21 @@ def settings():
         edited = input_id.split('_')
         if len(edited) == 2 and edited[0] == 'device':
             device = Device.query.filter_by(id=int(edited[1])).first_or_404()
-            device.set_location(result[input_id])
+            new_name = result[input_id]
+            try:
+                float_result = float(result[input_id][0])
+            except ValueError:
+                device.set_location(result[input_id])
+            except IndexError:
+                pass
         elif len(edited) == 3 and edited[0] == 'cat':
             device = Device.query.filter_by(id=int(edited[1])).first_or_404()
             cat = device.cats.filter_by(id=edited[2]).first_or_404()
-            cat.set_name(result[input_id])
+            new_name = result[input_id]
+            try:
+                float_result = float(result[input_id][0])
+            except ValueError:
+                cat.set_name(result[input_id])
+            except IndexError:
+                pass
     return render_template('settings.html', title=title, devices=devices)

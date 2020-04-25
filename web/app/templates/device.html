@@ -6,7 +6,10 @@
     <div class="batteryContainer">
       <div class="batteryOuter"><div id="batteryLevel" style="width:{{ device.battery_percentage }}px"></div></div>
       <div class="batteryBump"></div>
+      <br>
+
     </div>
+    <p> Food percentage: {{ device.food_percentage }} </p>
     </div>
     <hr>
     {% for cat in device.cats %}
@@ -21,7 +24,9 @@
     </div>
     <div class="card-reveal">
       <span class="card-title grey-text text-darken-4">{{ cat.name }}<i class="material-icons right">close</i></span>
+      <p>Last fed:</p>
       <p>{{ cat.get_time_after_last_feeding() }}</p>
+      <p>Eats {{ cat.feeding_amount }} kg</p>
     </div>
   </div>
     </div>

@@ -51,10 +51,16 @@ class Cat(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), index=True, default='name')
     last_feeding_time = db.Column(db.DateTime, index=True, default=datetime.utcnow())
+    feeding_amount = db.Column(db.Integer, default = 1)
     device_id = db.Column(db.Integer, db.ForeignKey('device.id'))
 
     def set_name(self, name):
         self.name = name
+        db.session.add(self)
+        db.session.commit()
+
+    def set_food_amount(self, food_amount):
+        self.feeding_amount = food_amount
         db.session.add(self)
         db.session.commit()
 

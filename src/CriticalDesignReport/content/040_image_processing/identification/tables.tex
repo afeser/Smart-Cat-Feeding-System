@@ -1,0 +1,77 @@
+\begin{table}%[h]% This is for fine tuning at the very end
+%   \begin{center}% just useless clutter
+        \begin{tabularx}{\textwidth}{ X  X }\toprule
+            \multicolumn{2}{c}{\textbf{\large Histogram Based Identification\strut}} \\ 
+            \midrule
+            \textbf{Advantages} & \textbf{Disadvantages} \\
+            \midrule
+            Very fast train time                    & Relatively slow identification time \\
+            Easy to implement                       & Open to noise because of light, angle etc. \\
+            Very powerful with different color cats & Bad performance with similar colored cats \\
+            Small database requirement              & Relatively low accuracy \\
+            Fast update-train time                  & Confusion as database enlarges \\
+            \bottomrule
+        \end{tabularx}
+%   \end{center}
+    \caption{Advantages and Disadvantages on the Histogram Based Identification}
+    \label{tab:adv_dis_histograms}
+\end{table}
+
+\begin{table}%[h]% This is for fine tuning at the very end
+%   \begin{center}% just useless clutter
+        \begin{tabularx}{\textwidth}{ X  X }\toprule
+            \multicolumn{2}{c}{\textbf{\large Neural Network Based Identification\strut}} \\ 
+            \midrule
+            \textbf{Advantages} & \textbf{Disadvantages} \\
+            \midrule
+            Very fast identification time           & Very slow train time \\
+            Learning based, easier                  & Open to noise \\
+            More powerful with more data            & Bad performance with few data \\
+            Very small database requirements        & Very slow update-train time \\
+                                                    & Fine-tune requirements for different environments \\
+                                                    & Useless with single-shot data \\
+            \bottomrule
+        \end{tabularx}
+%   \end{center}
+    \caption{Advantages and Disadvantages on the Neural Network Based Identification}
+    \label{tab:adv_dis_neural_network}
+\end{table}
+
+\begin{table}%[h]% This is for fine tuning at the very end
+%   \begin{center}% just useless clutter
+        \begin{tabularx}{\textwidth}{ X  X }\toprule
+            \multicolumn{2}{c}{\textbf{\large Landmark Based Identification\strut}} \\ 
+            \midrule
+            \textbf{Advantages} & \textbf{Disadvantages} \\
+            \midrule
+            No train required                       & Another control of comparison required \\
+            Easy to implement                       & No past experience \\
+            Powerful with different kinds of cats   & Lack of train data \\
+            Small database requirement              & Bigger identification time with 2-steps \\
+                                                    & Very little available resources \\
+            \bottomrule
+        \end{tabularx}
+%   \end{center}
+    \caption{Advantages and Disadvantages on the Landmark Based Identification}
+    \label{tab:adv_dis_landmarks}
+\end{table}
+
+\begin{table}%[h]% This is for fine tuning at the very end
+%   \begin{center}% just useless clutter
+        \begin{tabularx}{\textwidth}{ X  X }\toprule
+            \multicolumn{2}{c}{\textbf{\large Feature Descriptor Based Identification\strut}} \\ 
+            \midrule
+            \textbf{Advantages} & \textbf{Disadvantages} \\
+            \midrule
+            Robust to illumination and angle              & Very slow train time \\
+            Relatively fast identification time           & Low accuracy if no features present \\
+            Powerful with detailed cats                   & Wrong matches with \\
+            Useful with different environments            & \\
+            Fast update-train time                        & \\
+            Relatively higher performance for single shot & \\
+            \bottomrule
+        \end{tabularx}
+%   \end{center}
+    \caption{Advantages and Disadvantages on the Feature Descriptor Based Identification}
+    \label{tab:adv_dis_feature_descriptors}
+\end{table}

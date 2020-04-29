@@ -1,0 +1,39 @@
+%% Tikz stuff...
+\tikzstyle{startstop} = [rectangle, text width=0.3\linewidth, minimum width=0.1\linewidth, rounded corners, text centered, draw=black, fill=red!30]
+\tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, text centered, draw=black, fill=blue!30]
+\tikzstyle{process} = [rectangle, text width=0.4\linewidth, minimum height=0.15\linewidth, text centered, draw=black, fill=orange!30]
+\tikzstyle{decision} = [diamond, text width=0.25\linewidth, minimum height=0.2\linewidth, text centered, draw=black, fill=green!30]
+\tikzstyle{arrow} = [thick,->,>=stealth]
+
+\begin{wrapfigure}{r}{0.4\textwidth}
+\begin{center}
+\begin{tikzpicture}[node distance=0.25\linewidth]
+
+%% Nodes...
+\node (camera) [startstop] {Camera};
+\node (client) [process, below of=camera] {Raspberry Pi};
+\node (server) [process, below of=client] {Client};
+\node (classifier) [process, below of=server] {Classifier};
+\node (topisCatDetected) [draw=none, below of=classifier] {};
+\node (isCatDetected) [decision, below of=topisCatDetected] {Cat\\Detected?};
+\node (rightisCatDetected) [draw=none, right of=isCatDetected] {};
+\node (identifier) [process, text width=0.3\linewidth, right of=rightisCatDetected] {Identifier};
+\node (botisCatDetected) [draw=none, below of=isCatDetected] {};
+\node (decisionMaker) [process, below of=botisCatDetected] {Decision\\Maker};
+\node (takeAction) [startstop, below of=decisionMaker] {Final\\Action};
+
+%% Connections...
+\draw[arrow] (camera) -- (client);
+\draw[arrow] (client) -- (server);
+\draw[arrow] (server) -- (classifier);
+\draw[arrow] (classifier) -- (isCatDetected);
+\draw[arrow] (isCatDetected) -- node[anchor=east] {no} (decisionMaker);
+\draw[arrow] (decisionMaker) -- (takeAction);
+\draw[arrow] (isCatDetected) -- node[anchor=north] {yes} (identifier);
+\draw[arrow] (identifier) |- (decisionMaker);
+
+\end{tikzpicture}
+\end{center}
+\caption{Information Flow Chart}
+\label{fig:information_flow_chart}
+\end{wrapfigure}

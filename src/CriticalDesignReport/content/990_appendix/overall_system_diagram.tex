@@ -1,0 +1,80 @@
+\begin{figure}[ht!]
+\centering
+\resizebox{\linewidth}{!}{
+\begin{tikzpicture}[auto,node distance=3.5cm]
+% Create nodes
+\node[rect] (controller) {Controller};
+\node[draw=none, below of=controller] (controllerBot) {};
+\node[draw=none, left of=controllerBot] (controllerBotLeft) {};
+\node[draw=none, below of=controllerBotLeft] (controllerBotLeftBot) {};
+\node[rect, left of=controllerBotLeftBot] (database) {Database};
+\node[rect, right of=controllerBot] (imageProcessor) {Image\\Processor};
+\node[rect, right of=controller] (userInterface) {User\\Interface};
+\node[rect, below of=controllerBot] (decisionMaker) {Desicion\\Maker};
+\node[draw=none, above of=controller] (controllerTop) {};
+\node[rect, left of=controllerTop] (commandServer) {Command\\Server};
+\node[rect, right of=controllerTop] (videoServer) {Video\\Server};
+\node[rect, above of=commandServer] (commandClient) {Command\\Client};
+\node[rect, above of=videoServer] (videoClient) {Video\\Client};
+\node[rect, right of=videoClient] (camera) {Camera};
+\node[rect, left of=commandClient] (GPIO) {GPIO};
+\node[rect, below of=imageProcessor] (sift) {SIFT};
+\node[rect, right of=sift] (siftDatabase) {Database};
+\node[rect, right of=imageProcessor] (NN) {NN};
+\node[rect, above of=GPIO] (motor) {Motor};
+\node[rect, right of=motor] (leds) {LEDs};
+\node[draw=none, left of=commandServer] (commandServerLeft) {};
+\node[rect, below of=commandServerLeft] (sensors) {Sensors};
+
+% Connections
+    % Controller
+    \path [->,bend left=10] (controller) edge node {Commands} (commandServer);
+    \path [->,bend left=10] (commandServer) edge node {Status} (controller);
+    \path [->,bend left=20] (controller) edge node {Request} (videoServer);
+    \path [->,bend left=10] (videoServer) edge node {Data} (controller);
+    \path [->,bend left=10] (controller) edge node {Image} (imageProcessor);
+    \path [->,bend left=10] (imageProcessor) edge node {Object ID} (controller);
+    \path [->,bend left=15] (controller) edge node {Query} (database);
+    \path [->,bend left=15] (database) edge node {Result} (controller);
+    \path [->,bend left=10] (controller) edge node {Info} (userInterface);
+    \path [->,bend left=10] (userInterface) edge node {Requests} (controller);
+    \path [->,bend left=10] (controller) edge node {Info} (decisionMaker);
+    \path [->,bend left=10] (decisionMaker) edge node {Decision} (controller);
+    
+
+    % Server - Client
+    \path [->,bend left=10] (commandClient) edge node {Response} (commandServer);
+    \path [->,bend left=10] (commandServer) edge node {Request} (commandClient);
+    \path [->,bend left=10] (videoClient) edge node {Data} (videoServer);
+    \path [->,bend left=10] (videoServer) edge node {Request} (videoClient);
+
+    % Pi
+    \path [->] (camera) edge node {Data} (videoClient);
+    \path [->,bend left=10] (commandClient) edge node {Action} (GPIO);
+    \path [->,bend left=10] (GPIO) edge node {Status} (commandClient);
+    
+    % Image Processor
+    \path [->,bend left=10] (imageProcessor) edge node {Image} (NN);
+    \path [->,bend left=10] (NN) edge node {Class} (imageProcessor);
+    \path [->,bend left=10] (imageProcessor) edge node {Image} (sift);
+    \path [->,bend left=10] (sift) edge node {Identity} (imageProcessor);
+    
+    % GPIO
+    \path [->,bend left=10] (GPIO) edge node {Voltage} (leds);
+    \path [->,bend left=10] (GPIO) edge node {PWM} (motor);
+    \path [->,bend left=30] (sensors) edge node {Request} (GPIO);
+    \path [->,bend right=20] (GPIO) edge node {Measurement} (sensors);
+    
+    % SIFT
+    \path [->,bend right=10] (sift) edge node {} (siftDatabase);
+    \path [->,bend right=10] (siftDatabase) edge node {} (sift);
+    
+
+    
+
+
+\end{tikzpicture}
+}
+\caption{Overall System Diagram}
+\label{fig:overall_system_diagram}
+\end{figure}

@@ -1,0 +1,52 @@
+\subsubsection{Reasons and Requirements}
+Image processing and real time decision making are computationally expensive tasks which come with computational burden. There are also basic requirements which are important for the regular and stable operation of the system. In order to satisfy those requirements and reduce cost in addition to more flexible operation, server - client model best fits for the product. There are many reasons regarding the model structure from the point of customer and the company.
+
+Customer needs and demands are changing continuously, even faster than it had been in past, such that customers are now looking for augmented product features, after-sale services, customer support, maintenance, repair, etc. Moreover, in the scale of thousands of product sales, it is apparent that massive customer support due to failures or malfunctions, questions and suggestions related to the product will require a big budget in the company. In addition, customer desire for monitoring the system and cat statistics are going to be satisfied through a server at present. All of these requirements and specifications make it reasonable to use server - client model.
+
+Server - client model provides very powerful ways to satisfy augmented product requirements. After sale services can be ensured over network; any errors, warnings, malfunctions can be solved in real time, even before customer recognizes it. Digital world also enables customer to find their wants and answers for their products. Sensor data, images, statistics, problems are gathered and manipulated on servers make it possible to satisfy customer needs much faster and quicker. Customized experience for the users can easily be done, end even after the sale they can be reached and powerful customer experience can be achieved. This model also allows the Felerest group to remotely control, update, and collect data in a single way. New updates, modifications, features can be added easily and cheaper. Therefore, server - client model forms the project core and used in practice. Some of requirements for this sub-system is given in the itemized structure shown.
+
+\begin{itemize}
+    \item Real time decision making capability
+    \item Transfer data without any trouble and loss
+    \item React to environmental changes accordingly
+    \item Detect dangerous situations and take cautions
+    \item Collect sensor, camera data for later analysis
+    \item Process data efficiently
+    \item Use reasonable amounts of bandwidth
+    \item Manage database, dump unnecessary information
+\end{itemize}
+
+\subsubsection{Software Design}
+The software combines all the parts and creates a backbone for the operation. Modular architecture with agile development is used throughout the project. python is used because of it's flexibility and it's rich library support as well as a big community. New libraries always can be found and errors are easily be solved with the help of community. Moreover, it's abstraction design make it the proper language for the backbone. Note that many programming languages are used in practice, C, bash scripting, JS, PHP; however python is the base language that runs the system.
+
+The system can be explained best in the overall system diagram in \ref{fig:overall_system_diagram}. Controller is the mainframe that governs the whole system. Single server - multiple clients model is used so that the requirements can be satisfied effectively. Each product represents a client, and all of their data is collected in a server for processing, storage, and management. This allows the system to have greater computational capacity and storage size.
+
+% TODO - alttakilerin benzerleri overall icinde de olacak
+\paragraph{Client}
+Client is the product itself as mentioned earlier. Peripheral communication and environmental controls are the jobs of this module as explained in overall design. Client have three sub-modules which are GPIODriver, CameraDriver, and Client object which separates into Command Client and Video Client. GPIODriver is the controller for the input/output whereas CameraDriver is an abstraction class over Raspberry Pi camera for an easier and clear implementation. Client objects are for video and command transfer which is explained in the next paragraph, namely "Data Communication". As mentioned earlier, all of these abstractions are helpful for connecting various components.
+
+
+\paragraph{Data Communication}
+Data communication consists of every data, no matter type of it. The design suggests two parallel communication channels over TCP/IP protocol which is the only protocol used in data communication for reliability and cheaper implementation cost. The transfers use two separate ports over TCP/IP protocol which can be configured for customization but using 10002 and 10003 by default. These ports do not belong to any known service, therefore port filtering or any other service running in parallel will not be affected.
+
+Everything comes with a cost, data communication does also. Opening data to the internet makes it vulnerable for possible attacks and customer privacy becomes an important issue. Some strategies are developed so as to cope with all of these challenges. Turkey puts some regulations on data transactions one of which is the "Protection of Personal Data" (6698 Sayılı Kişisel Verilerin Korunması Kanunu, Madde 3). This code states that without approval of the customer, it is not possible to store these data on abroad servers which is why servers will be located in Turkey and data privacy on an international scale will be solved. Moreover, encryption for both data, frame or video, and command are encrypted through 4096-bit RSA keys which are considered to be secure \cite{cite:RSA}. Implementation is based on SSH tunnelling, using OpenSSH.
+
+\paragraph{Server}
+Server resembles to the client. It uses sub-modules to create the server module. Controller, Classifier, Identifier, and User Interface are the parts creating the server side. Encapsulation of the software is done with python3 in which the most of the code is written. On the other hand, modules requiring high speed, computation burden are written in C, or they are compiled from C libraries such as SIFT, neural networks. Server is responsible for decision making, data storage, statistics, and human interaction for further product updates.
+
+Data, as mentioned earlier, is another problem. It's security, transmission, storage creates problems for even very large servers. Solving these problems requires more strict specifications. For the final prototype, Linux file system with "pickle" objects are used for databases. However, this does not mean the final product is going to have simple file systems. Encrypted SQL databases, distributed storage techniques are future work after the prototype which involves data science and security engineer optimizations. For the prototype, these are omitted and it is assumed the server disk is completely secure, or it is run under a human supervision.
+
+
+\subsection{Tests and Results, Future Test Plans}
+Tests are measured with software tools nethods, top, iotop, and system monitor. The system results are given for the personal computer located in Computer Engineering Department Laboratories in METU. Taken 10 data points are averaged to get these results.
+
+\begin{verbatim}
+    121 KB/s network usage on average
+    1.7 lag in data transmission
+    0.0625 errors / min
+    Memory (server) : 624 M
+    Memory (client)  : 1.99 M
+    CPU (server) : 13.3 %  (i7-4770S)
+    CPU (client)  : 2.2 %  (ARM1176(+)
+\end{verbatim}
+

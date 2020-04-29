@@ -1,0 +1,48 @@
+% ======================= Import packages and definitions ===============================
+
+\input{config/includes}
+\input{config/notations.tex}
+
+% ========================== Beginning of the Document ==================================
+%
+\begin{document}
+
+% ================================= Title Page ==========================================
+
+\input{config/title/titlepage.tex}
+
+% ============================= Table of Contents =======================================
+
+\tableofcontents
+
+% ================================== Content ============================================
+
+\input{content/005_executive_summary/include}
+\input{content/010_introduction/include.tex}
+\input{content/020_overall_design/include.tex}
+\input{content/030_system_architecture/include.tex}
+\input{content/040_image_processing/include.tex}
+\input{content/050_electrical_design/include.tex}
+\input{content/060_mechanical_design/include.tex}
+\input{content/150_power_analysis/include.tex}
+\input{content/160_cost_analysis/include.tex}
+\input{content/170_deliverables/include}
+\input{content/200_conclusion/include.tex}
+
+
+% ================================ References ===========================================
+
+\bibliographystyle{plain}
+\bibliography{ref}
+\pagebreak
+
+% ================================= Appendix ============================================
+
+
+\input{content/990_appendix/include.tex}
+
+
+
+% ========================== Bunu da ben mi yazayım -evet =====================================
+
+\end{document}

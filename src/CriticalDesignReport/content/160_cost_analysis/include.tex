@@ -1,0 +1,67 @@
+\textbf{\section{Cost Analysis} \label{sec:cost_analysis}}
+
+  After choosing the components used in the design, a price comparison for each component has been made to minimize the cost without performance loss. The components are shown in the Table \ref{table:costanalysis}.
+  
+    For microcomputer unit, we bought Raspberry Pi Zero WH which is the least expensive Raspberry containing a wireless module inside it.
+    
+    For camera unit, three different options are compared in terms of cost and performance, which are Raspberry Pi camera module v1, Raspberry Pi camera module v2, and a webcam. The performance of the webcam does not satisfy our image quality requirements, and the camera module v2 is expensive, Raspberry Pi camera module v1 is selected as the camera.
+    
+    For motor unit, servo motors MG996R, SG90 are compared. Although the SG90 motor is cheaper than MG996R, its output torque does not satisfy the required rotation for the mechanical part. Hence, MG996 motor is selected.
+    
+    For batteries, Li-Ion, Li-Po, and power bank options are compared in terms of the performance, capacity, and price, and 18650 Li-Ion batteries are selected.
+    
+    For distance measurement unit, ultrasonic sonar sensor HC-SR04 and infrared sensor GP2Y0A710K0F are compared in terms of performance and price. The ultrasonic sensor is selected due to its lower price.
+    
+    For cables, regulators, relays, and other components, unit prices are similar compared to different options, so the selection is made with respect to the performance.
+    
+
+\begin{center}
+\begin{table} [h!]
+\centering
+\begin{tabular}{ |c|c|c|c|c| } 
+\hline
+Item & Quantity & Price (\$) & Total (\$) \\
+\hline
+Raspberry Pi Zero WH & 1 & 20 & 20 \\
+\hline
+Raspberry Pi Camera V1 & 1 & 16 & 16 \\
+\hline
+Raspberry Pi Camera Cable & 1 & 3.5 & 3.5 \\
+\hline
+Raspberry Pi Camera Case & 1 & 4.5 & 4.5 \\
+\hline
+16 gb MicroSD Card  & 1 & 5 & 5 \\
+\hline
+2650 mAh Li-Ion Battery & 4 & 5 & 20 \\ 
+\hline
+1A Lithium Battery Charger & 3 & 1 & 3 \\ 
+\hline
+Micro USB Adapter & 1 & 4 & 4 \\ 
+\hline
+MicroUSB-USB Cable & 1 & 4 & 4 \\ 
+\hline
+5V Voltage Regulator & 1 & 2 & 2 \\ 
+\hline
+Ultrasonic Sonar Sensor HC-SR04 & 1 & 1 & 1 \\ 
+\hline
+Weight Sensor & 1 & 1.5 & 1.5 \\ 
+\hline
+Servo Motor MG996R & 1 & 1 & 5 \\ 
+\hline
+5V Relay & 4 & 0.8 & 3.2 \\ 
+\hline
+Arduino Uno R3 & 1 & 6.5 & 6.5 \\ 
+\hline
+Mechanical Components & - & - & 20 \\
+\hline
+Outer Box & - & - & 20 \\
+\hline
+3D Printed Components & - & - & 13 \\ 
+\hline
+ & & Total Cost & 153.2 \\ 
+\hline
+\end{tabular}
+\caption{Estimated Cost Analysis for the Project}
+\label{table:costanalysis}
+\end{table}
+\end{center}

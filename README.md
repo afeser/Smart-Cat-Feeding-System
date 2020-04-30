@@ -4,6 +4,8 @@
 
 ## [Eser - Documentation](https://github.com/afeser/FinalProject/tree/master/pi)
 
+## [Futuristic Report](https://github.com/afeser/FinalProject/tree/Report/Futuristic.pdf)
+
 
 ## Installation
 Simply run "setup" file as a bash script. Arguments specify whether build is for client or server.

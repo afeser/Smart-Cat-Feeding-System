@@ -61,21 +61,28 @@ def settings():
         edited = input_id.split('_')
         if len(edited) == 2 and edited[0] == 'device':
             device = Device.query.filter_by(id=int(edited[1])).first_or_404()
-            new_name = result[input_id]
             try:
                 float_result = float(result[input_id][0])
             except ValueError:
                 device.set_location(result[input_id])
             except IndexError:
                 pass
-        elif len(edited) == 3 and edited[0] == 'cat':
+        elif len(edited) == 3:
+            print(edited)
             device = Device.query.filter_by(id=int(edited[1])).first_or_404()
             cat = device.cats.filter_by(id=edited[2]).first_or_404()
-            new_name = result[input_id]
-            try:
-                float_result = float(result[input_id][0])
-            except ValueError:
-                cat.set_name(result[input_id])
-            except IndexError:
-                pass
+            if edited[0] == 'cat':
+                try:
+                    float_result = float(result[input_id][0])
+                except ValueError:
+                    cat.set_name(result[input_id])
+                except IndexError:
+                    pass
+            if edited[0] == 'food':
+                print('okidoki')
+                try:
+                    cat.set_food_amount(int(result[input_id]))
+                except:
+                    pass
+
     return render_template('settings.html', title=title, devices=devices)

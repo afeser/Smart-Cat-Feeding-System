@@ -27,6 +27,8 @@ class Device(db.Model):
     battery_percentage = db.Column(db.Integer, default=100)
     food_percentage = db.Column(db.Integer,default=100)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    is_charging = db.Column(db.Boolean, default = False)
+    last_refill_time = db.Column(db.DateTime, index=True, default=datetime.utcnow())
     cats = db.relationship('Cat',backref='kitchen', lazy='dynamic')
 
     def set_location(self, location):
@@ -43,6 +45,25 @@ class Device(db.Model):
         self.food_percentage = food_level
         db.session.add(self)
         db.session.commit()
+
+    def toggle_charging(self):
+        self.is_charging = not self.is_charging
+        db.session.add(self)
+        db.session.commit()
+
+    def update_last_refill_time(self):
+        self.last_refill_time = datetime.utcnow()
+        db.session.add(self)
+        db.session.commit()
+
+    def get_time_after_last_refill(self):
+        diff = datetime.utcnow() - self.last_refill_time
+        if diff.days != 0:
+            return str(diff.days) + ' day(s) ago'
+        elif diff.seconds > 3600:
+            return str(diff.seconds // 3600) + ' hour(s) ago'
+        else:
+            return str(diff.seconds) + ' second(s) ago'
 
     def __repr__(self):
         return '<Device {}>'.format(self.location)

@@ -11,7 +11,14 @@
             <div class="batteryOuter"><div id="batteryLevel" style="width:{{ device.battery_percentage }}px"></div></div>
             <div class="batteryBump"></div>
           </div>
+          {% if device.is_charging %}
+          <p>Charging</p>
+          {% else %}
+          <p>Not charging</p>
+          {% endif %}
           <p> Food percentage: {{ device.food_percentage }}% </p>
+          <p>Last refilled:</p>
+          <p>{{ device.get_time_after_last_refill() }}</p>
         </div>
         <div class="card-action">
           <a href="{{ url_for('device', device_id=device.id) }}">Cats</a>
@@ -27,7 +34,10 @@
               <div class="batteryOuter"><div id="batteryLevel" style="width:100px"></div></div>
               <div class="batteryBump"></div>
             </div>
+            <p>Not charging</p>
             <p> Food percentage: 100% </p>
+            <p>Last refilled:</p>
+          <p>Never</p>
           </div>
           <div class="card-action">
             <a href="#">Cats</a>
@@ -42,7 +52,10 @@
               <div class="batteryOuter"><div id="batteryLevel" style="width:100px"></div></div>
               <div class="batteryBump"></div>
             </div>
+            <p>Not charging</p>
             <p> Food percentage: 100% </p>
+            <p>Last refilled:</p>
+          <p>Never</p>
           </div>
           <div class="card-action">
             <a href="#">Cats</a>
@@ -57,7 +70,10 @@
               <div class="batteryOuter"><div id="batteryLevel" style="width:100px"></div></div>
               <div class="batteryBump"></div>
             </div>
+            <p>Not charging</p>
             <p> Food percentage: 100% </p>
+            <p>Last refilled:</p>
+          <p>Never</p>
           </div>
           <div class="card-action">
             <a href="#">Cats</a>

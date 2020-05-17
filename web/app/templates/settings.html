@@ -28,7 +28,7 @@
           <input id="cat_{{device.id}}_{{cat.id}}" type="text" name="cat_{{device.id}}_{{cat.id}}" class="validate">
           <label for="cat_{{device.id}}_{{cat.id}}">{{cat.name}}</label>
           </div>
-          <div class="col s6">
+          <div class="col s3">
           <button class="btn waves-effect waves-light" type="submit" name="action">
             <i class="material-icons">done</i>
           </button>
@@ -36,8 +36,24 @@
           </div>
         </form>
 
+    <form action = "" method = post>
+
+      <div class="row">
+          <div class="input-field col s3">
+            <input id="food_{{device.id}}_{{cat.id}}" type="text" name="food_{{device.id}}_{{cat.id}}" class="validate">
+            <label for="food_{{device.id}}_{{cat.id}}">{{cat.feeding_amount}} grams</label>
+            </div>
+            <div class="col s3">
+            <button class="btn waves-effect waves-light" type="submit" name="action">
+              <i class="material-icons">done</i>
+            </button>
+            </div>
+            </div>
+          </form>
+
     {% endfor %}
 
     {% endfor %}
 
 {% endblock %}
+

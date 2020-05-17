@@ -9,7 +9,14 @@
       <br>
 
     </div>
+    {% if device.is_charging %}
+    <p>Charging</p>
+    {% else %}
+    <p>Not charging</p>
+    {% endif %}
     <p> Food percentage: {{ device.food_percentage }} </p>
+    <p>Last refilled:</p>
+    <p>{{ device.get_time_after_last_refill() }}</p>
     </div>
     <hr>
     {% for cat in device.cats %}
@@ -24,9 +31,9 @@
     </div>
     <div class="card-reveal">
       <span class="card-title grey-text text-darken-4">{{ cat.name }}<i class="material-icons right">close</i></span>
+      <p>Eats {{ cat.feeding_amount }} grams</p>
       <p>Last fed:</p>
       <p>{{ cat.get_time_after_last_feeding() }}</p>
-      <p>Eats {{ cat.feeding_amount }} kg</p>
     </div>
   </div>
     </div>

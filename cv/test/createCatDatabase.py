@@ -1,3 +1,7 @@
+'''
+Create database by cropping the photos for the cats
+'''
+
 import cv2
 import numpy
 import logging
@@ -13,32 +17,37 @@ classifier = Classifier(debug=False)
 
 defaultOut = '/home/afeser/RAM/clippedImages'
 
-dirSource = input('Name of the directory containing images (name_number.jpg) : ')
+dirSources = input('Name of the directory containing images (multiple directories possible seperated by a space) : ')
 dirDest   = input('Destination (empty for default ' + defaultOut + ') : ')
 
 if dirDest == '':
     dirDest = defaultOut
 
-if not os.path.exists(dirDest):
-    os.makedirs(dirDest)
 
-files = os.listdir(dirSource)
 
-for file in files:
-    print('Processing ' + file)
-    im = cv2.imread(dirSource + '/' + file)
 
-    if im is None:
-        print('Error ' + str(file))
-        continue
+for dirSource in dirSources.split():
+    if not os.path.exists(dirDest + '/' + dirSource):
+        print('Directory ' + dirDest + '/' + dirSource + ' does not exist, creating...')
+        os.makedirs(dirDest + '/' + dirSource)
 
-    classOut = classifier.classifyCatDog(im)
+    filenames = os.listdir(dirSource)
 
-    if classOut['type'] == 'cat':
-        if classOut['frame'].shape[1] < 50 or classOut['frame'].shape[0] < 50:
-            print('In file ' + file + ' image size : ' + str(classOut['frame'].shape) + ' at ' + str(datetime.datetime.now()))
+    for filename in filenames:
+        print('Processing ' + filename)
+        im = cv2.imread(dirSource + '/' + filename)
+
+        if im is None:
+            print('Error ' + str(filename))
+            continue
+
+        classOut = classifier.classifyCatDog(im)
+
+        if classOut['type'] == 'cat':
+            if classOut['frame'].shape[1] < 50 or classOut['frame'].shape[0] < 50:
+                print('Skipping filename ' + filename + 'Image size : ' + str(classOut['frame'].shape) + ' at ' + str(datetime.datetime.now()))
+            else:
+                print('Writing filename ' + filename)
+                cv2.imwrite(dirDest + '/' + dirSource + '/' + filename, classOut['frame'])
         else:
-            print('Writing file ' + file)
-            cv2.imwrite(dirDest + '/' + file, classOut['frame'])
-    else:
-        print('Cat not detected in ' + file)
+            print('Cat not detected in ' + filename)

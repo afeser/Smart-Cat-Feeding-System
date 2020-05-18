@@ -12,6 +12,8 @@ import matplotlib.pyplot as plt
 import datetime
 import time
 import sys
+import enlighten
+
 
 class Identifier:
     '''
@@ -215,9 +217,10 @@ class Identifier:
         pass
     def importDirectory(self, directoryPath):
         '''
-        Import every file in a directory based on their base names
+        Import every file in a directory based on their class directories
 
-        poncik_1.jpg -> imported with unique id 'poncik'
+        class_01/{img1.jpg, img2.jpg, ...}
+        class_02/{img1.jpg, img2.jpg, ...}
 
         Parameters
         ----------
@@ -232,31 +235,29 @@ class Identifier:
         2) When finished, send them to the sift creator
         3) Compile all of them into database
         '''
-        files = os.listdir(directoryPath)
-        files.sort()
+        # A directory represents a class
+        directories = os.listdir(directoryPath)
+        directories.sort()
 
 
         localImages = {
 
         }
         # 1)
-        for file in files:
-            logging.debug('Reading file ' + file)
-            basename  = file.split('_')[0]
+        for directory in directories:
+            filenames = os.listdir(os.path.join(directoryPath, directory))
+            localImages[directory] = []
 
-            targetFile = self._databaseDir + '/' + basename + '/' + basename + '.pickle'
+            for filename in filenames:
+                logging.debug('Reading file ' + filename)
 
+                im = cv2.imread(os.path.join(directoryPath, directory, filename))
 
-            if basename not in localImages:
-                localImages[basename] = []
-
-            im = cv2.imread(directoryPath + '/' + file)
-            # pdb.set_trace()
-            im = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
-            localImages[basename].append(im)
+                im = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
+                localImages[directory].append(im)
 
 
-        def _createSiftVectorsFromImageSet(images, catId):
+        def _createSiftVectorsFromImageSet(images, catId, bar):
             '''
             This is the method to extract sift vectors based on the common ones among
             pictures. Note that, every time a new picture is added, whole database
@@ -280,6 +281,8 @@ class Identifier:
                 completeVectors = []
                 for index1, image1 in enumerate(images):
                     for index2, image2 in enumerate(images):
+                        bar.update()
+                        #pdb.set_trace()
 
                         if index1 != index2:
                             keypoints1, siftVectors1 = self._getSiftVectors(image1, returnKP=True)
@@ -340,11 +343,13 @@ class Identifier:
             return completeVectors
 
         # 2)
+        print('Creating database')
+        bar = enlighten.Counter(total=sum(map(len, localImages.values())))
         for catId in localImages:
             logging.info('Processing ' + str(catId) + ' to import from directory')
 
 
-            vectors = _createSiftVectorsFromImageSet(localImages[catId], catId)
+            vectors = _createSiftVectorsFromImageSet(localImages[catId], catId, bar)
 
             logging.info('Total vectors adding to database for class ' + str(catId) + ' is ' + str(len(vectors)))
 

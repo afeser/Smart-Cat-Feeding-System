@@ -5,6 +5,7 @@ from cv.src.Identifier import Identifier
 import os
 import sys
 import pdb
+from os.path import join
 
 '''
 Tester Siftir class
@@ -13,7 +14,7 @@ To start it, place it to the main directory by copying and start using python3
 '''
 
 work_dir = 'cv/data/SIFT'
-logging.getLogger().setLevel(logging.DEBUG)
+logging.basicConfig(filename='identifier_test_log.txt', level=logging.DEBUG)
 
 def test1():
     # Old test for saveCat, not used anymore...
@@ -72,7 +73,16 @@ def test1():
     print(a.getCatId(utku5))
     print(a.getCatId(im1))
 
-def test2ve3(train_root_name, test_root_name, saveEdeyimMi=False, databaseLocation=None):
+def train_validation_test_accuracy(train_root_name, validation_root_name, test_root_name, databaseLocation=None):
+    '''
+    Give train data root directory and test data root directory.
+    Directory structure :
+    train_root_name/class_1/image1.jpg
+
+    test_root_name/class_1/image2.jpg
+
+    Set databaseLocation if you want to save that database; otherwise, database will be trashed after tests are done.
+    '''
 
     a = Identifier(featureDescriptor='SIFT', debug=True)
 
@@ -80,79 +90,59 @@ def test2ve3(train_root_name, test_root_name, saveEdeyimMi=False, databaseLocati
 
 
     # a.resetDatabase(force=True)
-    if databaseLocation is None or saveEdeyimMi:
+    if databaseLocation is None:
+        # No database, import and do not save
         a.importDirectory(train_root_name)
-    if saveEdeyimMi:
-        a.saveDatabase(databaseLocation=databaseLocation)
-    if not databaseLocation is None:
+    elif os.path.exists(databaseLocation):
+        # Use existing database as it exists
         a.loadDatabase(databaseLocation=databaseLocation)
-    # a.databaseInfo()
+    else:
+        a.importDirectory(train_root_name)
+        a.saveDatabase(databaseLocation=databaseLocation)
 
 
-    def accuracyTrain():
-        # Accuracy calculation
-        files = os.listdir(train_root_name)
-        # TODO - static...
+    def calc_accuracy(target_dir, test_name):
+        '''
+        Calculate accuracy based on files under given directory.
+
+        Directory is train / test / validation set directory.
+        Example :
+            27MarchTrainSet
+
+        Test name is only for print purposes.
+        Example :
+            train
+            test
+
+        Example Use :
+            calc_accuracy('dataset/train_images', 'train')
+            calc_accuracy('dataset/test_images', 'test')
+        '''
+
+        directories = os.listdir(target_dir)
 
         total   = 0
         correct = 0
-        print('Train set accuracy computations...')
+        print(test_name + ' set accuracy computations...')
         totalClass        = {}
         totalCorrectClass = {}
-        for file in files:
-            basename = file.split('_')[0]
-            if not basename in totalClass:
-                totalClass[basename]        = 0
-                totalCorrectClass[basename] = 0
+        for directory in directories:
+            totalClass[directory]        = 0
+            totalCorrectClass[directory] = 0
 
+            filenames = os.listdir(join(target_dir, directory))
+            for filename in filenames:
+                im = cv2.imread(join(target_dir, directory, filename))
 
-            im = cv2.imread(train_root_name + file)
+                predictedClass = a.getCatId(im)
 
-            predictedClass = a.getCatId(im)
+                print(directory + ' -> ' + predictedClass)
 
-            print(basename + ' -> ' + predictedClass)
-
-            total = total + 1
-            totalClass[basename] = totalClass[basename] + 1
-            if basename == predictedClass:
-                totalCorrectClass[basename] = totalCorrectClass[basename] + 1
-                correct = correct + 1
-
-        print('Detailed accuracy report : ')
-
-        for catName in totalClass:
-            print('\t{0:30s} : {1:4f}'.format('Cat name ' + catName + ' with accuracy ', totalCorrectClass[catName] / totalClass[catName]))
-
-        print('Calculated accuracy is ' + str(correct / total))
-
-    def accuracyTest():
-        # Accuracy calculation
-        files = os.listdir(test_root_name)
-        total   = 0
-        correct = 0
-        print('Test set accuracy computations...')
-        totalClass        = {}
-        totalCorrectClass = {}
-        for file in files:
-            basename = file.split('_')[0]
-            extension = file.split('.')[1]
-            if not basename in totalClass:
-                totalClass[basename]        = 0
-                totalCorrectClass[basename] = 0
-
-
-            im = cv2.imread(test_root_name + file)
-
-            predictedClass = a.getCatId(im)
-
-            print(basename + ' -> ' + predictedClass)
-
-
-            total = total + 1
-            totalClass[basename] = totalClass[basename] + 1
-            if basename == predictedClass or extension == 'jpg':
-                totalCorrectClass[basename] = totalCorrectClass[basename] + 1
-                correct = correct + 1
+                total = total + 1
+                totalClass[directory] = totalClass[directory] + 1
+                if directory == predictedClass:
+                    totalCorrectClass[directory] = totalCorrectClass[directory] + 1
+                    correct = correct + 1
 
         print('Detailed accuracy report : ')
 
@@ -162,39 +152,20 @@ def test2ve3(train_root_name, test_root_name, saveEdeyimMi=False, databaseLocati
         print('Calculated accuracy is ' + str(correct / total))
 
 
-    # accuracyTrain()
-    accuracyTest()
+    calc_accuracy(train_root_name, 'train')
+    calc_accuracy(validation_root_name, 'validation')
+    calc_accuracy(test_root_name, 'test')
+
     return a
 
 def test2():
-        train_root_name = work_dir + '/DigitalImages27/'
-        test_root_name  = work_dir + '/Test_DigitalImages27/'
+    '''
+    18 May 2020 Utku Serhan Database Test V1
+    '''
+    train_root_name      = 'train'
+    validation_root_name = 'val'
+    test_root_name       = 'test'
 
-        return test2ve3(train_root_name, test_root_name, databaseLocation='database/siftVectorsTest2.pickle')
+    train_validation_test_accuracy(train_root_name, validation_root_name, test_root_name, 'database_utku_V1')
 
-def test3():
-        train_root_name = work_dir + '/FacebookDataset13_Train/'
-        test_root_name  = work_dir + '/FacebookDataset13_Test/'
-
-        return test2ve3(train_root_name, test_root_name, saveEdeyimMi=False)
-
-
-def test3():
-        train_root_name = work_dir + '/DigitalImages27_small/'
-        test_root_name  = work_dir + '/Test_DigitalImages27_small/'
-
-        return test2ve3(train_root_name, test_root_name, saveEdeyimMi=False)
-
-def test4():
-        train_root_name = work_dir + '/DigitalImages27/'
-        test_root_name  = work_dir + '/Test_DigitalImages27/'
-
-        return test2ve3(train_root_name, test_root_name)
-
-def test5():
-        train_root_name = work_dir + '/DigitalImages27_2/'
-        test_root_name  = work_dir + '/Test_DigitalImages27_2/'
-
-        return test2ve3(train_root_name, test_root_name)
-
-# a = test2()
+test2()

@@ -344,7 +344,7 @@ class Identifier:
 
         # 2)
         print('Creating database')
-        bar = enlighten.Counter(total=sum(map(len, localImages.values())))
+        bar = enlighten.Counter(total=sum(map(lambda x: len(x)**2, localImages.values())))
         for catId in localImages:
             logging.info('Processing ' + str(catId) + ' to import from directory')
 

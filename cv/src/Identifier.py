@@ -45,6 +45,8 @@ class Identifier:
         # Descriptor and matching
         self._ratioTestThreshold = 0.35
         self._flann = cv2.FlannBasedMatcher({'algorithm' : 0, 'trees' : 5})
+        self._new_cat_threshold = 100
+        self._new_cat_distances = []
 
         # Performance measurement
         self._timeStart = time.time()
@@ -63,7 +65,7 @@ class Identifier:
             dirName = databaseLocation
 
         with open(dirName, 'rb') as f:
-            self._database = pickle.load(f)
+            [self._database, self._new_cat_threshold] = pickle.load(f)
     def saveDatabase(self, databaseLocation=None):
         '''
         Save the whole database.
@@ -78,7 +80,7 @@ class Identifier:
             dirName = databaseLocation
 
         with open(dirName, 'wb') as f:
-            pickle.dump(self._database, f)
+            pickle.dump([self._database, self._new_cat_threshold], f)
 
     # Private definitions...
     def _getSiftVectors(self, im, returnKP=False):
@@ -146,6 +148,7 @@ class Identifier:
         matchNumber    = {}
         allDescriptors = []
         boundaries     = [0]
+        # TODO -> bu precompute edilebilir...
         for catId in self._database:
             boundaries.append(boundaries[-1] + len(self._database[catId]))
             allDescriptors.extend(self._database[catId])
@@ -199,7 +202,7 @@ class Identifier:
 
         self._debugTime('flann match')
         # pdb.set_trace()
-        if smallestDistances[0] < 100:
+        if smallestDistances[0] < self._new_cat_threshold: # static threshold for new cat, currently working !
             return maxLabel # str(list(mostFrequent))
         else:
              return 'None'
@@ -303,6 +306,9 @@ class Identifier:
                                     completeVectors.append(siftVectors2[match[0].trainIdx])
 
                                     matchesMask[i] = [0, 1]
+
+                                    self._new_cat_distances.append(match[0].distance)
+
                             self._debugTime('find keys')
 
 
@@ -318,7 +324,8 @@ class Identifier:
                             plt.close(new_fig)
 
 
-
+                self._new_cat_threshold = sum(self._new_cat_distances) / len(self._new_cat_distances)
+                
                 return completeVectors
 
 

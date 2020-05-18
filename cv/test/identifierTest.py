@@ -73,13 +73,17 @@ def test1():
     print(a.getCatId(utku5))
     print(a.getCatId(im1))
 
-def train_validation_test_accuracy(train_root_name, validation_root_name, test_root_name, databaseLocation=None):
+def train_validation_test_accuracy(train_root_name, validation_root_name, test_root_name, new_cat_labels, databaseLocation=None):
     '''
     Give train data root directory and test data root directory.
     Directory structure :
     train_root_name/class_1/image1.jpg
 
     test_root_name/class_1/image2.jpg
+
+    New cat labels are given so that they are not classified as false.
+    Example :
+        ['label_08', 'label_09']
 
     Set databaseLocation if you want to save that database; otherwise, database will be trashed after tests are done.
     '''
@@ -114,6 +118,8 @@ def train_validation_test_accuracy(train_root_name, validation_root_name, test_r
             train
             test
 
+
+
         Example Use :
             calc_accuracy('dataset/train_images', 'train')
             calc_accuracy('dataset/test_images', 'test')
@@ -136,13 +142,18 @@ def train_validation_test_accuracy(train_root_name, validation_root_name, test_r
 
                 predictedClass = a.getCatId(im)
 
-                print(directory + ' -> ' + predictedClass)
+                print('Actual {0:20} -> predicted {1:20}'.format(directory, predictedClass))
 
                 total = total + 1
                 totalClass[directory] = totalClass[directory] + 1
                 if directory == predictedClass:
                     totalCorrectClass[directory] = totalCorrectClass[directory] + 1
                     correct = correct + 1
+
+                if directory in new_cat_labels and predictedClass == 'None':
+                    totalCorrectClass[directory] = totalCorrectClass[directory] + 1
+                    correct = correct + 1
+
 
         print('Detailed accuracy report : ')
 
@@ -152,7 +163,7 @@ def train_validation_test_accuracy(train_root_name, validation_root_name, test_r
         print('Calculated accuracy is ' + str(correct / total))
 
 
-    calc_accuracy(train_root_name, 'train')
+    # calc_accuracy(train_root_name, 'train')
     calc_accuracy(validation_root_name, 'validation')
     calc_accuracy(test_root_name, 'test')
 
@@ -165,7 +176,7 @@ def test2():
     train_root_name      = 'train'
     validation_root_name = 'val'
     test_root_name       = 'test'
-
-    train_validation_test_accuracy(train_root_name, validation_root_name, test_root_name, 'database_utku_V1')
+    new_cat_labels       = ['07', '08']
+    train_validation_test_accuracy(train_root_name, validation_root_name, test_root_name, new_cat_labels, 'database_utku_V1')
 
 test2()

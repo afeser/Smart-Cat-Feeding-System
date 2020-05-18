@@ -441,18 +441,3 @@ class Identifier:
 
         print('\t' + '_' * 30 + ' : ' + '_' * 4 + '+')
         print('\t{0:30s} : {1:5d}'.format('Total', total))
-    def getValidationResults(self, validationSetImages):
-        '''
-        input :
-        validationSetImages = [im1_location, im2_location, ...]
-
-        output :
-        dictionary = {
-            'accuracy' : overall accuracy,
-            'classAccuracy' : accuracy per class,
-            'distances' : list of distances per validation image, the nearest
-            TODO ?????
-        }
-
-        '''
-        pass

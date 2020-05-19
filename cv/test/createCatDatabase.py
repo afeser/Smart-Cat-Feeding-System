@@ -80,7 +80,14 @@ class DatabaseCreator:
 
             filenames = os.listdir(join(source_database_dir, directory))
             for filename in filenames:
-                os.symlink(join(os.getcwd(), source_database_dir, directory, filename), join(dest_dir, directory, filename))
+                if train_end >= int(filename.split('.')[0]) >= train_start:
+                    os.symlink(join(os.getcwd(), source_database_dir, directory, filename), join(dest_dir, directory, 'train', filename))
+                elif val_end >= int(filename.split('.')[0]) >= val_start:
+                    os.symlink(join(os.getcwd(), source_database_dir, directory, filename), join(dest_dir, directory, 'validation', filename))
+                elif test_end >= int(filename.split('.')[0]) >= test_start:
+                    os.symlink(join(os.getcwd(), source_database_dir, directory, filename), join(dest_dir, directory, 'test', filename))
+
+
 
 
 
@@ -189,7 +196,7 @@ class DatabaseCreator:
 
 
 dbc = DatabaseCreator()
-# DatabaseCreator().crop_rename('Original')
-dbc.seperate_into_databases('Original', 'db1_metadata.txt', dest_dir='Dataset1')
-dbc.seperate_into_databases('Original', 'db2_metadata.txt', dest_dir='Dataset2')
-dbc.seperate_into_databases('Original', 'db2_metadata.txt', dest_dir='Dataset3')
+DatabaseCreator().crop_rename('Original', 'Dataset_Cropped')
+# dbc.seperate_into_databases('Dataset_Cropped', 'db_metadata.txt', dest_dir='Dataset1')
+for dataset_num in range(30):
+    dbc.seperate_into_databases('Dataset_Cropped', join('metadata', str(dataset_num).zfill(2) + '.txt'), dest_dir='Dataset' + str(dataset_num).zfill(2))

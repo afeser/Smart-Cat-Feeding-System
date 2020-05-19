@@ -55,6 +55,10 @@ class DatabaseCreator:
             Test
             31
             40
+            Excluded (optional)
+            2 # bu bize kac tane classin exlude edilecegini veriyor, altta kac tane satir gelecek onu yani
+            6 # 6.
+            4 # ve 7.yi train etme, sadece test ederken kullan anlamina geliyor
         '''
         db_file  = open(database_file_path, 'r')
 
@@ -71,21 +75,32 @@ class DatabaseCreator:
         test_start  = int(lines[8])
         test_end    = int(lines[9])
 
+        all_exludes = []
+
+        if len(lines) > 10:
+            if lines[10] == 'Excluded':
+                num_excludes = int(lines[11])
+                all_exludes  = [int(lines[12+x]) for x in range(num_excludes)]
+
+
+
 
         directories = os.listdir(source_database_dir)
         for directory in directories:
-            if not os.path.exists(join(dest_dir, directory)):
-                os.makedirs(join(dest_dir, directory))
+            excluded = (int(directory) in all_exludes)
 
+            os.makedirs(join(dest_dir, 'train', directory))
+            os.makedirs(join(dest_dir, 'validation', directory))
+            os.makedirs(join(dest_dir, 'test', directory))
 
             filenames = os.listdir(join(source_database_dir, directory))
             for filename in filenames:
-                if train_end >= int(filename.split('.')[0]) >= train_start:
-                    os.symlink(join(os.getcwd(), source_database_dir, directory, filename), join(dest_dir, directory, 'train', filename))
+                if train_end >= int(filename.split('.')[0]) >= train_start and (not excluded):
+                    os.symlink(join(os.getcwd(), source_database_dir, directory, filename), join(dest_dir, 'train', directory, filename))
                 elif val_end >= int(filename.split('.')[0]) >= val_start:
-                    os.symlink(join(os.getcwd(), source_database_dir, directory, filename), join(dest_dir, directory, 'validation', filename))
+                    os.symlink(join(os.getcwd(), source_database_dir, directory, filename), join(dest_dir, 'validation', directory, filename))
                 elif test_end >= int(filename.split('.')[0]) >= test_start:
-                    os.symlink(join(os.getcwd(), source_database_dir, directory, filename), join(dest_dir, directory, 'test', filename))
+                    os.symlink(join(os.getcwd(), source_database_dir, directory, filename), join(dest_dir, 'test', directory, filename))
 
 
 
@@ -196,7 +211,7 @@ class DatabaseCreator:
 
 
 dbc = DatabaseCreator()
-DatabaseCreator().crop_rename('Original', 'Dataset_Cropped')
-# dbc.seperate_into_databases('Dataset_Cropped', 'db_metadata.txt', dest_dir='Dataset1')
-for dataset_num in range(30):
-    dbc.seperate_into_databases('Dataset_Cropped', join('metadata', str(dataset_num).zfill(2) + '.txt'), dest_dir='Dataset' + str(dataset_num).zfill(2))
+# DatabaseCreator().crop_rename('Original', 'Dataset_Cropped')
+dbc.seperate_into_databases('Dataset_Cropped/Original', 'db_metadata.txt', dest_dir='Dataset1')
+# for dataset_num in range(30):
+#     dbc.seperate_into_databases('Dataset_Cropped', join('metadata', str(dataset_num).zfill(2) + '.txt'), dest_dir='Dataset' + str(dataset_num).zfill(2))

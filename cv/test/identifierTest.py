@@ -122,3 +122,11 @@ def train_validation_test_bench():
     train_validation_test_accuracy(train_root_name, validation_root_name, test_root_name, new_cat_labels, 'database_utku_V1')
 
 
+for counter in range(1, 10):
+    train_root_name      = 'Dataset' + str(counter).zfill(2) + '/train'
+    validation_root_name = 'Dataset' + str(counter).zfill(2) + '/validation'
+    test_root_name       = 'Dataset' + str(counter).zfill(2) + '/test'
+    with open(join('Dataset' + str(counter).zfill(2), 'excluded_classes.txt'), 'r') as class_file:
+        new_cat_labels = class_file.readline().split()
+
+    train_validation_test_accuracy(train_root_name, validation_root_name, test_root_name, new_cat_labels, 'utku_database' + str(counter))

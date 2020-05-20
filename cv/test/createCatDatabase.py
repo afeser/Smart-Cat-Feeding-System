@@ -90,7 +90,7 @@ class DatabaseCreator:
 
                 os.makedirs(dest_dir)
                 with open(join(dest_dir, 'excluded_classes.txt'), 'w') as class_file:
-                    class_file.write(''.join(map(lambda x: x + ' ', )))
+                    class_file.write(''.join(map(lambda x: x + ' ', all_exludes)))
 
 
 

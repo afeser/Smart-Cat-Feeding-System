@@ -15,3 +15,7 @@
 * Calendar will be added.
 
 * ~~There will be an option for users to control and change the amount of foodpoured.~~
+
+## Database
+
+* ~~Database with 30 different cats will be created.~~

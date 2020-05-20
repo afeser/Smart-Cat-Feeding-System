@@ -60,14 +60,15 @@ class DatabaseCreator:
             6 # 6.
             4 # ve 7.yi train etme, sadece test ederken kullan anlamina geliyor
         '''
-        if os.path.exists(dest_dir) and (not override):
-            raise FileExistsError('Destination database directory is not empty! If it is okay, set override flag')
-        else:
-            shutils.rmtree(dest_dir)
+        if os.path.exists(dest_dir):
+            if override:
+                shutil.rmtree(dest_dir)
+            else:
+                raise FileExistsError('Destination database directory is not empty! If it is okay, set override flag')
 
         db_file  = open(database_file_path, 'r')
 
-        lines = list(map(lambda x: x.split('#')[0], db_file.readlines()))
+        lines = list(map(lambda x: x.split('#')[0].splitlines()[0], db_file.readlines()))
 
         num_classes = int(lines[0])
 

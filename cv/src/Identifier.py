@@ -311,7 +311,7 @@ class Identifier:
 
                             self._debugTime('find keys')
 
-
+                            '''
                             draw_params = dict(matchColor=(0, 255, 0),
                                             singlePointColor=(255, 0, 0),
                                             matchesMask=matchesMask,
@@ -322,6 +322,7 @@ class Identifier:
                             plt.imshow(img3)
                             plt.savefig(debugDir + '/' + catId + '_' + str(index1+1) + '_' + str(index2+1) + '.png')
                             plt.close(new_fig)
+                            '''
 
 
                 self._new_cat_threshold = sum(self._new_cat_distances) / len(self._new_cat_distances)

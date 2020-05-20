@@ -275,38 +275,53 @@ class Identifier:
             A better algorithm may be found, feel free to add and change it. However,
             common ones are the only useful thing I imagined.
             '''
+            # Debug mode
+            if self._debug:
+                debugDir = self._databaseDir + '/debug'
+                logging.debug('Debug mode on, saving match results into ' + debugDir)
+                os.makedirs(debugDir, exist_ok=True)
+
+                completeVectors = []
+                for index1, image1 in enumerate(images):
+                    for index2, image2 in enumerate(images):
+                        bar.update()
+                        pdb.set_trace()
+
+                        if index1 != index2:
+                            keypoints1, siftVectors1 = self._getSiftVectors(image1, returnKP=True)
+                            keypoints2, siftVectors2 = self._getSiftVectors(image2, returnKP=True)
+
+                            logging.debug('Matching key points with flann matcher')
+                            matches = self._flann.knnMatch(siftVectors1, siftVectors2, k=2)
+                            self._debugTime('flann match')
+                            # Save the matches
+                            matchesMask = [[0, 0] for i in range(len(matches))]
+                            # ratio test as per Lowe's paper
+                            logging.debug('Finding the correct key points according to Lowe\'s paper')
+                            self._debugTime(reset=True)
+                            for i, match in enumerate(matches):
+                                if match[0].distance < match[1].distance*self._ratioTestThreshold:
+                                    # Add it!
+                                    completeVectors.append(siftVectors1[match[0].queryIdx])
+                                    completeVectors.append(siftVectors2[match[0].trainIdx])
+
+                                    matchesMask[i] = [0, 1]
+
+                                    self._new_cat_distances.append(match[0].distance)
+
+                            self._debugTime('find keys')
 
 
-            completeVectors = []
-            for index1, image1 in enumerate(images):
-                for index2, image2 in enumerate(images):
-                    bar.update()
-                    # pdb.set_trace()
+                            draw_params = dict(matchColor=(0, 255, 0),
+                                            singlePointColor=(255, 0, 0),
+                                            matchesMask=matchesMask,
+                                            flags=0)
 
-                    if index1 != index2:
-                        keypoints1, siftVectors1 = self._getSiftVectors(image1, returnKP=True)
-                        keypoints2, siftVectors2 = self._getSiftVectors(image2, returnKP=True)
-
-                        logging.debug('Matching key points with flann matcher')
-                        matches = self._flann.knnMatch(siftVectors1, siftVectors2, k=2)
-                        self._debugTime('flann match')
-                        # Save the matches
-                        matchesMask = [[0, 0] for i in range(len(matches))]
-                        # ratio test as per Lowe's paper
-                        logging.debug('Finding the correct key points according to Lowe\'s paper')
-                        self._debugTime(reset=True)
-                        for i, match in enumerate(matches):
-                            if match[0].distance < match[1].distance*self._ratioTestThreshold:
-                                # Add it!
-                                completeVectors.append(siftVectors1[match[0].queryIdx])
-                                completeVectors.append(siftVectors2[match[0].trainIdx])
-
-                                matchesMask[i] = [0, 1]
-
-                                self._new_cat_distances.append(match[0].distance)
-
-                        self._debugTime('find keys')
-
+                            img3 = cv2.drawMatchesKnn(image1, keypoints1, image2, keypoints2, matches, None, **draw_params)
+                            new_fig = plt.figure(figsize=(32, 32))
+                            plt.imshow(img3)
+                            plt.savefig(debugDir + '/' + catId + '_' + str(index1+1) + '_' + str(index2+1) + '.png')
+                            plt.close(new_fig)
 
 
 
@@ -314,26 +329,27 @@ class Identifier:
 
                 return completeVectors
 
+            else:
+                completeVectors = []
+                for index1, image1 in enumerate(images):
+                    for index2, image2 in enumerate(images):
+                        bar.update()
 
-            completeVectors = []
-            for index1, image1 in enumerate(images):
-                for index2, image2 in enumerate(images):
+                        if index1 != index2:
+                            siftVectors1 = self._getSiftVectors(image1)
+                            siftVectors2 = self._getSiftVectors(image2)
 
-                    if index1 != index2:
-                        siftVectors1 = self._getSiftVectors(image1)
-                        siftVectors2 = self._getSiftVectors(image2)
+                            # pdb.set_trace()
+                            matches = self._flann.knnMatch(siftVectors1, siftVectors2, k=2)
 
-                        # pdb.set_trace()
-                        matches = self._flann.knnMatch(siftVectors1, siftVectors2, k=2)
-
-                        for match in matches:
-                            if match[0].distance < match[1].distance*self._ratioTestThreshold:
-                                # Add it!
-                                completeVectors.append(siftVectors1[match[0].queryIdx])
-                                completeVectors.append(siftVectors2[match[0].trainIdx])
+                            for match in matches:
+                                if match[0].distance < match[1].distance*self._ratioTestThreshold:
+                                    # Add it!
+                                    completeVectors.append(siftVectors1[match[0].queryIdx])
+                                    completeVectors.append(siftVectors2[match[0].trainIdx])
 
 
-            return completeVectors
+                return completeVectors
 
         # 2)
         print('Creating database')

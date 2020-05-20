@@ -12,7 +12,7 @@ import pdb
 import datetime
 from os.path import join
 import enlighten
-
+import shutil
 
 
 class DatabaseCreator:
@@ -22,7 +22,7 @@ class DatabaseCreator:
 
         self.defaultOut = '/home/afeser/RAM/clippedImages'
 
-    def seperate_into_databases(self, source_database_dir, database_file_path, dest_dir='seperate_into_databases'):
+    def seperate_into_databases(self, source_database_dir, database_file_path, dest_dir='seperate_into_databases', override=False):
         '''
         This part is going to seperate the original data into train, test and
         validation sets based on the file provided as input.
@@ -60,6 +60,11 @@ class DatabaseCreator:
             6 # 6.
             4 # ve 7.yi train etme, sadece test ederken kullan anlamina geliyor
         '''
+        if os.path.exists(dest_dir) and (not override):
+            raise ('Destination database directory is not empty! If it is okay, set override flag')
+        else:
+            shutils.rmtree(dest_dir)
+
         db_file  = open(database_file_path, 'r')
 
         lines = list(map(lambda x: x.split('#')[0], db_file.readlines()))
@@ -82,6 +87,9 @@ class DatabaseCreator:
                 num_excludes = int(lines[11])
                 all_exludes  = [int(lines[12+x]) for x in range(num_excludes)]
 
+                os.makedirs(dest_dir)
+                with open(join(dest_dir, 'excluded_classes.txt'), 'w') as class_file:
+                    class_file.write(''.join(map(lambda x: x + ' ', )))
 
 
 
@@ -212,6 +220,6 @@ class DatabaseCreator:
 
 dbc = DatabaseCreator()
 # DatabaseCreator().crop_rename('Original', 'Dataset_Cropped')
-dbc.seperate_into_databases('Dataset_Cropped/Original', 'db_metadata.txt', dest_dir='Dataset1')
-# for dataset_num in range(30):
-#     dbc.seperate_into_databases('Dataset_Cropped', join('metadata', str(dataset_num).zfill(2) + '.txt'), dest_dir='Dataset' + str(dataset_num).zfill(2))
+# Do for utku data sets...
+for dataset_num in range(1,11):
+    dbc.seperate_into_databases('Dataset_Cropped', join('metadata', 'dataset' + str(dataset_num) + '.txt'), dest_dir='Dataset' + str(dataset_num).zfill(2))

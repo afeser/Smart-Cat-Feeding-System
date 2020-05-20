@@ -6,6 +6,7 @@ import os
 import sys
 import pdb
 from os.path import join
+import multiprocessing
 
 '''
 Tester Siftir class
@@ -30,7 +31,7 @@ def train_validation_test_accuracy(train_root_name, validation_root_name, test_r
     Set databaseLocation if you want to save that database; otherwise, database will be trashed after tests are done.
     '''
 
-    a = Identifier(featureDescriptor='SIFT', debug=True)
+    a = Identifier(featureDescriptor='SIFT')
 
 
 
@@ -84,7 +85,7 @@ def train_validation_test_accuracy(train_root_name, validation_root_name, test_r
 
                 predictedClass = a.getCatId(im)
 
-                print('Actual {0:20} -> predicted {1:20}'.format(directory, predictedClass))
+                #print('Actual {0:20} -> predicted {1:20}'.format(directory, predictedClass))
 
                 total = total + 1
                 totalClass[directory] = totalClass[directory] + 1
@@ -105,7 +106,7 @@ def train_validation_test_accuracy(train_root_name, validation_root_name, test_r
         print('Calculated accuracy is ' + str(correct / total))
 
 
-    # calc_accuracy(train_root_name, 'train')
+    calc_accuracy(train_root_name, 'train')
     calc_accuracy(validation_root_name, 'validation')
     calc_accuracy(test_root_name, 'test')
 
@@ -122,11 +123,22 @@ def train_validation_test_bench():
     train_validation_test_accuracy(train_root_name, validation_root_name, test_root_name, new_cat_labels, 'database_utku_V1')
 
 
-for counter in range(1, 10):
+
+def test_utku(counter):
     train_root_name      = 'Dataset' + str(counter).zfill(2) + '/train'
     validation_root_name = 'Dataset' + str(counter).zfill(2) + '/validation'
     test_root_name       = 'Dataset' + str(counter).zfill(2) + '/test'
     with open(join('Dataset' + str(counter).zfill(2), 'excluded_classes.txt'), 'r') as class_file:
         new_cat_labels = class_file.readline().split()
 
-    train_validation_test_accuracy(train_root_name, validation_root_name, test_root_name, new_cat_labels, 'utku_database' + str(counter))
+        train_validation_test_accuracy(train_root_name, validation_root_name, test_root_name, new_cat_labels, 'utku_database' + str(counter))
+
+
+procs = [None] * 20
+for counter in range(3, 11):
+    procs[counter-1] = multiprocessing.Process(target=test_utku, args=(counter,))
+    procs[counter-1].start()
+
+    if counter % 2 == 1:
+        procs[counter-1].join()
+        procs[counter-2].join()

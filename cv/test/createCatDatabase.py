@@ -98,7 +98,9 @@ class DatabaseCreator:
         for directory in directories:
             excluded = (int(directory) in all_exludes)
 
-            os.makedirs(join(dest_dir, 'train', directory))
+            if not excluded:
+                os.makedirs(join(dest_dir, 'train', directory))
+
             os.makedirs(join(dest_dir, 'validation', directory))
             os.makedirs(join(dest_dir, 'test', directory))
 

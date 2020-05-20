@@ -61,7 +61,7 @@ class DatabaseCreator:
             4 # ve 7.yi train etme, sadece test ederken kullan anlamina geliyor
         '''
         if os.path.exists(dest_dir) and (not override):
-            raise ('Destination database directory is not empty! If it is okay, set override flag')
+            raise FileExistsError('Destination database directory is not empty! If it is okay, set override flag')
         else:
             shutils.rmtree(dest_dir)
 

@@ -90,7 +90,7 @@ class DatabaseCreator:
 
                 os.makedirs(dest_dir)
                 with open(join(dest_dir, 'excluded_classes.txt'), 'w') as class_file:
-                    class_file.write(''.join(map(lambda x: x + ' ', all_exludes)))
+                    class_file.write(''.join(map(lambda x: str(x).zfill(2) + ' ', all_exludes)))
 
 
 
@@ -223,4 +223,4 @@ dbc = DatabaseCreator()
 # DatabaseCreator().crop_rename('Original', 'Dataset_Cropped')
 # Do for utku data sets...
 for dataset_num in range(1,11):
-    dbc.seperate_into_databases('Dataset_Cropped', join('metadata', 'dataset' + str(dataset_num) + '.txt'), dest_dir='Dataset' + str(dataset_num).zfill(2))
+    dbc.seperate_into_databases('Dataset_Cropped', join('metadata', 'dataset' + str(dataset_num) + '.txt'), dest_dir='Dataset' + str(dataset_num).zfill(2), override=True)

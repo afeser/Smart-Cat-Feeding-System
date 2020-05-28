@@ -2,7 +2,7 @@
 
 ## Devices
 
-* There will be a button to open or close the system.
+* ~~There will be a button to open or close the system.~~
 
 * ~~The charging status of the device will be shown.~~
 

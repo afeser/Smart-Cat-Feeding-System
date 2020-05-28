@@ -28,6 +28,7 @@ class Device(db.Model):
     food_percentage = db.Column(db.Integer,default=100)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     is_charging = db.Column(db.Boolean, default = False)
+    is_on = db.Column(db.Boolean, default = False)
     last_refill_time = db.Column(db.DateTime, index=True, default=datetime.utcnow())
     cats = db.relationship('Cat',backref='kitchen', lazy='dynamic')
 
@@ -48,6 +49,11 @@ class Device(db.Model):
 
     def toggle_charging(self):
         self.is_charging = not self.is_charging
+        db.session.add(self)
+        db.session.commit()
+
+    def toggle_on_off(self):
+        self.is_on = not self.is_on
         db.session.add(self)
         db.session.commit()
 

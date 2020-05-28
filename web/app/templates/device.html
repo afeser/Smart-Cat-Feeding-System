@@ -9,6 +9,18 @@
       <br>
 
     </div>
+    <div class="switch">
+      <label>
+        Off
+        {% if device.is_on %}
+        <input type="checkbox" checked>
+        {% else %}
+        <input type="checkbox">
+        {% endif %}
+        <span class="lever"></span>
+        On
+      </label>
+    </div>
     {% if device.is_charging %}
     <p>Charging</p>
     {% else %}

@@ -86,3 +86,9 @@ def settings():
                     pass
 
     return render_template('settings.html', title=title, devices=devices)
+
+@app.route('/toggle_on_off') 
+def toggled_status():
+  device = Device.query.all()[0]
+  device.toggle_on_off()
+  return 'Toggled'

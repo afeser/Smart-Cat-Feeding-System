@@ -11,6 +11,18 @@
             <div class="batteryOuter"><div id="batteryLevel" style="width:{{ device.battery_percentage }}px"></div></div>
             <div class="batteryBump"></div>
           </div>
+          <div class="switch">
+            <label>
+              Off
+              {% if device.is_on %}
+              <input type="checkbox" checked>
+              {% else %}
+              <input type="checkbox">
+              {% endif %}
+              <span class="lever"></span>
+              On
+            </label>
+          </div>
           {% if device.is_charging %}
           <p>Charging</p>
           {% else %}
@@ -34,8 +46,13 @@
               <div class="batteryOuter"><div id="batteryLevel" style="width:100px"></div></div>
               <div class="batteryBump"></div>
             </div>
+            <div class="switch">
+              <label>
+                Off
+              </label>
+            </div>
             <p>Not charging</p>
-            <p> Food percentage: 100% </p>
+            <p>Food percentage: 100%</p>
             <p>Last refilled:</p>
           <p>Never</p>
           </div>
@@ -52,8 +69,13 @@
               <div class="batteryOuter"><div id="batteryLevel" style="width:100px"></div></div>
               <div class="batteryBump"></div>
             </div>
+            <div class="switch">
+              <label>
+                Off
+              </label>
+            </div>
             <p>Not charging</p>
-            <p> Food percentage: 100% </p>
+            <p>Food percentage: 100%</p>
             <p>Last refilled:</p>
           <p>Never</p>
           </div>
@@ -70,8 +92,13 @@
               <div class="batteryOuter"><div id="batteryLevel" style="width:100px"></div></div>
               <div class="batteryBump"></div>
             </div>
+            <div class="switch">
+              <label>
+                Off
+              </label>
+            </div>
             <p>Not charging</p>
-            <p> Food percentage: 100% </p>
+            <p>Food percentage: 100%</p>
             <p>Last refilled:</p>
           <p>Never</p>
           </div>

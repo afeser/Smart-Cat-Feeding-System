@@ -103,4 +103,18 @@
   });
         </script>
     </body>
+    <script>
+      $(document).ready(function() {
+       $('.lever').click(function() {
+        var current_status = $('.status').text();
+        $.ajax({
+         url: "/toggle_on_off",
+         type: "get",
+          error: function(xhr) {
+           //Do Something to handle error
+          }
+        });
+       });
+     });
+     </script>
 </html>

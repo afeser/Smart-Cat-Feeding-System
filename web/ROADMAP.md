@@ -16,3 +16,10 @@
 
 * ~~There will be an option for users to control and change the amount of foodpoured.~~
 
+## Asude's Feedback
+
+* On/off should be more self-explanatory
+
+* Food percentage should be more self-explanatory
+
+* `Eats xxx grams` should be more self-explanatory

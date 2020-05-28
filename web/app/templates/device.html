@@ -10,6 +10,7 @@
 
     </div>
     <div class="switch">
+      Device:
       <label>
         Off
         {% if device.is_on %}
@@ -26,7 +27,7 @@
     {% else %}
     <p>Not charging</p>
     {% endif %}
-    <p> Food percentage: {{ device.food_percentage }} </p>
+    <p> Remaining food: {{ device.food_percentage }} </p>
     <p>Last refilled:</p>
     <p>{{ device.get_time_after_last_refill() }}</p>
     </div>
@@ -43,7 +44,7 @@
     </div>
     <div class="card-reveal">
       <span class="card-title grey-text text-darken-4">{{ cat.name }}<i class="material-icons right">close</i></span>
-      <p>Eats {{ cat.feeding_amount }} grams</p>
+      <p>Eats {{ cat.feeding_amount }} grams per meal</p>
       <p>Last fed:</p>
       <p>{{ cat.get_time_after_last_feeding() }}</p>
     </div>

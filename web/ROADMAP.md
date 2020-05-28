@@ -18,8 +18,8 @@
 
 ## Asude's Feedback
 
-* On/off should be more self-explanatory
+* ~~On/off should be more self-explanatory.~~
 
-* Food percentage should be more self-explanatory
+* ~~Food percentage should be more self-explanatory.~~
 
-* `Eats xxx grams` should be more self-explanatory
+* ~~`Eats xxx grams` should be more self-explanatory.~~

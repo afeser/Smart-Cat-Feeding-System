@@ -12,6 +12,7 @@
             <div class="batteryBump"></div>
           </div>
           <div class="switch">
+            Device:
             <label>
               Off
               {% if device.is_on %}
@@ -28,7 +29,7 @@
           {% else %}
           <p>Not charging</p>
           {% endif %}
-          <p> Food percentage: {{ device.food_percentage }}% </p>
+          <p> Remaining food: {{ device.food_percentage }}% </p>
           <p>Last refilled:</p>
           <p>{{ device.get_time_after_last_refill() }}</p>
         </div>
@@ -47,12 +48,13 @@
               <div class="batteryBump"></div>
             </div>
             <div class="switch">
+              Device:
               <label>
                 Off
               </label>
             </div>
             <p>Not charging</p>
-            <p>Food percentage: 100%</p>
+            <p>Remaining food: 100%</p>
             <p>Last refilled:</p>
           <p>Never</p>
           </div>
@@ -70,12 +72,13 @@
               <div class="batteryBump"></div>
             </div>
             <div class="switch">
+              Device:
               <label>
                 Off
               </label>
             </div>
             <p>Not charging</p>
-            <p>Food percentage: 100%</p>
+            <p>Remaining food: 100%</p>
             <p>Last refilled:</p>
           <p>Never</p>
           </div>
@@ -93,12 +96,13 @@
               <div class="batteryBump"></div>
             </div>
             <div class="switch">
+              Device:
               <label>
                 Off
               </label>
             </div>
             <p>Not charging</p>
-            <p>Food percentage: 100%</p>
+            <p>Remaining food: 100%</p>
             <p>Last refilled:</p>
           <p>Never</p>
           </div>

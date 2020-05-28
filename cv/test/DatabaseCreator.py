@@ -213,12 +213,3 @@ class DatabaseCreator:
                     logging.info('Cat not detected in ' + filename)
 
                 bar.update()
-
-
-
-
-dbc = DatabaseCreator()
-# DatabaseCreator().crop_rename('Original', 'Dataset_Cropped')
-# Do for utku data sets...
-for dataset_num in range(2,3):
-    dbc.seperate_into_databases('Dataset_Cropped', join('metadata', 'dataset' + str(dataset_num) + '.txt'), dest_dir='Dataset' + str(dataset_num).zfill(2), override=True)

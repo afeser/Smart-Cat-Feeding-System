@@ -17,7 +17,40 @@
           </div>
           </div>
     </form>
+    
+    <form action = "" method = post>
+      <div class="row">
+          <div class="input-field col s3">
+          Lights on: 
+          </div>
+          <div class="input-field col s6">
+                <input id="turnon_{{device.id}}" type="text" name="turnon_{{device.id}}" class="timepicker">
+                <label for="turnon_{{device.id}}">{{ device.turn_on }}</label>
+          </div>
+          <div class="col s3">
+          <button class="btn waves-effect waves-light" type="submit" name="action">
+            <i class="material-icons">done</i>
+          </button>
+          </div>
+          </div>
+    </form>
 
+    <form action = "" method = post>
+      <div class="row">
+          <div class="input-field col s3">
+          Lights off: 
+          </div>
+          <div class="input-field col s6">
+                <input id="turnoff_{{device.id}}" type="text" name="turnoff_{{device.id}}" class="timepicker">
+                <label for="turnoff_{{device.id}}">{{ device.turn_off }}</label>
+          </div>
+          <div class="col s3">
+          <button class="btn waves-effect waves-light" type="submit" name="action">
+            <i class="material-icons">done</i>
+          </button>
+          </div>
+          </div>
+    </form>
 
     {% for cat in device.cats %}
 

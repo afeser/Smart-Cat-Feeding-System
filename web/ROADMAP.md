@@ -8,7 +8,7 @@
 
 * ~~The last updated time for food status will be shown.~~
 
-* There will be an option to decide when the lights turn on/off.
+* ~~There will be an option to decide when the lights turn on/off.~~
 
 ## Cats
 

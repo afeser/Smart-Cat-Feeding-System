@@ -105,8 +105,8 @@
     </body>
     <script>
       $(document).ready(function() {
+       $('.timepicker').timepicker();
        $('.lever').click(function() {
-        var current_status = $('.status').text();
         $.ajax({
          url: "/toggle_on_off",
          type: "get",

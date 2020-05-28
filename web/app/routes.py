@@ -59,14 +59,27 @@ def settings():
         result = request.form
         input_id = list(result.keys())[0]
         edited = input_id.split('_')
-        if len(edited) == 2 and edited[0] == 'device':
-            device = Device.query.filter_by(id=int(edited[1])).first_or_404()
-            try:
-                float_result = float(result[input_id][0])
-            except ValueError:
-                device.set_location(result[input_id])
-            except IndexError:
-                pass
+        if len(edited) == 2:
+            if edited[0] == 'device':
+                device = Device.query.filter_by(id=int(edited[1])).first_or_404()
+                try:
+                    float_result = float(result[input_id][0])
+                except ValueError:
+                    device.set_location(result[input_id])
+                except IndexError:
+                    pass
+            if edited[0] == 'turnon':
+                device = Device.query.filter_by(id=int(edited[1])).first_or_404()
+                try:
+                    device.set_turn_on(result[input_id])
+                except:
+                    pass
+            if edited[0] == 'turnoff':
+                device = Device.query.filter_by(id=int(edited[1])).first_or_404()
+                try:
+                    device.set_turn_off(result[input_id])
+                except:
+                    pass
         elif len(edited) == 3:
             print(edited)
             device = Device.query.filter_by(id=int(edited[1])).first_or_404()

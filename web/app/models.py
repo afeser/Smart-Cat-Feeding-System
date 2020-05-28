@@ -29,6 +29,8 @@ class Device(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     is_charging = db.Column(db.Boolean, default = False)
     is_on = db.Column(db.Boolean, default = False)
+    turn_on  = db.Column(db.String(32), default='10:00 PM')
+    turn_off = db.Column(db.String(32), default='07:00 AM')
     last_refill_time = db.Column(db.DateTime, index=True, default=datetime.utcnow())
     cats = db.relationship('Cat',backref='kitchen', lazy='dynamic')
 
@@ -44,6 +46,16 @@ class Device(db.Model):
 
     def set_food_level(self, food_level):
         self.food_percentage = food_level
+        db.session.add(self)
+        db.session.commit()
+
+    def set_turn_on(self, turn_on):
+        self.turn_on = turn_on
+        db.session.add(self)
+        db.session.commit()
+
+    def set_turn_off(self, turn_off):
+        self.turn_off = turn_off
         db.session.add(self)
         db.session.commit()
 

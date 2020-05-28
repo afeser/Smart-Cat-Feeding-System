@@ -254,18 +254,22 @@ class Identifier:
             all_processes = []
             allCatIds = list(database.keys())
 
-            print('Printing approximate progress..')
-            bar = enlighten.Counter(total=len(self._database[allCatIds[-1]]))
+            print('Optimizing database, printing approximate progress..')
+            total_classes = len(self._database)
+            serial_cat_id = allCatIds[np.argmax([len(self._database[xx]) for xx in self._database])]
+            parallel_cat_ids = list(set(allCatIds) - set([serial_cat_id]))
 
-            p = Pool(4)
+            bar = enlighten.Counter(total=len(self._database[serial_cat_id]))
+
+            p = Pool(total_classes)
             # print(list(map(lambda catId : (database, catId, self._new_cat_threshold), allCatIds[:-1])))
             # a,b,c=list(map(lambda catId: [self, catId, bar], allCatIds))[0]
             # print(b)
             # pdb.set_trace()
-            eliminateList = p.map_async(Identifier._eliminateDuplicateVectors_parallel, list(map(lambda catId: [self._database[catId], self._new_cat_threshold], allCatIds[:-1])));
+            eliminateList = p.map_async(Identifier._eliminateDuplicateVectors_parallel, list(map(lambda catId: [catId, self._database[catId], self._new_cat_threshold], parallel_cat_ids)))
 
 
-            catId = allCatIds[-1]
+            catId = serial_cat_id
             eliminateThose = []
 
             for index1, vector1 in enumerate(database[catId]):
@@ -276,15 +280,18 @@ class Identifier:
                         eliminateThose.append(index1)
 
             eliminateThose = list(np.unique(eliminateThose))
-            eliminateThose.sort(reverse=True)
 
 
             p.close()
             p.join()
-            eliminateList.append(eliminateThose)
-            for counter, identity in enumerate(liminateThose):
+            eliminateList = eliminateList.get()
+            eliminateList.append((serial_cat_id, eliminateThose))
+            for identity_and_cat in eliminateList:
+                catId, identity = identity_and_cat
+                
+                identity.sort(reverse=True)
                 for el in identity:
-                    database[allCatIds[counter]].pop(el)
+                    database[catId].pop(el)
 
 
 
@@ -369,7 +376,7 @@ class Identifier:
 
         self._timeStart = time.time()
     def _eliminateDuplicateVectors_parallel(argsss):
-        database, new_cat_threshold = argsss
+        catId, database, new_cat_threshold = argsss
 
         eliminateThose = []
         for index1, vector1 in enumerate(database):
@@ -380,9 +387,8 @@ class Identifier:
                 pass
 
         eliminateThose = list(np.unique(eliminateThose))
-        eliminateThose.sort(reverse=True)
 
-        return eliminateThose
+        return (catId, eliminateThose)
 
     # Most commonly used in public...
     def getCatId(self, catImage):

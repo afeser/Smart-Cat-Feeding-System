@@ -11,6 +11,8 @@ from cv.test.MetadataParser import MetadataParser
 import enlighten
 import xlsxwriter
 import time
+from cv.test.DatabaseCreator import DatabaseCreator
+import pickle
 
 '''
 Tester Siftir class
@@ -29,7 +31,7 @@ def train_validation_test_accuracy(train_root_name, validation_root_name, test_r
     train_validation_test_accuracy(train_root_name, validation_root_name, test_root_name, excludes, databaseLocation, returns)
 
 
-def train_validation_test_accuracy(train_root_name, validation_root_name, test_root_name, new_cat_labels, databaseLocation=None, returns=[]):
+def train_validation_test_accuracy(train_root_name, validation_root_name, test_root_name, new_cat_labels, databaseLocation=None, returns=[], optimize_database=False):
     '''
     Give train data root directory and test data root directory.
     Directory structure :
@@ -64,14 +66,29 @@ def train_validation_test_accuracy(train_root_name, validation_root_name, test_r
 
     # a.resetDatabase(force=True)
     if databaseLocation is None:
-        # No database, import and do not save
         a.importDirectory(train_root_name)
-    elif os.path.exists(databaseLocation):
-        # Use existing database as it exists
+
+
+    # Not optimizing one possibilities
+    elif os.path.exists(databaseLocation) and (not optimize_database):
         a.loadDatabase(databaseLocation=databaseLocation)
-    else:
+    elif (not os.path.exists(databaseLocation)) and (not optimize_database):
         a.importDirectory(train_root_name)
         a.saveDatabase(databaseLocation=databaseLocation)
+
+    # Optimizing one possibilities
+    elif os.path.exists(databaseLocation+'_optimized') and (optimize_database):
+        a.loadDatabase(databaseLocation=databaseLocation+'_optimized')
+    elif os.path.exists(databaseLocation) and optimize_database:
+        a.loadDatabase(databaseLocation=databaseLocation)
+        a.optimizeDatabase()
+        a.saveDatabase(databaseLocation=databaseLocation+'_optimized')
+    elif (not os.path.exists(databaseLocation)) and optimize_database:
+        a.importDirectory(train_root_name)
+        a.saveDatabase(databaseLocation=databaseLocation)
+        a.optimizeDatabase()
+        a.saveDatabase(databaseLocation=databaseLocation+'_optimized')
+
 
 
     def calc_accuracy(target_dir, test_name):
@@ -101,8 +118,7 @@ def train_validation_test_accuracy(train_root_name, validation_root_name, test_r
 
 
         all_classes_included = list(set(['None'] + directories) - set(new_cat_labels))
-        confusion_matrix         = {}
-        confusion_matrix['None'] = {diri:0 for diri in all_classes_included}
+        confusion_matrix         = {diri2:{diri:0 for diri in all_classes_included} for diri2 in all_classes_included}
         time_spent               = {}
         totalClass               = {}
         totalCorrectClass        = {}
@@ -113,7 +129,6 @@ def train_validation_test_accuracy(train_root_name, validation_root_name, test_r
                  current_class_name = directory
 
             # confusion_matrix
-            confusion_matrix[current_class_name]  = {diri:0 for diri in all_classes_included}
             totalClass[current_class_name]        = 0
             totalCorrectClass[current_class_name] = 0
             time_spent[current_class_name]        = 0
@@ -212,14 +227,19 @@ def train_validation_test_bench():
 
 
 def test_utku():
-    counter = 2
+    counter = 3
+    optimize = True
+
+    dbCreator = DatabaseCreator()
+    dbCreator.seperate_into_databases('Dataset_Cropped', join('metadata', 'dataset' + str(counter) + '.txt'), dest_dir='Dataset' + str(counter).zfill(2), override=True)
+
     train_root_name      = 'Dataset' + str(counter).zfill(2) + '/train'
     validation_root_name = 'Dataset' + str(counter).zfill(2) + '/validation'
     test_root_name       = 'Dataset' + str(counter).zfill(2) + '/test'
     with open(join('Dataset' + str(counter).zfill(2), 'excluded_classes.txt'), 'r') as class_file:
         new_cat_labels = class_file.readline().split()
 
-        train_validation_test_accuracy(train_root_name, validation_root_name, test_root_name, new_cat_labels, 'utku_database2_optimized', ['accuracy', 'confusion_matrix', 'print', 'test_times'])
+        train_validation_test_accuracy(train_root_name, validation_root_name, test_root_name, new_cat_labels, 'utku_database3', ['accuracy', 'confusion_matrix', 'print', 'test_times'], optimize_database=# OPTIMIZE: )
 
 
 test_utku()

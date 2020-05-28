@@ -62,6 +62,8 @@ class Device(db.Model):
             return str(diff.days) + ' day(s) ago'
         elif diff.seconds > 3600:
             return str(diff.seconds // 3600) + ' hour(s) ago'
+        elif diff.seconds > 60:
+            return str(diff.seconds // 60) + ' minute(s) ago'
         else:
             return str(diff.seconds) + ' second(s) ago'
 
@@ -91,6 +93,8 @@ class Cat(db.Model):
             return str(diff.days) + ' day(s) ago'
         elif diff.seconds > 3600:
             return str(diff.seconds // 3600) + ' hour(s) ago'
+        elif diff.seconds > 60:
+            return str(diff.seconds // 60) + ' minute(s) ago'
         else:
             return str(diff.seconds) + ' second(s) ago'
 

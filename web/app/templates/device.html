@@ -35,18 +35,22 @@
     {% for cat in device.cats %}
   <div class="row">
     <div class="col s12 m3">
-      <div class="card">
+      <div class="card sticky-action">
     <div class="card-image waves-effect waves-block waves-light">
       <img class="activator" src="/static/cats/{{ device.id }}_{{ cat.id }}.jpeg">
     </div>
     <div class="card-content">
       <span class="card-title activator grey-text text-darken-4">{{ cat.name }}<i class="material-icons right">more_vert</i></span>
     </div>
+    <div class="card-action">
+      <a href="/device/1/cat/{{ cat.id }}">Feeding Log</a>
+    </div>
     <div class="card-reveal">
       <span class="card-title grey-text text-darken-4">{{ cat.name }}<i class="material-icons right">close</i></span>
       <p>Eats {{ cat.feeding_amount }} grams per meal</p>
       <p>Last fed:</p>
       <p>{{ cat.get_time_after_last_feeding() }}</p>
+      
     </div>
   </div>
     </div>

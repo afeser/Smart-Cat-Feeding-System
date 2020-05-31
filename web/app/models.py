@@ -94,6 +94,8 @@ class Cat(db.Model):
     last_feeding_time = db.Column(db.DateTime, index=True, default=datetime.utcnow())
     feeding_amount = db.Column(db.Integer, default = 1)
     device_id = db.Column(db.Integer, db.ForeignKey('device.id'))
+    times_of_feeding = db.relationship('Fed_Time',backref='monster', lazy='dynamic')
+    times_of_denial = db.relationship('Denial_Time',backref='monster', lazy='dynamic')
 
     def set_name(self, name):
         self.name = name
@@ -123,6 +125,16 @@ class Cat(db.Model):
 
     def __repr__(self):
         return '<Cat {}>'.format(self.name)
+
+class Fed_Time(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    time = db.Column(db.String(64), index=True, default='2020-06-01T12:00:00')
+    cat_id = db.Column(db.Integer, db.ForeignKey('cat.id'))
+
+class Denial_Time(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    time = db.Column(db.String(64), index=True, default='2020-06-01T12:00:00')
+    cat_id = db.Column(db.Integer, db.ForeignKey('cat.id'))
 
 @login.user_loader
 def load_user(id):

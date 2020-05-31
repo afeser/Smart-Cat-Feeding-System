@@ -1,7 +1,152 @@
-{% extends "base.html" %}
+<html>
+    <head>
+        <!--Import Google Icon Font-->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <!-- Compiled and minified CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 
-{% block content %}
-    <h1>User: {{ current_user.username }}</h1>
-    <h2>Device: {{ device.location }}</h2>
-    <h3>Cat: {{ cat.name }}</h3>
-{% endblock %}
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/core/main.min.css" />
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/daygrid/main.min.css" />
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/timegrid/main.min.css" />
+
+        <!--Let browser know website is optimized for mobile-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+        {% if title %}
+        <title>{{ title }} - Felerest</title>
+        {% else %}
+        <title>Felerest</title>
+        {% endif %}
+
+    </head>
+    <body>
+      <nav>
+    <div class="nav-wrapper">
+      <a href="{{ url_for('index') }}" class="brand-logo">Felerest</a>
+      <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+      <ul class="right hide-on-med-and-down">
+        {% if current_user.is_anonymous %}
+        <li><a href="{{ url_for('login') }}">Login</a></li>
+        {% else %}
+        <li><a href="{{ url_for('user')     }}">Devices</a></li>
+        <li><a href="{{ url_for('settings') }}">Account</a></li>
+        <li><a href="{{ url_for('logout')   }}">Logout</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </nav>
+
+  <ul class="sidenav" id="mobile-demo">
+    {% if current_user.is_anonymous %}
+        <li><a href="{{ url_for('login') }}">Login</a></li>
+        {% else %}
+        <li><a href="{{ url_for('user')     }}">Devices</a></li>
+        <li><a href="{{ url_for('settings') }}">Account</a></li>
+        <li><a href="{{ url_for('logout')   }}">Logout</a></li>
+        {% endif %}
+  </ul>
+  <div class="container">
+
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+
+        <div class="row">
+            <div class="col s4">
+                <br>
+                <img class="activator" width="100%" src="/static/cats/1_{{ cat.id }}.jpeg">
+            </div>
+            <div class="col s8">
+                <h3 align="center">Name: {{ cat.name }}</h3>
+                <p>Eats {{ cat.feeding_amount }} grams per meal</p>
+                <p>Last fed:</p>
+                <p>{{ cat.get_time_after_last_feeding() }}</p>
+            </div>
+            </div>
+
+        <hr>
+        <div id='calendar'></div>
+      </div>
+
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+        <!-- Compiled and minified JavaScript -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/core/main.min.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/daygrid/main.min.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/timegrid/main.min.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/interaction/main.min.js"></script>
+
+        <script>
+            $(document).ready(function(){
+    $('.sidenav').sidenav();
+  });
+        </script>
+    </body>
+    <script>
+      $(document).ready(function() {
+       $('.timepicker').timepicker();
+       $('.lever').click(function() {
+        $.ajax({
+         url: "/toggle_on_off",
+         type: "get",
+          error: function(xhr) {
+           //Do Something to handle error
+          }
+        });
+       });
+     });
+     </script>
+     <script>
+
+      document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        console.log('ne');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+          plugins: [ 'interaction', 'dayGrid', 'timeGrid' ],
+          defaultView: 'dayGridMonth',
+          defaultDate: '2020-05-31',
+          header: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+          },
+          
+        events: [
+        {% for time in cat.times_of_feeding %}
+        {
+            title: 'fed',
+            start: '{{ time.time }}'
+        },
+        {% endfor %}
+        {% for time in cat.times_of_denial %}
+        {
+            title: 'rejected',
+            start: '{{ time.time }}'
+        },
+        {% endfor %}
+
+        {
+            title: 'what',
+            start: '1998-11-21T12:00:00'
+        }
+        ]
+        });
+
+        calendar.render();
+      });
+
+    </script>
+</html>

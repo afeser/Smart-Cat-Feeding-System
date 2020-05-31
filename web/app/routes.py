@@ -33,12 +33,17 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
+@app.route('/calendar/')
+def calendar():
+    cat = Cat.query.all()[2]
+    return render_template('calendar.html', title='Calendar', cat = cat)
+
 @app.route('/user/')
 @login_required
 def user():
     user = User.query.filter_by(username=current_user.username).first_or_404()
     devices = user.devices
-    title = user.username + ' - Devices'
+    title = user.username
     return render_template('user.html', title=title, devices=devices)
 
 @app.route('/device/<device_id>')
@@ -46,8 +51,17 @@ def user():
 def device(device_id):
     user = User.query.filter_by(username=current_user.username).first_or_404()
     device = user.devices.filter_by(id=device_id).first_or_404()
-    title = user.username + ' - ' + device.location
+    title = device.location + ' - ' + user.username
     return render_template('device.html', title=title, device=device)
+
+@app.route('/device/<device_id>/cat/<cat_id>')
+@login_required
+def cat(device_id, cat_id):
+    user = User.query.filter_by(username=current_user.username).first_or_404()
+    device = user.devices.filter_by(id=device_id).first_or_404()
+    cat = device.cats.filter_by(id=cat_id).first_or_404()
+    title = cat.name + ' - ' + device.location + ' - ' + user.username
+    return render_template('cat.html', title=title, cat=cat)
 
 @app.route('/settings/', methods=['GET', 'POST'])
 @login_required
@@ -99,6 +113,13 @@ def settings():
                     pass
 
     return render_template('settings.html', title=title, devices=devices)
+
+'''
+@app.route('/admin/', methods=['GET', 'POST'])
+def admin():
+    cats = Cat.query.all()
+    return render_template('admin.html', title=title, cats=cats)
+'''
 
 @app.route('/toggle_on_off') 
 def toggled_status():

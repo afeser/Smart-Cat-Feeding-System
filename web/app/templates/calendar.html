@@ -2,9 +2,14 @@
     <head>
         <!--Import Google Icon Font-->
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        
         <!-- Compiled and minified CSS -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/core/main.min.css" />
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/daygrid/main.min.css" />
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/timegrid/main.min.css" />
 
         <!--Let browser know website is optimized for mobile-->
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -15,44 +20,6 @@
         <title>Felerest</title>
         {% endif %}
 
-        <style>
-        .batteryContainer {
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
-.batteryOuter {
-  border-radius: 3px;
-  border: 1px solid #444;
-  padding: 1px;
-  width: 104px;
-  height: 34px;
-}
-
-.batteryBump {
-  border-radius: 2px;
-  background-color: #444;
-  margin: 2px;
-  width: 1px;
-  height: 3px;
-}
-
-#batteryLevel {
-  border-radius: 2px;
-  background-color: #73AD21;
-  height: 30px;
-}
-
-.nav-wrapper .brand-logo svg {
-  height: 64px;
-}
-
-        </style>
     </head>
     <body>
       <nav>
@@ -91,13 +58,21 @@
         </ul>
         {% endif %}
         {% endwith %}
-        {% block content %}{% endblock %}
+        <div id='calendar'></div>
       </div>
 
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 
         <!-- Compiled and minified JavaScript -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/core/main.min.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/daygrid/main.min.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/timegrid/main.min.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/interaction/main.min.js"></script>
 
         <script>
             $(document).ready(function(){
@@ -119,4 +94,44 @@
        });
      });
      </script>
+     <script>
+
+      document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        console.log('ne');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+          plugins: [ 'interaction', 'dayGrid', 'timeGrid' ],
+          defaultView: 'dayGridMonth',
+          defaultDate: '2020-05-31',
+          header: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+          },
+          
+        events: [
+        {% for time in cat.times_of_feeding %}
+        {
+            title: 'fed',
+            start: '{{ time.time }}'
+        },
+        {% endfor %}
+        {% for time in cat.times_of_denial %}
+        {
+            title: 'rejected',
+            start: '{{ time.time }}'
+        },
+        {% endfor %}
+
+        {
+            title: 'what',
+            start: '1998-11-21T12:00:00'
+        }
+        ]
+        });
+
+        calendar.render();
+      });
+
+    </script>
 </html>

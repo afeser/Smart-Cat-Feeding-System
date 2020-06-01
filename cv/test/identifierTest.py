@@ -13,6 +13,8 @@ import xlsxwriter
 import time
 from cv.test.DatabaseCreator import DatabaseCreator
 import pickle
+import matplotlib.pyplot as plt
+import matplotlib
 
 '''
 Tester Siftir class
@@ -31,7 +33,7 @@ def train_validation_test_accuracy(train_root_name, validation_root_name, test_r
     train_validation_test_accuracy(train_root_name, validation_root_name, test_root_name, excludes, databaseLocation, returns)
 
 
-def train_validation_test_accuracy(train_root_name, validation_root_name, test_root_name, new_cat_labels, databaseLocation=None, returns=[], optimize_database=False):
+def train_validation_test_accuracy(train_root_name, validation_root_name, test_root_name, new_cat_labels, databaseLocation=None, returns=[], optimize_database=False, save_name=''):
     '''
     Give train data root directory and test data root directory.
     Directory structure :
@@ -55,7 +57,7 @@ def train_validation_test_accuracy(train_root_name, validation_root_name, test_r
         ['confusion_matrix', 'test_times']
         [...]
 
-
+    save_name is used as prefix for the output files.
 
     '''
 
@@ -155,16 +157,16 @@ def train_validation_test_accuracy(train_root_name, validation_root_name, test_r
             time_spent[current_class_name] = time_spent[current_class_name] / totalClass[current_class_name]
 
         class_accuracy                 = {catName:totalCorrectClass[catName] / totalClass[catName] for catName in totalClass}
-        class_accuracy['net_accuracy'] = sum(map(lambda x : totalCorrectClass[x], totalCorrectClass)) / sum(map(lambda x : totalClass[x], totalClass))
+        class_accuracy['NET'] = sum(map(lambda x : totalCorrectClass[x], totalCorrectClass)) / sum(map(lambda x : totalClass[x], totalClass))
         if 'print' in returns:
             print('Detailed accuracy report : ')
 
             for catName in totalClass:
                 print('\t{0:30s} : {1:4f}'.format('Cat name ' + catName + ' with accuracy ', class_accuracy[catName]))
 
-            print('Calculated accuracy is ' + str(class_accuracy['net_accuracy']))
+            print('Calculated accuracy is ' + str(class_accuracy['NET']))
 
-        time_spent['all_average'] = sum(time_spent.values()) / sum(totalClass.values())
+        time_spent['NET'] = sum(time_spent.values()) / len(totalClass.values())
 
         return_array = {}
         for return_request in returns:
@@ -191,7 +193,7 @@ def train_validation_test_accuracy(train_root_name, validation_root_name, test_r
 
     if 'confusion_matrix' in returns:
         # Write to excel file...
-        workbook  = xlsxwriter.Workbook('confusion_matrix.xlsx')
+        workbook  = xlsxwriter.Workbook(save_name + 'confusion_matrix.xlsx')
 
         for set_name in ['train', 'validation', 'test']:
             all_cat_names = list(return_array[set_name]['confusion_matrix'].values())[0].keys()
@@ -212,6 +214,84 @@ def train_validation_test_accuracy(train_root_name, validation_root_name, test_r
 
         workbook.close()
 
+    if 'accuracy' in returns:
+        # Write to excel file...
+        workbook  = xlsxwriter.Workbook(save_name + 'accuracy_results.xlsx')
+
+        # Chart
+        chart = workbook.add_chart({'type': 'column'})
+        chart.set_x_axis({
+            'name': 'Different Cat IDs',
+            'name_font': {'size': 14, 'bold': True},
+            'num_font':  {'italic': True },
+            })
+        chart.set_y_axis({
+            'name': 'Accuracy Scores',
+            'name_font': {'size': 14, 'bold': True},
+            'num_font':  {'italic': True },
+            })
+        chart.set_title({'name' : 'Accuracy Results'})
+        for set_name in ['train', 'validation', 'test']:
+            all_cat_names = list(return_array[set_name]['accuracy'].keys())
+            worksheet = workbook.add_worksheet(name=set_name)
+
+            # First column
+            worksheet.write(0, 0, 'Cat ID')
+            for counter1, cat_name in enumerate(all_cat_names):
+                worksheet.write(counter1+1, 0, cat_name)
+
+            # Second column
+            worksheet.write(0, 1, 'Accuracy')
+            for counter1, cat_name in enumerate(all_cat_names):
+                worksheet.write(counter1+1, 1, return_array[set_name]['accuracy'][cat_name])
+
+
+
+            # Chart
+            chart.add_series({'values': '=' + set_name + '!$A$2:$A$' + str(len(all_cat_names))})
+            chart.add_series({'values': '=' + set_name + '!$B$2:$B$' + str(len(all_cat_names))})
+        worksheet.insert_chart('D7', chart)
+
+        workbook.close()
+
+    if 'test_times' in returns:
+        # Write to excel file...
+        workbook  = xlsxwriter.Workbook(save_name + 'time_results.xlsx')
+
+        # Chart
+        chart = workbook.add_chart({'type': 'column'})
+        chart.set_x_axis({
+            'name': 'Different Cat IDs',
+            'name_font': {'size': 14, 'bold': True},
+            'num_font':  {'italic': True },
+            })
+        chart.set_y_axis({
+            'name': 'Accuracy Scores',
+            'name_font': {'size': 14, 'bold': True},
+            'num_font':  {'italic': True },
+            })
+        chart.set_title({'name' : 'Accuracy Results'})
+        for set_name in ['train', 'validation', 'test']:
+            all_cat_names = list(return_array[set_name]['time_spent'].keys())
+            worksheet = workbook.add_worksheet(name=set_name)
+
+            # First column
+            worksheet.write(0, 0, 'Cat ID')
+            for counter1, cat_name in enumerate(all_cat_names):
+                worksheet.write(counter1, 0, cat_name)
+
+            # Second column
+            worksheet.write(0, 1, 'Accuracy')
+            for counter1, cat_name in enumerate(all_cat_names):
+                worksheet.write(counter1, 1, str(return_array[set_name]['time_spent'][cat_name]))
+
+            # Chart
+            chart.add_series({'values': '=' + set_name + '!$A$2:$A$' + str(len(all_cat_names))})
+            chart.add_series({'values': '=' + set_name + '!$B$2:$B$' + str(len(all_cat_names))})
+        worksheet.insert_chart('D7', chart)
+
+        workbook.close()
+
     return return_array
 
 def train_validation_test_bench():
@@ -227,19 +307,68 @@ def train_validation_test_bench():
 
 
 def test_utku():
-    counter = 3
-    optimize = True
+    test_sonuclari_hersey = []
+    for counter in [6]:
+        test_sonuclari = []
+        for optimize in [False, True]:
+            print('Test', counter, 'optimized = ' + str(optimize))
 
-    dbCreator = DatabaseCreator()
-    dbCreator.seperate_into_databases('Dataset_Cropped', join('metadata', 'dataset' + str(counter) + '.txt'), dest_dir='Dataset' + str(counter).zfill(2), override=True)
 
-    train_root_name      = 'Dataset' + str(counter).zfill(2) + '/train'
-    validation_root_name = 'Dataset' + str(counter).zfill(2) + '/validation'
-    test_root_name       = 'Dataset' + str(counter).zfill(2) + '/test'
-    with open(join('Dataset' + str(counter).zfill(2), 'excluded_classes.txt'), 'r') as class_file:
-        new_cat_labels = class_file.readline().split()
+            dbCreator = DatabaseCreator()
+            dbCreator.seperate_into_databases('Dataset_Cropped', join('metadata', 'dataset' + str(counter) + '.txt'), dest_dir='Dataset' + str(counter).zfill(2), override=True)
 
-        train_validation_test_accuracy(train_root_name, validation_root_name, test_root_name, new_cat_labels, 'utku_database3', ['accuracy', 'confusion_matrix', 'print', 'test_times'], optimize_database=# OPTIMIZE: )
+            train_root_name      = 'Dataset' + str(counter).zfill(2) + '/train'
+            validation_root_name = 'Dataset' + str(counter).zfill(2) + '/validation'
+            test_root_name       = 'Dataset' + str(counter).zfill(2) + '/test'
+            with open(join('Dataset' + str(counter).zfill(2), 'excluded_classes.txt'), 'r') as class_file:
+                new_cat_labels = class_file.readline().split()
+
+                test_sonuclari.append(train_validation_test_accuracy(train_root_name, validation_root_name, test_root_name, new_cat_labels, 'utku_database'+str(counter), ['accuracy', 'confusion_matrix', 'print', 'test_times'], optimize_database=optimize, save_name='dataset'+str(counter)+'_optimize'+str(optimize)+'_'))
+
+
+        # Extra plots...
+        fig = plt.figure(figsize=(24, 18))
+        font = {'family' : 'normal',
+                'size'   : 28}
+
+        matplotlib.rc('font', **font)
+
+
+        # Accuracy plots...
+        for set_name in ['train', 'validation', 'test']:
+            plt.bar(list(test_sonuclari[0][set_name]['accuracy'].keys()), list(test_sonuclari[0][set_name]['accuracy'].values()))
+            plt.bar(list(test_sonuclari[1][set_name]['accuracy'].keys()), list(test_sonuclari[1][set_name]['accuracy'].values()))
+            plt.title('Optimized vs. Unoptimized for ' + set_name + 'set')
+            plt.xlabel('Cat Identities')
+            plt.ylabel('Accuracy Results')
+            plt.legend(['Unoptimized', 'Optimized'])
+            plt.xticks(rotation='vertical')
+
+            plt.savefig('test' + str(counter) + set_name + '_set_accuracy_graph.png')
+
+            plt.clf()
+
+        # Speed plots...
+        for set_name in ['train', 'validation', 'test']:
+            plt.bar(list(test_sonuclari[0][set_name]['time_spent'].keys()), list(test_sonuclari[0][set_name]['time_spent'].values()))
+            plt.bar(list(test_sonuclari[1][set_name]['time_spent'].keys()), list(test_sonuclari[1][set_name]['time_spent'].values()))
+            plt.title('Optimized vs. Unoptimized for ' + set_name + 'set')
+            plt.xlabel('Cat Identities')
+            plt.ylabel('Time for Convergence(seconds)')
+            plt.legend(['Unoptimized', 'Optimized'])
+            plt.xticks(rotation='vertical')
+
+            plt.savefig('test' + str(counter) + set_name + '_set_speed1_graph.png')
+
+            plt.clf()
+
+        plt.close(fig)
+
+        test_sonuclari_hersey.append(test_sonuclari)
+
+    pickle.dump(test_sonuclari_hersey, open('test_sonuclari_yedekleri.pickle', 'wb'))
+
+
 
 
 test_utku()

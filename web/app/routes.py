@@ -61,7 +61,23 @@ def cat(device_id, cat_id):
     device = user.devices.filter_by(id=device_id).first_or_404()
     cat = device.cats.filter_by(id=cat_id).first_or_404()
     title = cat.name + ' - ' + device.location + ' - ' + user.username
-    return render_template('cat.html', title=title, cat=cat)
+    fed_times = []
+    denial_times = []
+    for i in range(31):
+        for j in range(3):
+            if i < 9:
+                day = '0' + str(i+1)
+            else:
+                day = str(i+1)
+            if j == 0:
+                hour1 = '08'
+                hour2 = '09'
+            else:
+                hour1 = str(7*j+8)
+                hour2 = str(7*j+9)
+            fed_times.append('2020-05-'+day+'T'+hour1+':00:00')
+            denial_times.append('2020-05-'+day+'T'+hour2+':50:00')
+    return render_template('cat.html', title=title, cat=cat, fed_times=fed_times, denial_times=denial_times)
 
 @app.route('/settings/', methods=['GET', 'POST'])
 @login_required
@@ -95,7 +111,6 @@ def settings():
                 except:
                     pass
         elif len(edited) == 3:
-            print(edited)
             device = Device.query.filter_by(id=int(edited[1])).first_or_404()
             cat = device.cats.filter_by(id=edited[2]).first_or_404()
             if edited[0] == 'cat':
@@ -106,7 +121,6 @@ def settings():
                 except IndexError:
                     pass
             if edited[0] == 'food':
-                print('okidoki')
                 try:
                     cat.set_food_amount(int(result[input_id]))
                 except:

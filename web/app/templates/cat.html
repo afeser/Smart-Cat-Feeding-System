@@ -125,22 +125,22 @@
           },
           
         events: [
-        {% for time in cat.times_of_feeding %}
+        {% for time in fed_times %}
         {
             title: 'fed',
-            start: '{{ time.time }}'
+            start: '{{ time }}'
         },
         {% endfor %}
-        {% for time in cat.times_of_denial %}
+        {% for time in denial_times %}
         {
             title: 'rejected',
-            start: '{{ time.time }}'
+            start: '{{ time }}'
         },
         {% endfor %}
 
         {
-            title: 'what',
-            start: '1998-11-21T12:00:00'
+            title: 'rejected',
+            start: '2020-06-01T14:00:00'
         }
         ]
         });

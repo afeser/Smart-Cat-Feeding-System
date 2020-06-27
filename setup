@@ -32,10 +32,11 @@ fi
 if [ $1 == 'server' ]
 then
 	echo "Building server..."
+	pip3 install enlighten --user
 
 	mkdir $INSTALL_DIR
 
-	cp $PI_SRC/Controller/Controller.latest.py $INSTALL_DIR/Controller.py
+	cp $PI_SRC/Controller.py $INSTALL_DIR/Controller.py
 	cp $PI_SRC/RunServer.sh $INSTALL_DIR/
 	chmod +x $PI_SRC/RunServer.sh
 	echo "Creating dataset..."

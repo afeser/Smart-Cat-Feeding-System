@@ -75,7 +75,7 @@ class GPIODriver:
     def closeFoodGate(self):
         self._pwm.ChangeDutyCycle(2.5)
 
-    def feedCat(self):
+    def feedCat(self, amount):
         self.openFoodGate()
         time.sleep(5)
         self.closeFoodGate()

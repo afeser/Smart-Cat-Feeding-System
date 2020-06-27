@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 import pi.src.Server as Server
 import pi.src.Constants as Constants
-import cv.src.pythonYOLO as pythonYOLO
-
+from cv.src.Classifier import Classifier
+from cv.src.Identifier import Identifier
 
 import cv2
 import time
@@ -45,10 +45,13 @@ constants   = Constants.getConstants()
 videoServer   = Server.VideoServer(constants)
 commandServer = Server.CommandServer(constants)
 
-neuralNetwork = pythonYOLO.NeuralNetwork(debugMode=debugMode)
+classifier = Classifier(debugMode=debugMode)
+identifier = Identifier()
 
 # TODO - bunu dogru yere tasimaliyiz...
+cats = {
 
+}
 
 while True:
     # V1 stuff...
@@ -78,15 +81,31 @@ while True:
         cv2.imwrite('flippedImage.jpg', frame)
 
     # Classify
-    sinif = neuralNetwork.classifyCatDog(frame)
-
+    tempClassFrame = classifier.classifyCatDog(frame)
+    sinif = tempClassFrame['type']
+    frame = tempClassFrame['frame']
 
     # Send command
     commandServer.allLedsOff()
     if sinif == 'cat':
+        # Decision making!
         logging.info('Cat detected')
-        commandServer.greenLedOn()
-        commandServer.feedCat()
+        catId = identifier.getCatId(frame)
+        if catId in cats:
+            cats[catId] = Cat(catId)
+
+        cat = cats[catId]
+
+        '''
+        Specifications :
+        - Cat must be in database
+        - Cat must not have eaten in 5 hours before now
+        '''
+        if cat.isAbleToEat():
+            commandServer.greenLedOn()
+            commandServer.feedCat(cat.getEatAmount())
+            cat.fed()
+
     elif sinif == 'dog':
         logging.info('Dog detected')
         commandServer.redLedOn()
@@ -94,7 +113,7 @@ while True:
         logging.info('Nothing detected')
         commandServer.yellowLedOn()
     else:
-        logging.warning('Unreasonable string from classifyCatDog')
+        logging.warning('Unreasonable string from classifyCatDog "' + sinif + '"')
 
 
 

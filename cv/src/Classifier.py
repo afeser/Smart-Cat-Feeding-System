@@ -3,9 +3,9 @@ import numpy as np
 import time
 import logging
 
-class NeuralNetwork:
+class Classifier:
 
-    def __init__(self, debugMode=False):
+    def __init__(self, debug=False):
 
         logging.info('Loading YOLO weights and configuration...')
 
@@ -20,7 +20,7 @@ class NeuralNetwork:
         self._output_layers = [layer_names[i[0] - 1] for i in self._net.getUnconnectedOutLayers()]
 
 
-        self._debugMode = debugMode
+        self._debugMode = debug
 
     def classifyCatDog(self, frame):
         '''
@@ -79,13 +79,18 @@ class NeuralNetwork:
         # TODO - buna bakacagiz
         indexes = cv2.dnn.NMSBoxes(boxes, confidences, 0.5, 0.4)
 
-
         detectedClasses = [self._classes[id] for id in class_ids]
-
 
         def debugFunc():
             font = cv2.FONT_HERSHEY_PLAIN
             colors = np.random.uniform(0, 255, size=(len(classes), 3))
+
+            logging.info('Writing the image to the folder...')
+            t = time.localtime()
+            timestamp = time.strftime('%b-%d-%Y_%H%M%S', t)
+            cv2.imwrite('frame_original_' + timestamp + '.jpg', frame)
+
+            frameChanged = frame.copy()
 
             for i in range(len(boxes)):
                 if i in indexes:
@@ -93,17 +98,10 @@ class NeuralNetwork:
                     label = str(classes[class_ids[i]])
                     confidence = confidences[i]
                     color = colors[class_ids[i]]
-                    cv2.rectangle(frame, (x, y), (x + w, y + h), color, 2)
-                    cv2.putText(frame, label + " " + str(round(confidence, 2)), (x, y + 30), font, 3, color, 3)
+                    cv2.rectangle(frameChanged, (x, y), (x + w, y + h), color, 2)
+                    cv2.putText(frameChanged, label + " " + str(round(confidence, 2)), (x, y + 30), font, 3, color, 3)
 
-
-
-            logging.info('Writing the image to the folder...')
-            t = time.localtime()
-            timestamp = time.strftime('%b-%d-%Y_%H%M%S', t)
-            cv2.imwrite("frame_" + timestamp + ".jpg", frame)
-
-
+            cv2.imwrite("frame_" + timestamp + ".jpg", frameChanged)
 
         logging.info('Calling nested debug function (debugFunc)...')
         if debug:
@@ -111,12 +109,19 @@ class NeuralNetwork:
 
         logging.info('Elapsed time + str(time.time() - startTime) : ' + str(time.time() - startTime))
 
+        if   'dog' in   detectedClasses :
+            return {'type': 'dog', 'frame': None}
+        elif 'cat' in   detectedClasses :
+            catIndex = detectedClasses.index('cat')
+            x, y, w, h = boxes[catIndex]
+            croppedCat = frame[y:y+h,x:x+w]
+            return {'type': 'cat', 'frame': croppedCat}
+        else                            :
+            return {'type': 'NA' , 'frame': None}
 
-        if   'dog' in   detectedClasses :  return "dog"
-        elif 'cat' in   detectedClasses :  return "cat"
-        else                            :  return "NA"
 
-
+    def cropCat(self):
+        pass
 
     def getObjectCoordinates(self):
 
@@ -137,3 +142,12 @@ class NeuralNetwork:
 # im = cv2.imread('wallpaper.jpg')
 # a.classifyCatDog(im)
 # print('APRTILEasdasd')
+
+
+'''
+a = Classifier(False)
+b = cv2.imread('cv/data/SIFT/23.jpg')
+sucuk = a.classifyCatDog(b)
+cv2.imshow('abc',sucuk['frame'])
+cv2.waitKey()
+'''

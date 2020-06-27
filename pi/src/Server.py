@@ -148,6 +148,7 @@ class CommandServer(Server):
 
     def feedCat(self):
         self._sendStr('feedCat')
+        self._sendStr(str(amount))
 
     def openFoodGate(self):
         self._sendStr('openFoodGate')

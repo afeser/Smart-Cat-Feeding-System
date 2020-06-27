@@ -1,11 +1,8 @@
-# FinalProject
+# METU EEE 2020 - Capstone Project
 
-## [Weekly Reports](https://github.com/afeser/FinalProject/tree/Report/)
+The project is developed based on ProjectDefinition.md file. It is a smart cat feeding project that can detect, identify and feed cats intelligently using machine learning, computer vision and control. Due to COVID-19 pandemic, some parts of the project is left incomplete. Version 1 prototype is ready, but unfortunately, version 2 prototype will not be completed.
 
-## [Eser - Documentation](https://github.com/afeser/FinalProject/tree/master/pi)
-
-## [Futuristic Report](https://github.com/afeser/FinalProject/tree/Report/Futuristic.pdf)
-
+Computer vision, electronic board, user interface and mechanic designs are available and tested with prototype 1. Computer vision part is improved for identification and gives practical results. More information on the test results are included in the final report. Web interface is ready to be used and also is included.
 
 ## Installation
 Simply run "setup" file as a bash script. Arguments specify whether build is for client or server.
@@ -18,9 +15,4 @@ Some notes :
 
 
 
-## Repo Structure
-Please do not commit **ANY** changes to master unless they are major and tested. Only LTS versions could exist in the master branch and they should be cleared from small and confusing commits. Keeping the commits stable and under control, please commit as little as possible to the master branch.
-
-On the other hand branches are open to any commit, and everyone is encouraged to commit as much as possible. These commits will be rebased(squashed) into a single version in master.
-
-This branch is to keep branch structure in each version. Only emerging changes will be made to master, others should appear in this branch.
+## [All Reports](https://github.com/afeser/FinalProject/tree/Report/)

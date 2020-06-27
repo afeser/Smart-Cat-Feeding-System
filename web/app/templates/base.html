@@ -1,0 +1,122 @@
+<html>
+    <head>
+        <!--Import Google Icon Font-->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        
+        <!-- Compiled and minified CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+        <!--Let browser know website is optimized for mobile-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+        {% if title %}
+        <title>{{ title }} - Felerest</title>
+        {% else %}
+        <title>Felerest</title>
+        {% endif %}
+
+        <style>
+        .batteryContainer {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.batteryOuter {
+  border-radius: 3px;
+  border: 1px solid #444;
+  padding: 1px;
+  width: 104px;
+  height: 34px;
+}
+
+.batteryBump {
+  border-radius: 2px;
+  background-color: #444;
+  margin: 2px;
+  width: 1px;
+  height: 3px;
+}
+
+#batteryLevel {
+  border-radius: 2px;
+  background-color: #73AD21;
+  height: 30px;
+}
+
+.nav-wrapper .brand-logo svg {
+  height: 64px;
+}
+
+        </style>
+    </head>
+    <body>
+      <nav>
+    <div class="nav-wrapper">
+      <a href="{{ url_for('index') }}" class="brand-logo">Felerest</a>
+      <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+      <ul class="right hide-on-med-and-down">
+        {% if current_user.is_anonymous %}
+        <li><a href="{{ url_for('login') }}">Login</a></li>
+        {% else %}
+        <li><a href="{{ url_for('user')     }}">Devices</a></li>
+        <li><a href="{{ url_for('settings') }}">Account</a></li>
+        <li><a href="{{ url_for('logout')   }}">Logout</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </nav>
+
+  <ul class="sidenav" id="mobile-demo">
+    {% if current_user.is_anonymous %}
+        <li><a href="{{ url_for('login') }}">Login</a></li>
+        {% else %}
+        <li><a href="{{ url_for('user')     }}">Devices</a></li>
+        <li><a href="{{ url_for('settings') }}">Account</a></li>
+        <li><a href="{{ url_for('logout')   }}">Logout</a></li>
+        {% endif %}
+  </ul>
+  <div class="container">
+
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+      </div>
+
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+        <!-- Compiled and minified JavaScript -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>        
+
+        <script>
+            $(document).ready(function(){
+    $('.sidenav').sidenav();
+  });
+        </script>
+    </body>
+    <script>
+      $(document).ready(function() {
+       $('.timepicker').timepicker();
+       $('.lever').click(function() {
+        $.ajax({
+         url: "/toggle_on_off",
+         type: "get",
+          error: function(xhr) {
+           //Do Something to handle error
+          }
+        });
+       });
+     });
+     </script>
+</html>

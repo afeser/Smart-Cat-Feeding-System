@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% for device in devices %}
+  <div class="row">
+    <div class="col s12 m6">
+      <div class="card blue-grey darken-1">
+        <div class="card-content white-text">
+          <span class="card-title">{{ device.location }}</span>
+          <div class="batteryContainer">
+            <div class="batteryOuter"><div id="batteryLevel" style="width:{{ device.battery_percentage }}px"></div></div>
+            <div class="batteryBump"></div>
+          </div>
+          <div class="switch">
+            Device:
+            <label>
+              Off
+              {% if device.is_on %}
+              <input type="checkbox" checked>
+              {% else %}
+              <input type="checkbox">
+              {% endif %}
+              <span class="lever"></span>
+              On
+            </label>
+          </div>
+          {% if device.is_charging %}
+          <p>Charging</p>
+          {% else %}
+          <p>Not charging</p>
+          {% endif %}
+          <p> Remaining food: {{ device.food_percentage }}% </p>
+          <p>Last refilled:</p>
+          <p>{{ device.get_time_after_last_refill() }}</p>
+        </div>
+        <div class="card-action">
+          <a href="{{ url_for('device', device_id=device.id) }}">Cats</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+      <div class="col s12 m6">
+        <div class="card blue-grey darken-1">
+          <div class="card-content white-text">
+            <span class="card-title">Shipping</span>
+            <div class="batteryContainer">
+              <div class="batteryOuter"><div id="batteryLevel" style="width:100px"></div></div>
+              <div class="batteryBump"></div>
+            </div>
+            <div class="switch">
+              Device:
+              <label>
+                Off
+              </label>
+            </div>
+            <p>Not charging</p>
+            <p>Remaining food: 100%</p>
+            <p>Last refilled:</p>
+          <p>Never</p>
+          </div>
+          <div class="card-action">
+            <a href="#">Cats</a>
+          </div>
+        </div>
+      </div>
+      <div class="col s12 m6">
+        <div class="card blue-grey darken-1">
+          <div class="card-content white-text">
+            <span class="card-title">Shipping</span>
+            <div class="batteryContainer">
+              <div class="batteryOuter"><div id="batteryLevel" style="width:100px"></div></div>
+              <div class="batteryBump"></div>
+            </div>
+            <div class="switch">
+              Device:
+              <label>
+                Off
+              </label>
+            </div>
+            <p>Not charging</p>
+            <p>Remaining food: 100%</p>
+            <p>Last refilled:</p>
+          <p>Never</p>
+          </div>
+          <div class="card-action">
+            <a href="#">Cats</a>
+          </div>
+        </div>
+      </div>
+      <div class="col s12 m6">
+        <div class="card blue-grey darken-1">
+          <div class="card-content white-text">
+            <span class="card-title">Shipping</span>
+            <div class="batteryContainer">
+              <div class="batteryOuter"><div id="batteryLevel" style="width:100px"></div></div>
+              <div class="batteryBump"></div>
+            </div>
+            <div class="switch">
+              Device:
+              <label>
+                Off
+              </label>
+            </div>
+            <p>Not charging</p>
+            <p>Remaining food: 100%</p>
+            <p>Last refilled:</p>
+          <p>Never</p>
+          </div>
+          <div class="card-action">
+            <a href="#">Cats</a>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}

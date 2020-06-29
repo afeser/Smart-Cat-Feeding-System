@@ -4,6 +4,8 @@ The project is developed based on ProjectDefinition.md file. It is a smart cat f
 
 Computer vision, electronic board, user interface and mechanic designs are available and tested with prototype 1. Computer vision part is improved for identification and gives practical results. More information on the test results are included in the final report. Web interface is ready to be used and also is included.
 
+Take a look at our [demo video](https://www.youtube.com/watch?v=P49Y6lQscVo).
+
 ## Installation
 Simply run "setup" file as a bash script. Arguments specify whether build is for client or server.
 

@@ -4,9 +4,6 @@ The project is developed based on ProjectDefinition.md file. It is a smart cat f
 
 Computer vision, electronic board, user interface and mechanic designs are available and tested with prototype 1. Computer vision part is improved for identification and gives practical results. More information on the test results are included in the final report. Web interface is ready to be used and also is included.
 
-Take a look at our [demo video](https://www.youtube.com/watch?v=P49Y6lQscVo).
-
-[![Demonstration Video](https://github.com/afeser/Smart-Cat-Feeding-System/tree/master2/ProjectFiles/main_readme_files/demo_video_intro.png?raw=true)](https://www.youtube.com/watch?v=P49Y6lQscVo)
 
 
 <!---
@@ -19,8 +16,10 @@ ffmpeg -y -i saved_2_2.mp4 -vf palettegen palette_2.png
 ffmpeg  -i saved_2_2.mp4 -i palette_2.png -filter_complex paletteuse -r 30 saved_2.gif
 -->
 
-![SIFT Vector Detection](https://github.com/afeser/Smart-Cat-Feeding-System/tree/master2/ProjectFiles/main_readme_files/saved_1.gif?raw=true)
-![Optimization Algorithm without Clustering](https://github.com/afeser/Smart-Cat-Feeding-System/tree/master2/ProjectFiles/main_readme_files/saved_2.gif)
+[<img src="https://github.com/afeser/Smart-Cat-Feeding-System/blob/master2/ProjectFiles/main_readme_files/demo_video_intro.png?raw=true" width="500">](https://www.youtube.com/watch?v=P49Y6lQscVo)
+
+<img src="https://github.com/afeser/Smart-Cat-Feeding-System/tree/master2/ProjectFiles/main_readme_files/saved_1.gif?raw=true" width="250"><img src="https://github.com/afeser/Smart-Cat-Feeding-System/tree/master2/ProjectFiles/main_readme_files/saved_2.gif?raw=true" width="250">
+
 
 ## Installation
 Simply run "setup" file as a bash script. Arguments specify whether build is for client or server.

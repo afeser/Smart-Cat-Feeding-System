@@ -23,6 +23,10 @@ ffmpeg  -i saved_2_2.mp4 -i palette_2.png -filter_complex paletteuse -r 30 saved
   <figcaption>Feature Descriptor Extraction</figcaption>
 </figure>
 
+<br />
+<br />
+
+
 <figure>
   <img src="https://raw.githubusercontent.com/afeser/Smart-Cat-Feeding-System/master2/ProjectFiles/main_readme_files/saved_2.gif" width="500">
   <figcaption>Feature Matching in Real Time without Clustering</figcaption>

@@ -20,6 +20,7 @@ ffmpeg  -i saved_2_2.mp4 -i palette_2.png -filter_complex paletteuse -r 30 saved
 
 <img src="https://github.com/afeser/Smart-Cat-Feeding-System/tree/master2/ProjectFiles/main_readme_files/saved_1.gif?raw=true" width="250"><img src="https://github.com/afeser/Smart-Cat-Feeding-System/tree/master2/ProjectFiles/main_readme_files/saved_2.gif?raw=true" width="250">
 
+![Worm Crawling](https://github.com/afeser/Smart-Cat-Feeding-System/tree/master2/ProjectFiles/main_readme_files/saved_1.gif)
 
 ## Installation
 Simply run "setup" file as a bash script. Arguments specify whether build is for client or server.
